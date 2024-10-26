@@ -349,3 +349,10 @@
 .input-group .form-control.is-invalid {
   border-radius: 0 0.25rem 0.25rem 0 !important;
 }
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  /*gap: 20px;*/ 
+  justify-content: center;
+}

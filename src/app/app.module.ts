@@ -12,6 +12,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TerminosCondicionesComponent } from './components/terminos-condiciones/terminos-condiciones.component';
+import { CardPdfComponent } from './components/card-pdf/card-pdf.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { TerminosCondicionesComponent } from './components/terminos-condiciones/
     NavComponent,
     FooterComponent,
     AltaTransporteEspecializado,
-    TerminosCondicionesComponent
+    TerminosCondicionesComponent,
+    CardPdfComponent
   ],
   imports: [
     BrowserModule,

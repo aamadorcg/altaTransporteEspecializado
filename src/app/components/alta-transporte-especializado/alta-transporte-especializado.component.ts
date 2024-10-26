@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AlertaUtility } from 'src/app/shared/utilities/alerta';
@@ -10,6 +10,7 @@ import { TerminosCondicionesComponent } from 'src/app/components/terminos-condic
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AltaRevistaService } from 'src/app/services/alta-revista.service';
+import { CardPdfComponent } from '../card-pdf/card-pdf.component';
 
 
 type ClavesFormulario = 'datosConcesionForm' | 'datosPermisionarioForm' | 'tramiteForm' | 'documentosUnidadForm';
@@ -23,6 +24,7 @@ type ClavesFormulario = 'datosConcesionForm' | 'datosPermisionarioForm' | 'trami
 export class AltaTransporteEspecializado {
 
   @ViewChild(MatStepper) stepper!: MatStepper;
+  @ViewChildren(CardPdfComponent) cardPdfs!: QueryList<CardPdfComponent>;
 
   FORM_DATOS_CONCESION = 'Datos de la Factura';
   FORM_DATOS_CONCESIONARIO = 'Datos del Permisionario';
@@ -41,11 +43,34 @@ export class AltaTransporteEspecializado {
   actualizarForm = false;
   cargarSpinner = false;
   pdfUrls: { [key: string]: any } = {};
+  listaTramites: any[] = [];
+  arregloDocumentos: any[] = [];
+  documentoGas: any;
+  /*Control Documentos Visibles*/
+  esSolicitudTitularVis: boolean = false;
+  esConvenioActualizadoVis: boolean = false;
+  esTarjetaCirculacionVis: boolean = false;
+  esRepuveVis: boolean = false;
+  esPolizaVis: boolean = false;
+  esUltimoPermisoVis: boolean = false;
+  esUltimoPagoRefVis: boolean = false;
+  esIneVis: boolean = false;
+  esDictamenGasVis: boolean = false;
+  esUltimoPagoTenVis: boolean = false;
+  esConstFiscalVis: boolean = false;
+  esAntNoPenalesVis: boolean = false;
+  esActaConstVis: boolean = false;
+  buscaRFC = false;
+  documentCheckedStatus: { [key: string]: boolean } = {};
+  documentValidatedStatus: { [key: string]: boolean } = {};
+
+
 
   RFC_FISICA_PATTERN = '^([A-ZÑ&]{4})(\\d{6})([A-Z\\d]{3})$';
   RFC_MORAL_PATTERN = '^([A-ZÑ&]{3})(\\d{6})([A-Z\\d]{3})$';
   esPersonaFisica: boolean = false;
   esPersonaMoral: boolean = false;
+  esModificacion: boolean = false;
   opcCveVeh: any[] = [];
   opcCveVehFiltradas: any[] = [];
 
@@ -54,6 +79,7 @@ export class AltaTransporteEspecializado {
   tramiteForm!: FormGroup;
   documentosUnidadForm!: FormGroup;
 
+  defaultPdfUrl: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -191,15 +217,28 @@ export class AltaTransporteEspecializado {
     });
   }
 
+  // private cargarDefaultPDFs() {
+  //   const defaultPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/documents/subirArchivo.pdf');
+  //   this.pdfUrls = {
+  //     tarjetaCirculacion: defaultPdfUrl,
+  //     repuve: defaultPdfUrl,
+  //     poliza: defaultPdfUrl,
+  //     dictamenGas: defaultPdfUrl,
+  //     ine: defaultPdfUrl,
+  //   };
+  // }
   private cargarDefaultPDFs() {
     const defaultPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/documents/subirArchivo.pdf');
-    this.pdfUrls = {
-      tarjetaCirculacion: defaultPdfUrl,
-      repuve: defaultPdfUrl,
-      poliza: defaultPdfUrl,
-      dictamenGas: defaultPdfUrl,
-      ine: defaultPdfUrl,
-    };
+    this.defaultPdfUrl = defaultPdfUrl;
+  }
+
+  // Agregar a reiniciaFormulario() o metodo similar
+  reiniciaDocumentos() {
+    if (this.cardPdfs) {
+      this.cardPdfs.forEach((cardPdf) => {
+        cardPdf.isDefaultPdf = true;
+      });
+    }
   }
 
   ngAfterViewInit() {
@@ -349,6 +388,145 @@ export class AltaTransporteEspecializado {
         input.value = '';
       });
     }
+  }
+
+  cargaInformacionDocumentos(documentos: any) {
+    let campoDoc = '';
+    if (this.esModificacion) {
+      campoDoc = 'strDescDoc';
+    } else {
+      campoDoc = 'strNombreDocumento';
+    }
+    documentos.forEach((doc: any) => {
+      this.arregloDocumentos.forEach((doc) => {
+        const status = doc.strAceptado === 'A';
+        switch (doc[campoDoc]) {
+          case 'SOLICITUD AL TITULAR DE SMyT':
+            this.esSolicitudTitularVis = true;
+            this.documentCheckedStatus['solicitudTitular'] = status;
+            this.pdfUrls['solicitudTitular'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['solicitudTitular'] = !status;
+            this.documentosUnidadForm.patchValue({
+              solicitudTitular: doc.strArchivo
+            });
+            break;
+          case 'convenioActualizado':
+            this.esConvenioActualizadoVis = true;
+            this.documentCheckedStatus['convenioActualizado'] = status;
+            this.pdfUrls['convenioActualizado'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['convenioActualizado'] = !status;
+            this.documentosUnidadForm.patchValue({
+              convenioActualizado: doc.strArchivo
+            });
+            break;
+          case 'tarjetaCirculacion':
+            this.esTarjetaCirculacionVis = true;
+            this.documentCheckedStatus['tarjetaCirculacion'] = status;
+            this.pdfUrls['tarjetaCirculacion'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['tarjetaCirculacion'] = !status;
+            this.documentosUnidadForm.patchValue({
+              tarjetaCirculacion: doc.strArchivo
+            });
+            break;
+          case 'repuve':
+            this.esRepuveVis = true;
+            this.documentCheckedStatus['repuve'] = status;
+            this.pdfUrls['repuve'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['repuve'] = !status;
+            this.documentosUnidadForm.patchValue({
+              repuve: doc.strArchivo
+            });
+            break;
+          case 'polizaSeguro':
+            this.esPolizaVis = true;
+            this.documentCheckedStatus['poliza'] = status;
+            this.pdfUrls['poliza'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['poliza'] = !status;
+            this.documentosUnidadForm.patchValue({
+              poliza: doc.strArchivo
+            });
+            break;
+          case 'ultimoPermiso':
+            this.esUltimoPermisoVis = true;
+            this.documentCheckedStatus['ultimoPermiso'] = status;
+            this.pdfUrls['ultimoPermiso'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['ultimoPermiso'] = !status;
+            this.documentosUnidadForm.patchValue({
+              ultimoPermiso: doc.strArchivo
+            });
+            break;
+          case 'refrendoVigenteAnual':
+            this.esUltimoPagoRefVis = true;
+            this.documentCheckedStatus['ultimoPagoRef'] = status;
+            this.pdfUrls['ultimoPagoRef'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['ultimoPagoRef'] = !status;
+            this.documentosUnidadForm.patchValue({
+              ultimoPagoRef: doc.strArchivo
+            });
+            break;
+          case 'ine':
+            this.esIneVis = true;
+            this.documentCheckedStatus['ine'] = status;
+            this.pdfUrls['ine'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['ine'] = !status;
+            this.documentosUnidadForm.patchValue({
+              ine: doc.strArchivo
+            });
+            break;
+          case 'dictamenGas':
+            this.esDictamenGasVis = true;
+            this.documentCheckedStatus['dictamenGas'] = status;
+            this.pdfUrls['dictamenGas'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['dictamenGas'] = !status;
+            this.documentosUnidadForm.patchValue({
+              dictamenGas: doc.strArchivo
+            });
+            break;
+          case 'ultimoPagoTenencia':
+            this.esUltimoPagoTenVis = true;
+            this.documentCheckedStatus['ultimoPagoTen'] = status;
+            this.pdfUrls['ultimoPagoTen'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['ultimoPagoTen'] = !status;
+            this.documentosUnidadForm.patchValue({
+              ultimoPagoTen: doc.strArchivo
+            });
+            break;
+          case 'constanciaFiscal':
+            this.esConstFiscalVis = true;
+            this.documentCheckedStatus['constFiscal'] = status;
+            this.pdfUrls['constFiscal'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+            this.documentValidatedStatus['constFiscal'] = !status;
+            this.documentosUnidadForm.patchValue({
+              constFiscal: doc.strArchivo
+            });
+            break;
+          case 'antecedentesPenales':
+            if (this.esPersonaFisica) {
+              this.esAntNoPenalesVis = true;
+              this.documentCheckedStatus['antNoPenales'] = status;
+              this.pdfUrls['antNoPenales'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+              this.documentValidatedStatus['antNoPenales'] = !status;
+              this.documentosUnidadForm.patchValue({
+                antNoPenales: doc.strArchivo
+              });
+            }
+            break;
+          case 'actaConstitutiva':
+            if (this.esPersonaMoral) {
+              this.esActaConstVis = true;
+              this.documentCheckedStatus['actaConst'] = status;
+              this.pdfUrls['actaConst'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+              this.documentValidatedStatus['actaConst'] = !status;
+              this.documentosUnidadForm.patchValue({
+                actaConst: doc.strArchivo
+              });
+            }
+            break;
+          default:
+            break;
+        }
+      });
+    });
   }
 
   /*LIMPIEZA FORMULARIO */

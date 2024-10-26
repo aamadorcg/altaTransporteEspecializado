@@ -15,7 +15,7 @@
             </h6>
           </div>
         </div>
-        <mat-vertical-stepper [linear]="true" #stepper animationDuration="1500"
+        <mat-vertical-stepper [linear]="false" #stepper animationDuration="1500"
           class="fondo-stepper rounded mat-stepper-vertical">
           <!-- Step 1 - DATOS DE LA FACTURA -->
           <mat-step [stepControl]="datosConcesionForm">
@@ -484,219 +484,39 @@
                     </svg> para visualizar el documento seleccionado. </p>
                 </div>
               </div>
-              <div class="row justify-content-center ">
-                <div class="col-md-4">
-                  <div class="card cards me-2 mt-2" style="width: 18rem;">
-                    <div class="card-body">
-                      <iframe width="100%" height="300" class="rounded" [src]="pdfUrls['tarjetaCirculacion']"></iframe>
-                      <div class="text-center">
-                        <div class="input-group mb-3 justify-content-center">
-                          <input type="file" accept=".pdf" (change)="pdfSeleccionado($event, 'tarjetaCirculacion')"
-                            style="display: none;" #tarjetaCirculacionInput>
-                          <button type="button" matTooltip="Seleccionar Documento" matTooltipPosition="left"
-                            class="mat-mdc-tooltip-trigger btn buton-subir-archivo"
-                            (click)="tarjetaCirculacionInput.click()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                              viewBox="0 0 16 16" class="bi bi-upload">
-                              <path
-                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z">
-                              </path>
-                              <path
-                                d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z">
-                              </path>
-                            </svg>
-                          </button>
-                          <a matTooltip="Ver Documento" matTooltipPosition="above" target="_blank" type="button"
-                            class="mat-mdc-tooltip-trigger btn buton-ver-archivo text-white"
-                            [href]="pdfUrls['tarjetaCirculacion']">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
-                              viewBox="0 0 16 16" class="bi bi-eyeglasses">
-                              <path
-                                d="M4 6a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm2.625.547a3 3 0 0 0-5.584.953H.5a.5.5 0 0 0 0 1h.541A3 3 0 0 0 7 8a1 1 0 0 1 2 0 3 3 0 0 0 5.959.5h.541a.5.5 0 0 0 0-1h-.541a3 3 0 0 0-5.584-.953A1.993 1.993 0 0 0 8 6c-.532 0-1.016.208-1.375.547zM14 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0z">
-                              </path>
-                            </svg>
-                          </a>
-                          <div matTooltip="Validación de Documento" matTooltipPosition="right"
-                            class="mat-mdc-tooltip-trigger input-group-text">
-                            <input type="checkbox" disabled="" class="form-check-input mt-0">
-                          </div>
-                        </div>
-                        <hr>
-                        <h6 [ngClass]="esPersonaFisica ? 'tittle' : 'tittleMoral'" class="card-title rounded">TARJETA DE
-                          CIRCULACIÓN</h6>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="card cards me-2 mt-2" style="width: 18rem;">
-                    <div class="card-body">
-                      <iframe width="100%" height="300" class="rounded" [src]="pdfUrls['repuve']"></iframe>
-                      <div class="text-center">
-                        <div class="input-group mb-3 justify-content-center">
-                          <input type="file" accept=".pdf" (change)="pdfSeleccionado($event, 'repuve')"
-                            style="display: none;" #repuveInput>
-                          <button type="button" matTooltip="Seleccionar Documento" matTooltipPosition="left"
-                            class="mat-mdc-tooltip-trigger btn buton-subir-archivo" (click)="repuveInput.click()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                              viewBox="0 0 16 16" class="bi bi-upload">
-                              <path
-                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z">
-                              </path>
-                              <path
-                                d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z">
-                              </path>
-                            </svg>
-                          </button>
-                          <a matTooltip="Ver Documento" matTooltipPosition="above" target="_blank" type="button"
-                            class="mat-mdc-tooltip-trigger btn buton-ver-archivo text-white" [href]="pdfUrls['repuve']">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
-                              viewBox="0 0 16 16" class="bi bi-eyeglasses">
-                              <path
-                                d="M4 6a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm2.625.547a3 3 0 0 0-5.584.953H.5a.5.5 0 0 0 0 1h.541A3 3 0 0 0 7 8a1 1 0 0 1 2 0 3 3 0 0 0 5.959.5h.541a.5.5 0 0 0 0-1h-.541a3 3 0 0 0-5.584-.953A1.993 1.993 0 0 0 8 6c-.532 0-1.016.208-1.375.547zM14 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0z">
-                              </path>
-                            </svg>
-                          </a>
-                          <div matTooltip="Validación de Documento" matTooltipPosition="right"
-                            class="mat-mdc-tooltip-trigger input-group-text">
-                            <input type="checkbox" disabled="" class="form-check-input mt-0">
-                          </div>
-                        </div>
-                        <hr>
-                        <h6 [ngClass]="esPersonaFisica ? 'tittle' : 'tittleMoral'" class="card-title rounded">REPUVE
-                        </h6>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="card cards me-2 mt-2" style="width: 18rem;">
-                    <div class="card-body">
-                      <iframe width="100%" height="300" class="rounded" [src]="pdfUrls['poliza']"></iframe>
-                      <div class="text-center">
-                        <div class="input-group mb-3 justify-content-center">
-                          <input type="file" accept=".pdf" (change)="pdfSeleccionado($event, 'poliza')"
-                            style="display: none;" #polizaInput>
-                          <button type="button" matTooltip="Seleccionar Documento" matTooltipPosition="left"
-                            class="mat-mdc-tooltip-trigger btn buton-subir-archivo" (click)="polizaInput.click()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                              viewBox="0 0 16 16" class="bi bi-upload">
-                              <path
-                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z">
-                              </path>
-                              <path
-                                d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z">
-                              </path>
-                            </svg>
-                          </button>
-                          <a matTooltip="Ver Documento" matTooltipPosition="above" target="_blank" type="button"
-                            class="mat-mdc-tooltip-trigger btn buton-ver-archivo text-white" [href]="pdfUrls['poliza']">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
-                              viewBox="0 0 16 16" class="bi bi-eyeglasses">
-                              <path
-                                d="M4 6a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm2.625.547a3 3 0 0 0-5.584.953H.5a.5.5 0 0 0 0 1h.541A3 3 0 0 0 7 8a1 1 0 0 1 2 0 3 3 0 0 0 5.959.5h.541a.5.5 0 0 0 0-1h-.541a3 3 0 0 0-5.584-.953A1.993 1.993 0 0 0 8 6c-.532 0-1.016.208-1.375.547zM14 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0z">
-                              </path>
-                            </svg>
-                          </a>
-                          <div matTooltip="Validación de Documento" matTooltipPosition="right"
-                            class="mat-mdc-tooltip-trigger input-group-text">
-                            <input type="checkbox" disabled="" class="form-check-input mt-0">
-                          </div>
-                        </div>
-                        <hr>
-                        <h6 [ngClass]="esPersonaFisica ? 'tittle' : 'tittleMoral'" class="card-title rounded">PÓLIZA
-                          SEGURO
-                        </h6>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <br><br><br><br><br><br>
-                <div class="row mt-4 justify-content-center">
-                  <div class="col-md-4 mx-2 mx-auto">
-                    <div class="card cards me-2 mt-2" style="width: 18rem;">
-                      <div class="card-body">
-                        <iframe width="100%" height="300" class="rounded" [src]="pdfUrls['dictamenGas']"></iframe>
-                        <div class="text-center">
-                          <div class="input-group mb-3 justify-content-center">
-                            <input type="file" accept=".pdf" (change)="pdfSeleccionado($event, 'dictamenGas')"
-                              style="display: none;" #dictamenGasInput>
-                            <button type="button" matTooltip="Seleccionar Documento" matTooltipPosition="left"
-                              class="mat-mdc-tooltip-trigger btn buton-subir-archivo"
-                              (click)="dictamenGasInput.click()">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                                viewBox="0 0 16 16" class="bi bi-upload">
-                                <path
-                                  d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z">
-                                </path>
-                                <path
-                                  d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z">
-                                </path>
-                              </svg>
-                            </button>
-                            <a matTooltip="Ver Documento" matTooltipPosition="above" target="_blank" type="button"
-                              class="mat-mdc-tooltip-trigger btn buton-ver-archivo text-white"
-                              [href]="pdfUrls['dictamenGas']">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
-                                viewBox="0 0 16 16" class="bi bi-eyeglasses">
-                                <path
-                                  d="M4 6a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm2.625.547a3 3 0 0 0-5.584.953H.5a.5.5 0 0 0 0 1h.541A3 3 0 0 0 7 8a1 1 0 0 1 2 0 3 3 0 0 0 5.959.5h.541a.5.5 0 0 0 0-1h-.541a3 3 0 0 0-5.584-.953A1.993 1.993 0 0 0 8 6c-.532 0-1.016.208-1.375.547zM14 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0z">
-                                </path>
-                              </svg>
-                            </a>
-                            <div matTooltip="Validación de Documento" matTooltipPosition="right"
-                              class="mat-mdc-tooltip-trigger input-group-text">
-                              <input type="checkbox" disabled="" class="form-check-input mt-0">
-                            </div>
-                          </div>
-                          <hr>
-                          <h6 [ngClass]="esPersonaFisica ? 'tittle' : 'tittleMoral'" class="card-title rounded">DICTAMEN
-                            DE GAS</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4 mx-2 mx-auto">
-                    <div class="card cards me-2 mt-2" style="width: 18rem;">
-                      <div class="card-body">
-                        <iframe width="100%" height="300" class="rounded" [src]="pdfUrls['ine']"></iframe>
-                        <div class="text-center">
-                          <div class="input-group mb-3 justify-content-center">
-                            <input type="file" accept=".pdf" (change)="pdfSeleccionado($event, 'ine')"
-                              style="display: none;" #ineInput>
-                            <button type="button" matTooltip="Seleccionar Documento" matTooltipPosition="left"
-                              class="mat-mdc-tooltip-trigger btn buton-subir-archivo" (click)="ineInput.click()">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                                viewBox="0 0 16 16" class="bi bi-upload">
-                                <path
-                                  d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z">
-                                </path>
-                                <path
-                                  d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z">
-                                </path>
-                              </svg>
-                            </button>
-                            <a matTooltip="Ver Documento" matTooltipPosition="above" target="_blank" type="button"
-                              class="mat-mdc-tooltip-trigger btn buton-ver-archivo text-white" [href]="pdfUrls['ine']">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
-                                viewBox="0 0 16 16" class="bi bi-eyeglasses">
-                                <path
-                                  d="M4 6a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm2.625.547a3 3 0 0 0-5.584.953H.5a.5.5 0 0 0 0 1h.541A3 3 0 0 0 7 8a1 1 0 0 1 2 0 3 3 0 0 0 5.959.5h.541a.5.5 0 0 0 0-1h-.541a3 3 0 0 0-5.584-.953A1.993 1.993 0 0 0 8 6c-.532 0-1.016.208-1.375.547zM14 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0z">
-                                </path>
-                              </svg>
-                            </a>
-                            <div matTooltip="Validación de Documento" matTooltipPosition="right"
-                              class="mat-mdc-tooltip-trigger input-group-text">
-                              <input type="checkbox" disabled="" class="form-check-input mt-0">
-                            </div>
-                          </div>
-                          <hr>
-                          <h6 [ngClass]="esPersonaFisica ? 'tittle' : 'tittleMoral'" class="card-title rounded">INE</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <!-- <div class="row justify-content-center "> -->
+              <div class="cards-container d-grid justify-content-center">
+                <!-- ACTUALMENTE NO SE USARIA EL *ngIf porque si no no se mostraria ningun archivo -->
+                <!-- <app-card-pdf *ngIf="esTarjetaCirculacionVis" [pdfUrl]="pdfUrls['tarjetaCirculacion']" -->
+                <app-card-pdf [pdfUrl]="pdfUrls['tarjetaCirculacion']"
+                  [title]="'TARJETA DE CIRCULACIÓN'" [controlName]="'tarjetaCirculacion'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['tarjetaCirculacion']" [esModificado]="esModificacion">
+                </app-card-pdf>
+
+                <!-- <app-card-pdf *ngIf="esRepuveVis" [pdfUrl]="pdfUrls['repuve']" [title]="'REPUVE'" -->
+                <app-card-pdf [pdfUrl]="pdfUrls['repuve']" [title]="'REPUVE'"
+                  [controlName]="'repuve'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['repuve']" [esModificado]="esModificacion">
+                </app-card-pdf>
+
+                <!-- <app-card-pdf *ngIf="esPolizaVis" [pdfUrl]="pdfUrls['poliza']" [title]="'POLIZA SEGURO'" -->
+                <app-card-pdf [pdfUrl]="pdfUrls['poliza']" [title]="'POLIZA SEGURO'"
+                  [controlName]="'poliza'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['poliza']" [esModificado]="esModificacion">
+                </app-card-pdf>
+
+                <!-- <app-card-pdf *ngIf="esDictamenGasVis" [pdfUrl]="pdfUrls['dictamenGas']" [title]="'DICTAMEN DE GAS'" -->
+                <app-card-pdf [pdfUrl]="pdfUrls['dictamenGas']" [title]="'DICTAMEN DE GAS'"
+                  [controlName]="'dictamenGas'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['dictamenGas']" [esModificado]="esModificacion">
+                </app-card-pdf>
+
+                <!-- <app-card-pdf *ngIf="esIneVis" [pdfUrl]="pdfUrls['ine']" [title]="'INE'" [controlName]="'ine'" -->
+                <app-card-pdf [pdfUrl]="pdfUrls['ine']" [title]="'INE'" [controlName]="'ine'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['ine']" [esModificado]="esModificacion">
+                </app-card-pdf>
               </div>
               <br><br>
               <div class="row g-3  mt-3">
