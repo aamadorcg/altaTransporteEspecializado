@@ -47,4 +47,29 @@ export class AltaRevistaService {
         })
       );
   }
+
+  obtenerDocumentosTramite(){
+    return this.http.get<any>(`${this.apiUrl}/tramites/obtenerDocumentacion`);
+  }
+
+  obtenerClavesVehiculares(){
+    return this.http.get<any>(`${this.apiUrl}/tramites/obtenerClavesVehiculares`);
+  }
+
+  obtenerMunicipios(body: any) {
+    return this.http.post(`${this.apiUrl + '/tramites/obtenerMunicipios'}`, body);
+  }
+
+  obtenerLocalidades(body: any) {
+    return this.http.post(`${this.apiUrl + '/tramites/obtenerLocalidades'}`, body);
+  }
+
+  validaNiv(body: any){
+    return this.http.post(`${this.apiUrl + '/tramites/validarNiv'}`, body);
+  }
+
+  validaRfc(body: any){
+    return this.http.post(`${this.apiUrl + '/tramites/validarPermisionario'}`, body);
+  }
+
 }

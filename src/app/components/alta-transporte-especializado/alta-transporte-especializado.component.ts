@@ -4,7 +4,6 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { AlertaUtility } from 'src/app/shared/utilities/alerta';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material/stepper';
-import { convertirPDFbase64 } from 'src/app/shared/utilities/convertirPDFbase64';
 import { COLOR_CONFIRMAR, COLOR_SI } from 'src/app/shared/constants/colores';
 import { TerminosCondicionesComponent } from 'src/app/components/terminos-condiciones/terminos-condiciones.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -32,11 +31,48 @@ export class AltaTransporteEspecializado {
   FORM_DATOS_DOCUMENTOS = 'Documentos de la Unidad';
 
   descripciones: { [key: string]: string } = {
+    //Formulario Datos Factura
     strNiv: `El campo <strong>Número de Identificación Vehicular</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strCveVeh: `El campo <strong>Clave Vehicular</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strMotor: `El campo <strong>Número de Motor</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strMarca: `El campo <strong>Marca</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    intModelo: `El campo <strong>Modelo</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strTipoVeh: `El campo <strong>Tipo</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    intCapacidad: `El campo <strong>Capacidad</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    intCilindros: `El campo <strong>Cilindros</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strCombustible: `El campo <strong>Combustible</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strColor: `El campo <strong>Color</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    intPuertas: `El campo <strong>Puertas</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strUnidadMedida: `El campo <strong>Unidad de Medida</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strEntFed: `El campo <strong>Entidad Federativa</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    dtFechaFact: `El campo <strong>Fecha de la Factura</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strNoFact: `El campo <strong>No. Factura</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strImporteFact: `El campo <strong>Importe de la Factura</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strProcedencia: `El campo <strong>Procedencia</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strAgenciaDist: `El campo <strong>Agencia Distribuidora</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strTipoServ: `El campo <strong>Tipo de Servicio</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strUsoVeh: `El campo <strong>Uso del Vehículo</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    strRepuve: `El campo <strong>REPUVE</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
+    //Formulario Permisionario
     strRfc: `El campo <strong>RFC</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strCurp: `El campo <strong>CURP</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strNombre: `El campo <strong>Nombre</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strApPaterno: `El campo <strong>Apellido Paterno</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strApMaterno: `El campo <strong>Apellido Materno</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strSexo: `El campo <strong>SEXO</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strFechaNac: `El campo <strong>Fecha Nacimiento</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strCalleProp: `El campo <strong>Calle</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strNumExt: `El campo <strong>Número Exterior</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strNumInt: `El campo <strong>Número Interior</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    estado: `El campo <strong>Estado</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strMunicipio: `El campo <strong>Municipio</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strLocalidad: `El campo <strong>Localidad</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strCp: `El campo <strong>Código Postal</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strColonia: `El campo <strong>Colonia</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strTelefonoRepresentante: `El campo <strong>Teléfono Representante</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, debe contener 10 núumeros.`,
     strEmail: `El campo <strong>Correo</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strTelefonoContacto: `El campo <strong>Teléfono Concesionario</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, debe contener 10 núumeros.`,
-    strTelefonoRepresentante: `El campo <strong>Teléfono Representante</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, debe contener 10 núumeros.`,
+    //Fromulario Tipo Trámite
     strTramite: `El campo <strong>Revista </strong> de <strong>${this.FORM_TRAMITE}</strong>, debe estar seleccionado.`,
   };
 
@@ -44,7 +80,7 @@ export class AltaTransporteEspecializado {
   cargarSpinner = false;
   pdfUrls: { [key: string]: any } = {};
   listaTramites: any[] = [];
-  arregloDocumentos: any[] = [];
+
   documentoGas: any;
   /*Control Documentos Visibles*/
   esSolicitudTitularVis: boolean = false;
@@ -64,8 +100,6 @@ export class AltaTransporteEspecializado {
   documentCheckedStatus: { [key: string]: boolean } = {};
   documentValidatedStatus: { [key: string]: boolean } = {};
 
-
-
   RFC_FISICA_PATTERN = '^([A-ZÑ&]{4})(\\d{6})([A-Z\\d]{3})$';
   RFC_MORAL_PATTERN = '^([A-ZÑ&]{3})(\\d{6})([A-Z\\d]{3})$';
   esPersonaFisica: boolean = false;
@@ -73,6 +107,9 @@ export class AltaTransporteEspecializado {
   esModificacion: boolean = false;
   opcCveVeh: any[] = [];
   opcCveVehFiltradas: any[] = [];
+  listaMunicipios: any[] = [];
+  listaLocalidades: any[] = [];
+  listaDocumentos: any[] = [];
 
   datosConcesionForm!: FormGroup;
   datosPermisionarioForm!: FormGroup;
@@ -96,34 +133,35 @@ export class AltaTransporteEspecializado {
     this.inicializarFormularios();
     this.configurarRFCFisicaMoral();
     this.cargarDefaultPDFs();
+    this.cargaDocumentosTramite();
     this.cargaValoresCamposDinamicos();
-    //this.observarFormularios();
+    this.observarFormularios();
   }
 
   private inicializarFormularios() {
     this.datosConcesionForm = this.formBuilder.group({
       intId: 0,
       strNiv: ['', Validators.required],
-      strCveVeh: [{ value: '',disabled: false }],
-      strMotor: [{ value: '',disabled: false}],
-      strMarca: [{ value: '',disabled: false}],
-      intModelo: [{ value: '',disabled: false}],
-      strTipoVeh: [{ value: '',disabled: false}],
-      intCapacidad: [{ value: '',disabled: false}],
-      intCilindros: [{ value: '',disabled: false}],
-      strCombustible: [{ value: '',disabled: false}],
-      strColor: [{ value: '',disabled: false}],
-      intPuertas: [{ value: '',disabled: false}],
-      strUnidadMedida: [{ value: '',disabled: false}],
-      strEntFed: [{ value: '',disabled: false}],
-      dtFechaFact: [{ value: '',disabled: false}],
-      strNoFact: [{ value: '',disabled: false}],
-      strImporteFact: [{ value: '',disabled: false}],
-      strProcedencia: [{ value: '',disabled: false}],
-      strAgenciaDist: [{ value: '',disabled: false}],
-      strTipoServ: [{ value: '',disabled: false}],
-      strUsoVeh: [{ value: '',disabled: false}],
-      strRepuve: [{ value: '',disabled: false}]
+      strCveVeh: ['', Validators.required],
+      strMotor: ['', Validators.required],
+      strMarca: ['', Validators.required],
+      intModelo: ['', Validators.required],
+      strTipoVeh: ['', Validators.required],
+      intCapacidad: ['', Validators.required],
+      intCilindros: ['', Validators.required],
+      strCombustible: ['', Validators.required],
+      strColor: ['', Validators.required],
+      intPuertas: ['', Validators.required],
+      strUnidadMedida: ['', Validators.required],
+      strEntFed: ['', Validators.required],
+      dtFechaFact: ['', Validators.required],
+      strNoFact: ['', Validators.required],
+      strImporteFact: ['', Validators.required],
+      strProcedencia: ['', Validators.required],
+      strAgenciaDist: ['', Validators.required],
+      strTipoServ: ['', Validators.required],
+      strUsoVeh: ['', Validators.required],
+      strRepuve: ['', Validators.required]
     });
 
     this.datosPermisionarioForm = this.formBuilder.group({
@@ -131,23 +169,23 @@ export class AltaTransporteEspecializado {
         validators: [Validators.required, this.rfcValidator()],
         updateOn: 'change'
       }],
-      strNombre: [{ value: '',disabled: false}],
-      strCurp: [{ value: '',disabled: false}],
-      strApPaterno: [{ value: '',disabled: false}],
-      strApMaterno: [{ value: '',disabled: false}],
-      strCalleProp: [{ value: '',disabled: false}],
-      strNumExt: [{ value: '',disabled: false}],
-      strNumInt: [{ value: '',disabled: false}],
-      strColonia: [{ value: '',disabled: false}],
-      strLocalidad: [{ value: '',disabled: false}],
-      strMunicipio: [{ value: '',disabled: false}],
-      estado: [{ value: '',disabled: false}],
-      strSexo: [{ value: '',disabled: false}],
-      strFechaNac: [{ value: '',disabled: false}],
-      strCP: [{ value: '',disabled: false}],
+      strCurp: ['', Validators.required],
+      strNombre: ['', Validators.required],
+      strApPaterno: ['', Validators.required],
+      strApMaterno: ['', Validators.required],
+      strSexo: ['', Validators.required],
+      strFechaNac: ['', Validators.required],
+      strCalleProp: ['', Validators.required],
+      strNumExt: ['', Validators.required],
+      strNumInt: ['', Validators.required],
+      estado: ['', Validators.required],
+      strMunicipio: ['', Validators.required],
+      strLocalidad: ['', Validators.required],
+      strCP: ['', Validators.required],
+      strColonia: ['', Validators.required],
       strTelefonoRepresentante: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]],
       strEmail: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
-      strTelefonoContacto: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]] 
+      strTelefonoContacto: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]]
 
     });
 
@@ -156,11 +194,18 @@ export class AltaTransporteEspecializado {
     });
 
     this.documentosUnidadForm = this.formBuilder.group({
-      tarjetaCirculacion: [null, Validators.required],
-      repuve: [null, Validators.required],
+      solicitudTitular: [null, Validators.required],
+      convenioEmpresa: [null, Validators.required],
       poliza: [null, Validators.required],
-      dictamenGas: [null, Validators.required],
+      ultimoPermiso: [null, Validators.required],
+      tarjetaCirculacion: [null, Validators.required],
+      ultimoPagoRefrendo: [null, Validators.required],
       ine: [null, Validators.required],
+      constanciaFis: [null, Validators.required],
+      factura: [null, Validators.required],
+      curp: [null, Validators.required],
+      comprobanteDom: [null, Validators.required],
+      antPenales: [null, Validators.required],
       aceptaTerminos: [false, Validators.requiredTrue]
     });
   }
@@ -196,7 +241,7 @@ export class AltaTransporteEspecializado {
   configurarRFCFisicaMoral() {
     this.activatedRoute.data.subscribe((param: any) => {
       if (param.tipo === 'F') {
-        this.formConcesionario['strRfc'].setValidators([
+        this.formPermisionario['strRfc'].setValidators([
           Validators.required,
           Validators.minLength(13),
           Validators.maxLength(13),
@@ -205,7 +250,7 @@ export class AltaTransporteEspecializado {
         this.datosPermisionarioForm.get('strRfc')?.updateValueAndValidity();
         this.esPersonaFisica = true;
       } else if (param.tipo === 'M') {
-        this.formConcesionario['strRfc'].setValidators([
+        this.formPermisionario['strRfc'].setValidators([
           Validators.required,
           Validators.minLength(12),
           Validators.maxLength(12),
@@ -217,123 +262,186 @@ export class AltaTransporteEspecializado {
     });
   }
 
-  // private cargarDefaultPDFs() {
-  //   const defaultPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/documents/subirArchivo.pdf');
-  //   this.pdfUrls = {
-  //     tarjetaCirculacion: defaultPdfUrl,
-  //     repuve: defaultPdfUrl,
-  //     poliza: defaultPdfUrl,
-  //     dictamenGas: defaultPdfUrl,
-  //     ine: defaultPdfUrl,
-  //   };
-  // }
   private cargarDefaultPDFs() {
-    const defaultPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/documents/subirArchivo.pdf');
-    this.defaultPdfUrl = defaultPdfUrl;
+    this.defaultPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/documents/subirArchivo.pdf');
   }
 
-  // Agregar a reiniciaFormulario() o metodo similar
-  reiniciaDocumentos() {
-    if (this.cardPdfs) {
-      this.cardPdfs.forEach((cardPdf) => {
-        cardPdf.isDefaultPdf = true;
-      });
-    }
+  cargaDocumentosTramite() {
+    this.servicios.obtenerDocumentosTramite().subscribe({
+      next: (value: any) => {
+        this.listaDocumentos = value.data;
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorGenerico(err);
+      }
+    })
   }
 
   ngAfterViewInit() {
     this.validaCamposConAutocomplete();
   }
 
-  /* IDENTIFICAR CAMBIOS EN FORMULARIO */
-  private observarFormularios() {
-    //TODO: Verificar con Eduardo que eventos deben lanzarse durante la captura de datos en el formulario
-  }
-
   /* OBTENER VALORES PARA USAR EN FORMULARIO */
-  cargaValoresCamposDinamicos(){
-    //TODO Identificar que campos obtienen valores dinámicamente -> Entidad Federativa, Tipo Servicio, etc
-    //TODO Reemplazar por consumo endpoint para obtener claves vehiculares
-    this.opcCveVeh = [
+  cargaValoresCamposDinamicos() {
+    /* this.opcCveVeh = [
       {
         "strCveVeh": "0000001",
         "nombre": "Opcion 1"
-    },
-    {
-        "strCveVeh": "0000002",
-        "nombre": "Opcion 2"
-    },
-    {
-        "strCveVeh": "0000003",
-        "nombre": "Opcion 3"
-    },
-    {
-        "strCveVeh": "0000004",
-        "nombre": "Opcion 4"
-    },
-    {
-        "strCveVeh": "0000005",
-        "nombre": "Opcion 5"
-    },
-    {
-        "strCveVeh": "0000006",
-        "nombre": "Opcion 6"
-    },
-    {
-        "strCveVeh": "0000007",
-        "nombre": "Opcion 7"
-    },
-    {
-        "strCveVeh": "0000008",
-        "nombre": "Opcion 8"
-    },
-    {
-        "strCveVeh": "0000009",
-        "nombre": "Opcion 9"
-    },
-    {
-        "strCveVeh": "0000010",
-        "nombre": "Opcion 10"
-    },
-    {
-        "strCveVeh": "0000011",
-        "nombre": "Opcion 11"
-    },
-    {
-        "strCveVeh": "0000012",
-        "nombre": "Opcion 12"
-    },
-    {
-        "strCveVeh": "0000013",
-        "nombre": "Opcion 13"
-    },
-    {
-        "strCveVeh": "0000014",
-        "nombre": "Opcion 14"
-    },
-    {
-        "strCveVeh": "0000015",
-        "nombre": "Opcion 15"
+      }
+    ]; */
+    this.servicios.obtenerClavesVehiculares().subscribe({
+      next: (value: any) => {
+        this.cargarSpinner = false;
+        this.opcCveVeh = value.data;
+        // this.opcCveVehFiltradas = this.opcCveVeh;
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorGenerico(err);
+      },
+    });
+
+    let jsonEstados = {
+      intIdEstado: 1
     }
-    ];
-    this.opcCveVehFiltradas = this.opcCveVeh;
+    this.servicios.obtenerMunicipios(jsonEstados).subscribe({
+      next: (value: any) => {
+        this.cargarSpinner = false;
+        this.listaMunicipios = value.data;
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorGenerico(err);
+      }
+    });
   }
 
   filtrarOpciones(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const valorBusqueda = inputElement?.value || '';
     this.opcCveVehFiltradas = this.opcCveVeh.filter(opcion =>
-        opcion.nombre.toLowerCase().includes(valorBusqueda.toLowerCase())
+      opcion.strClaveVehicular.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
+      opcion.strEmpresa.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
+      opcion.strModelo.toLowerCase().includes(valorBusqueda.toLowerCase())
     );
-}
+  }
 
-/*CARGA DE DATOS A FORMULARIO */
+  /* IDENTIFICAR CAMBIOS EN FORMULARIO */
+  private observarFormularios() {
+    this.datosConcesionForm.get('strNiv')?.valueChanges.subscribe((strNiv) => {
+      if (this.actualizarForm) return;
+      setTimeout(() => {
+        if (strNiv?.length === 17) {
+          this.validaNiv(this.formConcesion['strNiv'].value);
+        }
+      }, 0);
+    });
 
+    this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((strRfc) => {
+      if (this.actualizarForm) return;
+      setTimeout(() => {
+        if ((strRfc && strRfc.length === 13 && this.esPersonaFisica && this.formPermisionario['strRfc'].valid) ||
+          (strRfc && strRfc.length === 12 && this.esPersonaMoral && this.formPermisionario['strRfc'].valid)) {
+          this.validaRfc(this.formPermisionario['strRfc'].value);
+        }
+      }, 0);
+    });
+
+    this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
+      if (rfc.length <= 10) {
+        this.datosPermisionarioForm.patchValue({ strCurp: rfc });
+        if (rfc.length < 10) {
+          this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
+        }
+      }
+      if (rfc.length >= 10) {
+        const fechaNac = rfc.substring(4, 10);
+        this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
+        this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
+        this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
+      }
+      
+    });
+
+    this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
+      if (curp.length >= 11) {
+        const genderChar = curp.charAt(10);
+        if (genderChar === 'H') {
+          this.datosPermisionarioForm.patchValue({ strSexo: 'MASCULINO' });
+        } else if (genderChar === 'M') {
+          this.datosPermisionarioForm.patchValue({ strSexo: 'FEMENINO' });
+        }
+        this.datosPermisionarioForm.get('strSexo')?.markAsDirty();
+        this.datosPermisionarioForm.get('strSexo')?.markAsTouched();
+      } else {
+        this.datosPermisionarioForm.patchValue({ strSexo: '' });
+      }
+    });
+  }
+
+  validaNiv(value: any) {
+    let json = {
+      strNiv: value
+    }
+    this.servicios.validaNiv(json).subscribe({
+      error: (err: HttpErrorResponse) => {
+        this.resetFormulario('datosConcesionForm');
+        this.errorGenerico(err);
+      }
+    })
+  }
+
+  validaRfc(value: any) {
+    let json = {
+      strRfc: value,
+      esPersonaFisica: this.esPersonaFisica
+    }
+    this.servicios.validaNiv(json).subscribe({
+      next: (value: any) => {
+        this.llenaYBloqueaCampos(value.data);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.resetFormulario('datosPermisionarioForm');
+        this.errorGenerico(err);
+      }
+    })
+  }
+
+  llenaYBloqueaCampos(data: any) {
+    if (data) {
+      this.datosPermisionarioForm.patchValue(data);
+      Object.keys(this.formPermisionario).forEach((campo) => {
+        const control = this.documentosUnidadForm.get(campo);
+        if (control && control.value) {
+          control.disable();
+        }
+      });
+    }
+  }
+
+  convertirFecha(codigo: string): string {
+    if (codigo.length !== 6) {
+      throw new Error("El código debe tener 6 dígitos.");
+    }
+
+    const anioCorto: string = codigo.substring(0, 2); // YY
+    const mes: string = codigo.substring(2, 4);       // MM
+    const dia: string = codigo.substring(4, 6); 
+
+    let anioCompleto: string;
+    if (parseInt(anioCorto) >= 40) {
+      anioCompleto = '19' + anioCorto;
+    } else {
+      anioCompleto = '20' + anioCorto;
+    }
+    return `${dia}-${mes}-${anioCompleto}`;
+  }
+
+  /*CARGA DE DATOS A FORMULARIO */
   cargarDatosFormulario(formulario: FormGroup, nombreFormulario: ClavesFormulario, desdeNextStep: boolean) {
-   if (formulario.invalid) {
+    if (formulario.invalid) {
       formulario.markAllAsTouched();
       const primerCampoInvalido = this.obtenerPrimerCampoInvalido(formulario);
       if (primerCampoInvalido) {
+        console.log(primerCampoInvalido);
         const descripcion = this.descripciones[primerCampoInvalido] || 'Este campo es obligatorio';
         this.alertaUtility.mostrarAlerta({
           message: descripcion,
@@ -346,47 +454,8 @@ export class AltaTransporteEspecializado {
         });
         return;
       }
-    }else{
+    } else {
       this.stepper.next();
-    }
-  }
-
-  pdfSeleccionado(event: Event, controlName: string) {
-    const input = event.target as HTMLInputElement;
-    if (input.files?.[0]) {
-      const file = input.files[0];
-      const fileType = file.type;
-      if (fileType !== 'application/pdf') {
-        this.alertaUtility.mostrarAlerta({
-          message: 'Por favor selecciona un archivo PDF.',
-          icon: 'warning',
-          showConfirmButton: true,
-          confirmButtonColor: COLOR_CONFIRMAR,
-          confirmButtonText: 'Confirmar',
-          showCloseButton: false,
-          allowOutsideClick: true
-        });
-        input.value = '';
-        return;
-      }
-      convertirPDFbase64(file).then((base64: string) => {
-        this.documentosUnidadForm.patchValue({
-          [controlName]: base64
-        });
-        const fileURL = URL.createObjectURL(file);
-        this.pdfUrls[controlName] = this.sanitizer.bypassSecurityTrustResourceUrl(fileURL);
-      }).catch(() => {
-        this.alertaUtility.mostrarAlerta({
-          message: 'Error al procesar el archivo PDF.',
-          icon: 'warning',
-          showConfirmButton: true,
-          confirmButtonColor: COLOR_CONFIRMAR,
-          confirmButtonText: 'Confirmar',
-          showCloseButton: false,
-          allowOutsideClick: true
-        });
-        input.value = '';
-      });
     }
   }
 
@@ -398,7 +467,7 @@ export class AltaTransporteEspecializado {
       campoDoc = 'strNombreDocumento';
     }
     documentos.forEach((doc: any) => {
-      this.arregloDocumentos.forEach((doc) => {
+      this.listaDocumentos.forEach((doc) => {
         const status = doc.strAceptado === 'A';
         switch (doc[campoDoc]) {
           case 'SOLICITUD AL TITULAR DE SMyT':
@@ -553,21 +622,60 @@ export class AltaTransporteEspecializado {
     }
   }
 
-  /* ACTUALIZACIONES DE CAMPOS */
-
-  onSelectFocus() {
-    const control = this.tramiteForm.get('strTramite');
-    if (control && !control.value) {
-      control.markAsTouched();
+  reiniciaDocumentos() {
+    if (this.cardPdfs) {
+      this.cardPdfs.forEach((cardPdf) => {
+        cardPdf.isDefaultPdf = true;
+      });
     }
   }
 
-  onSelectChange() {
-    const control = this.tramiteForm.get('strTramite');
-    control?.setErrors(control.value ? null : { required: true });
+  /* ACTUALIZACIONES DE CAMPOS */
+
+  onSelectFocus() {
+    const controlTramite = this.tramiteForm.get('strTramite');
+    if (controlTramite && !controlTramite.value) {
+      controlTramite.markAsTouched();
+    }
+    const controlMunicipio = this.tramiteForm.get('strMunicipio');
+    if (controlMunicipio && !controlMunicipio.value) {
+      controlMunicipio.markAsTouched();
+    }
   }
 
-  validaCamposConAutocomplete(){
+  onSelectChange(event: Event): void {
+    const control = this.tramiteForm.get('strTramite');
+    control?.setErrors(control.value ? null : { required: true });
+    const campoMunicipio = this.datosPermisionarioForm.get('strMunicipio');
+    campoMunicipio?.setErrors(campoMunicipio.value ? null : { required: true });
+    if (campoMunicipio) {
+      const selectElement = event.target as HTMLSelectElement;
+      const selectedValue = selectElement.value;
+      if (selectedValue) {
+        let json = {
+          intIdMunicipio: selectedValue
+        }
+        this.obtenLocalidades(json, () => {
+        });
+      }
+    }
+
+  }
+
+  obtenLocalidades(idTipoTramite: any, callback: () => void): void {
+    this.servicios.obtenerLocalidades(idTipoTramite).subscribe({
+      next: (value: any) => {
+        this.cargarSpinner = false;
+        this.listaLocalidades = value.data;
+        console.log(this.listaLocalidades);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorGenerico(err);
+      }
+    });
+  }
+
+  validaCamposConAutocomplete() {
     const strEmailElement = document.getElementById('strEmail') as HTMLInputElement;
     if (strEmailElement) {
       strEmailElement.addEventListener('input', () => {
@@ -582,13 +690,13 @@ export class AltaTransporteEspecializado {
   }
 
   /**REGISTRO DE LA INFORMACIÓN CAPTURADA */
-  registraInformacion(){
-  //TODO: Definir objeto a enviar a backend para registro de trámite
+  registraInformacion() {
+    //TODO: Definir objeto a enviar a backend para registro de trámite
   }
 
-   /* UTILIDADES  */
+  /* UTILIDADES  */
 
-   private obtenerPrimerCampoInvalido(formulario: FormGroup): string {
+  private obtenerPrimerCampoInvalido(formulario: FormGroup): string {
     const controles = formulario.controls;
     for (const campo in controles) {
       if (controles[campo].invalid) {
@@ -648,6 +756,27 @@ export class AltaTransporteEspecializado {
     return endpoint;
   }
 
+  errorGenerico(err: HttpErrorResponse) {
+    this.cargarSpinner = false;
+    let message: string;
+    if (err.error instanceof ErrorEvent) {
+      message = 'Ocurrió un problema con la conexión de red. Por favor, verifica tu conexión a internet.';
+    } else if (err.status === 0) {
+      message = 'El servicio no está disponible en este momento.<br> Intente nuevamente más tarde.';
+    } else {
+      message = err.error.strMessage;
+    }
+    this.alertaUtility.mostrarAlerta({
+      message: message,
+      icon: 'error',
+      showConfirmButton: true,
+      confirmButtonColor: COLOR_CONFIRMAR,
+      confirmButtonText: 'Confirmar',
+      showCloseButton: false,
+      allowOutsideClick: true
+    });
+  }
+
   openModal() {
     this.modalTerminosCondiciones.open(TerminosCondicionesComponent, { size: 'xl', centered: true });
   }
@@ -656,7 +785,7 @@ export class AltaTransporteEspecializado {
     return this.datosConcesionForm.controls;
   }
 
-  get formConcesionario() {
+  get formPermisionario() {
     return this.datosPermisionarioForm.controls;
   }
 
