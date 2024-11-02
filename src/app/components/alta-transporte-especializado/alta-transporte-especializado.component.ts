@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AltaRevistaService } from 'src/app/services/alta-revista.service';
 import { CardPdfComponent } from '../card-pdf/card-pdf.component';
+import Swal from 'sweetalert2';
 
 
 type ClavesFormulario = 'datosConcesionForm' | 'datosPermisionarioForm' | 'tramiteForm' | 'documentosUnidadForm';
@@ -117,6 +118,7 @@ export class AltaTransporteEspecializado {
   documentosUnidadForm!: FormGroup;
 
   defaultPdfUrl: any;
+  idTramite: string = "";
 
   constructor(
     private formBuilder: FormBuilder,
@@ -358,7 +360,7 @@ export class AltaTransporteEspecializado {
         this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
         this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
       }
-      
+
     });
 
     this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
@@ -424,7 +426,7 @@ export class AltaTransporteEspecializado {
 
     const anioCorto: string = codigo.substring(0, 2); // YY
     const mes: string = codigo.substring(2, 4);       // MM
-    const dia: string = codigo.substring(4, 6); 
+    const dia: string = codigo.substring(4, 6);
 
     let anioCompleto: string;
     if (parseInt(anioCorto) >= 40) {
@@ -598,38 +600,6 @@ export class AltaTransporteEspecializado {
     });
   }
 
-  /*LIMPIEZA FORMULARIO */
-
-  private limpiarFormulariosSiguientes(formularioActual: ClavesFormulario) {
-    const formularios: ClavesFormulario[] = [
-      'datosConcesionForm',
-      'datosPermisionarioForm',
-      'tramiteForm',
-      'documentosUnidadForm',
-    ];
-    const indiceFormularioActual = formularios.indexOf(formularioActual);
-    formularios.slice(indiceFormularioActual + 1).forEach((formulario) => {
-      this.resetFormulario(formulario);
-    });
-  }
-
-  private resetFormulario(nombreFormulario: ClavesFormulario) {
-    const formulario = this[nombreFormulario];
-    if (formulario) {
-      formulario.reset();
-      formulario.markAsPristine();
-      formulario.markAsUntouched();
-    }
-  }
-
-  reiniciaDocumentos() {
-    if (this.cardPdfs) {
-      this.cardPdfs.forEach((cardPdf) => {
-        cardPdf.isDefaultPdf = true;
-      });
-    }
-  }
-
   /* ACTUALIZACIONES DE CAMPOS */
 
   onSelectFocus() {
@@ -667,7 +637,7 @@ export class AltaTransporteEspecializado {
       next: (value: any) => {
         this.cargarSpinner = false;
         this.listaLocalidades = value.data;
-        console.log(this.listaLocalidades);
+        //console.log(this.listaLocalidades);
       },
       error: (err: HttpErrorResponse) => {
         this.errorGenerico(err);
@@ -691,7 +661,230 @@ export class AltaTransporteEspecializado {
 
   /**REGISTRO DE LA INFORMACIÓN CAPTURADA */
   registraInformacion() {
-    //TODO: Definir objeto a enviar a backend para registro de trámite
+    let json = {};
+    if (this.esModificacion) {
+      //this.obtenDocumentosParaModificar();
+      json = {
+        intIdTramite: this.idTramite
+      };
+    } else {
+      this.obtenDocumentosParaEnviar();
+      json = {
+        intIdTipoTramite: 13,
+        esPersonaFisica: this.esPersonaFisica,
+        facturaVo: {
+          strNiv: this.formConcesion['strNiv'].value,
+          intIdCaCve: this.formConcesion['strCveVeh'].value,
+          strNumeroMotor: this.formConcesion['strMotor'].value,
+          strMarca: this.formConcesion['strMarca'].value,
+          intModelo: this.formConcesion['intModelo'].value,
+          strTipo: this.formConcesion['strTipoVeh'].value,
+          intCapacidad: this.formConcesion['intCapacidad'].value,
+          intCilindros: this.formConcesion['intCilindros'].value,
+          intIdCombustible: this.formConcesion['strCombustible'].value,
+          strColor: this.formConcesion['strColor'].value,
+          intPuertas: this.formConcesion['intPuertas'].value,
+          strUnidadMedida: this.formConcesion['strUnidadMedida'].value,
+          intIdEntidad: this.formConcesion['strEntFed'].value,
+          ldFechaFactura: this.formConcesion['dtFechaFact'].value,
+          strNumeroFactura: this.formConcesion['strNoFact'].value,
+          dblValor: this.formConcesion['strImporteFact'].value,
+          strProcedencia: this.formConcesion['strProcedencia'].value,
+          strAgencia: this.formConcesion['strAgenciaDist'].value,
+          strTipoServicio: this.formConcesion['strTipoServ'].value,
+          strUso: this.formConcesion['strUsoVeh'].value,
+          strRepuve: this.formConcesion['strRepuve'].value
+        },
+        permisionarioVo: {
+          strRfc: this.formPermisionario['strRfc'].value,
+          strCurp: this.formPermisionario['strCurp'].value,
+          strNombre: this.formPermisionario['strNombre'].value,
+          strApellidoPaterno: this.formPermisionario['strApPaterno'].value,
+          strApellidoMaterno: this.formPermisionario['strApMaterno'].value,
+          strSexo: this.formPermisionario['strSexo'].value,
+          ldFechaNacimiento: this.formPermisionario['strFechaNac'].value,
+          strCalle: this.formPermisionario['strCalleProp'].value,
+          strNumeroInterior: this.formPermisionario['strNumExt'].value,
+          strNumeroExterior: this.formPermisionario['strNumInt'].value,
+          intIdEstado: this.formPermisionario['estado'].value,
+          intIdMunicipio: this.formPermisionario['strMunicipio'].value,
+          intIdLocalidad: this.formPermisionario['strLocalidad'].value,
+          strCodigoPostal: this.formPermisionario['strCP'].value,
+          strColonia: this.formPermisionario['strColonia'].value,
+          mediosContactoVo:
+          {
+            strTelefonoRepresentante: this.formPermisionario['strTelefonoRepresentante'].value,
+            strCorreo: this.formPermisionario['strEmail'].value,
+            strTelefonoConcesionario: this.formPermisionario['strTelefonoContacto'].value
+          }
+        },
+        documentacionVo: this.listaDocumentos
+      };
+    }
+    console.log(json);
+
+    this.alertaUtility.mostrarAlerta({
+      message: '¿Estás seguro que deseas guardar la información?',
+      icon: 'question',
+      showConfirmButton: true,
+      confirmButtonColor: COLOR_SI,
+      confirmButtonText: 'Si',
+      showDenyButton: true,
+      denyButtonText: 'No',
+      showCloseButton: false
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.cargarSpinner = true;
+        if (this.esModificacion) {
+          this.servicios.corregirTramite(json).subscribe({
+            next: () => {
+              this.cargarSpinner = false;
+              this.alertaUtility.mostrarAlerta({
+                message: 'Trámite actualizado correctamente',
+                icon: 'success',
+                showConfirmButton: true,
+                confirmButtonColor: COLOR_SI,
+                confirmButtonText: 'Aceptar',
+                showCloseButton: false,
+                allowOutsideClick: true
+              }).then(result => {
+                if (result.isConfirmed) {
+                  this.reiniciaFormulario();
+                }
+              });
+            },
+            error: (err: HttpErrorResponse) => {
+              this.errorGenerico(err);
+            }
+          });
+        } else {
+          this.servicios.registrarTramite(json).subscribe({
+            next: (value: any) => {
+              this.cargarSpinner = false;
+              const email = this.datosPermisionarioForm.get('strEmail')?.value;
+              let htmlTramiteEnviado: string = '';
+              const strCodigo = value.data || '';
+              if (email) {
+                htmlTramiteEnviado = `
+                      <div>
+                        <h4>Estimado usuario, la solicitud fue enviada con éxito</h4>
+                        <hr>
+                        En un lapso de 24 a 48 horas notificaremos a través de tu <b>correo electrónico:</b>
+                        <b><p style="color: #a11a5c;">${email}</p></b>
+                        la información sobre el seguimiento al trámite por parte de SMyT.
+                        <br>
+                        <h5><b>Folio Trámite: ${strCodigo}</b></h5>
+                        Gracias.
+                      </div>
+                    `;
+              }
+              Swal.fire({
+                html: htmlTramiteEnviado,
+                icon: 'success',
+                showConfirmButton: true,
+                confirmButtonColor: COLOR_SI,
+                confirmButtonText: 'Aceptar',
+                showCloseButton: false,
+                allowOutsideClick: true,
+                background: '#fff url("/assets/images/logoTlaxC2.png") center/cover no-repeat'
+              }).then(result => {
+                if (result.isConfirmed) {
+                  this.reiniciaFormulario();
+                }
+              });
+            }, error: (err: HttpErrorResponse) => {
+              this.errorGenerico(err);
+            }
+          })
+        }
+      } else {
+        this.muestraError('La operación fue cancelada');
+      }
+    });
+  }
+
+  obtenDocumentosParaEnviar() {
+    if (this.listaDocumentos) {
+      this.listaDocumentos.forEach((documento) => {
+        switch (documento.strNombreDocumento) {
+          case 'SOLICITUD AL TITULAR DE SMyT':
+            documento.strArchivo = this.formDocumentos['solicitudTitular'].value
+            break;
+          case 'CONVENIO ACTUALIZADO':
+            documento.strArchivo = this.formDocumentos['convenioEmpresa'].value
+            break;
+          case 'POLIZA SEGURO':
+            documento.strArchivo = this.formDocumentos['poliza'].value
+            break;
+          case 'ULTIMO PERMISO':
+            documento.strArchivo = this.formDocumentos['ultimoPermiso'].value
+            break;
+          case 'TARJETA DE CIRCULACION':
+            documento.strArchivo = this.formDocumentos['tarjetaCirculacion'].value
+            break;
+          case 'ULTIMO PAGO DE REFRENDO':
+            documento.strArchivo = this.formDocumentos['ultimoPagoRefrendo'].value
+            break;
+          case 'INE':
+            documento.strArchivo = this.formDocumentos['ine'].value
+            break;
+          case 'CONSTANCIA FISCAL':
+            documento.strArchivo = this.formDocumentos['constanciaFis'].value
+            break;
+          case 'CARTA FACTURA':
+            documento.strArchivo = this.formDocumentos['factura'].value
+            break;
+          case 'CURP':
+            documento.strArchivo = this.formDocumentos['curp'].value
+            break;
+          case 'COMPROBANTE DE DOMICILIO':
+            documento.strArchivo = this.formDocumentos['comprobanteDom'].value
+            break;
+          case 'CARTA DE ANTECEDENTES NO PENALES':
+            documento.strArchivo = this.formDocumentos['antPenales'].value
+            break;
+          default:
+            break;
+        }
+      });
+    }
+  }
+
+
+  /*LIMPIEZA FORMULARIO */
+
+  private limpiarFormulariosSiguientes(formularioActual: ClavesFormulario) {
+    const formularios: ClavesFormulario[] = [
+      'datosConcesionForm',
+      'datosPermisionarioForm',
+      'tramiteForm',
+      'documentosUnidadForm',
+    ];
+    const indiceFormularioActual = formularios.indexOf(formularioActual);
+    formularios.slice(indiceFormularioActual + 1).forEach((formulario) => {
+      this.resetFormulario(formulario);
+    });
+  }
+
+  private resetFormulario(nombreFormulario: ClavesFormulario) {
+    const formulario = this[nombreFormulario];
+    if (formulario) {
+      formulario.reset();
+      formulario.markAsPristine();
+      formulario.markAsUntouched();
+    }
+  }
+
+  reiniciaDocumentos() {
+    if (this.cardPdfs) {
+      this.cardPdfs.forEach((cardPdf) => {
+        cardPdf.isDefaultPdf = true;
+      });
+    }
+  }
+
+  reiniciaFormulario() {
+
   }
 
   /* UTILIDADES  */
@@ -768,6 +961,18 @@ export class AltaTransporteEspecializado {
     }
     this.alertaUtility.mostrarAlerta({
       message: message,
+      icon: 'error',
+      showConfirmButton: true,
+      confirmButtonColor: COLOR_CONFIRMAR,
+      confirmButtonText: 'Confirmar',
+      showCloseButton: false,
+      allowOutsideClick: true
+    });
+  }
+
+  muestraError(message: string) {
+    this.alertaUtility.mostrarAlerta({
+      message,
       icon: 'error',
       showConfirmButton: true,
       confirmButtonColor: COLOR_CONFIRMAR,

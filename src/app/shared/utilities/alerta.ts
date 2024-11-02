@@ -23,7 +23,7 @@ export class AlertaUtility {
    *
    * @returns Una promesa que se resuelve en `true` si se confirmó la acción, y `false` en caso contrario.
    */
-  mostrarAlerta(options: MostrarAlertaOpciones): Promise<boolean> {
+  mostrarAlerta(options: MostrarAlertaOpciones): Promise<SweetAlertResult<any>> {
     const {
       message,
       icon,
@@ -65,8 +65,6 @@ export class AlertaUtility {
     } else if (icon) {
       config.icon = icon;
     }
-     return Swal.fire(config).then((result: SweetAlertResult<any>) => {
-      return result.isConfirmed;
-    });
+    return Swal.fire(config);
   }
 }

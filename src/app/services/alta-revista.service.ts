@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, map, catchError, throwError } from "rxjs";
 import { RespuestaGenerica } from "../core/models/respuesta.generica.model";
@@ -70,6 +70,19 @@ export class AltaRevistaService {
 
   validaRfc(body: any){
     return this.http.post(`${this.apiUrl + '/tramites/validarPermisionario'}`, body);
+  }
+
+  registrarTramite(body: any) {
+    return this.http.post(`${this.apiUrl}/tramites/registrarTramite`, body);
+  }
+
+  obtenerTramiteParaCorregir(idTramite: string) {
+    let params = new HttpParams().set('intIdTramite', idTramite);
+    return this.http.get<RespuestaGenerica>(`${this.apiUrl}/tramites/obtenerTramite`, { params });
+  }
+
+  corregirTramite(body: any) {
+    return this.http.post(`${this.apiUrl}/documentos/actualizarDocumento`, body);
   }
 
 }
