@@ -50,7 +50,7 @@
                 <div class="col-12 col-md-12 col-lg-8">
                   <label for="strCveVeh" class="form-label">CLAVE VEHICULAR<b class="asteriscos">*</b></label>
                   <input type="text" formControlName="strCveVeh" id="strCveVeh" name="strCveVeh" autocomplete="off"
-                    class="form-control" [matAutocomplete]="auto" (input)="filtrarOpciones($event)" [ngClass]="{
+                    class="form-control" [matAutocomplete]="auto" placeholder="Escribe la clave vehicular" (input)="filtrarOpciones($event)" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strCveVeh')?.invalid && (datosConcesionForm.get('strCveVeh')?.touched || datosConcesionForm.get('strCveVeh')?.dirty), 
             'is-valid': datosConcesionForm.get('strCveVeh')?.valid && (datosConcesionForm.get('strCveVeh')?.touched || datosConcesionForm.get('strCveVeh')?.dirty),
              }">
@@ -64,7 +64,7 @@
                 <div class="col-12 col-md-12 col-lg-4">
                   <label for="strMotor" class="form-label">NÚMERO DE MOTOR <b class="asteriscos">*</b></label>
                   <input type="text" minlength="1" maxlength="20" formControlName="strMotor" id="strMotor"
-                    name="strMotor" autocomplete="off" class="form-control" [ngClass]="{
+                    name="strMotor" autocomplete="off" class="form-control" placeholder="Escribe el número del motor" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strMotor')?.invalid && (datosConcesionForm.get('strMotor')?.touched || datosConcesionForm.get('strMotor')?.dirty), 
             'is-valid': datosConcesionForm.get('strMotor')?.valid && (datosConcesionForm.get('strMotor')?.touched || datosConcesionForm.get('strMotor')?.dirty),
              }" />
@@ -77,7 +77,7 @@
                 <div class="col-12 col-md-12 col-lg-8">
                   <label for="strMarca" class="form-label">MARCA <b class="asteriscos">*</b></label><input type="text"
                     formControlName="strMarca" id="strMarca" name="strMarca" autocomplete="off" class="form-control"
-                    [ngClass]="{
+                    placeholder="Escribe la marca del vehículo" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strMarca')?.invalid && (datosConcesionForm.get('strMarca')?.touched || datosConcesionForm.get('strMarca')?.dirty), 
             'is-valid': datosConcesionForm.get('strMarca')?.valid && (datosConcesionForm.get('strMarca')?.touched || datosConcesionForm.get('strMarca')?.dirty),
              }" />
@@ -90,7 +90,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="intModelo" class="form-label">MODELO <b class="asteriscos">*</b></label><input appNumeric
                     type="text" minlength="1" maxlength="4" formControlName="intModelo" id="intModelo" name="intModelo"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe modelo" [ngClass]="{
             'is-invalid': datosConcesionForm.get('intModelo')?.invalid && (datosConcesionForm.get('intModelo')?.touched || datosConcesionForm.get('intModelo')?.dirty), 
             'is-valid': datosConcesionForm.get('intModelo')?.valid && (datosConcesionForm.get('intModelo')?.touched || datosConcesionForm.get('intModelo')?.dirty),
              }" />
@@ -103,7 +103,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strTipoVeh" class="form-label">TIPO<b class="asteriscos">*</b> </label><input type="text"
                     formControlName="strTipoVeh" id="strTipoVeh" name="strTipoVeh" autocomplete="off"
-                    class="form-control" [ngClass]="{
+                    class="form-control" placeholder="Escribe tipo vehículo" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strTipoVeh')?.invalid && (datosConcesionForm.get('strTipoVeh')?.touched || datosConcesionForm.get('strTipoVeh')?.dirty), 
             'is-valid': datosConcesionForm.get('strTipoVeh')?.valid && (datosConcesionForm.get('strTipoVeh')?.touched || datosConcesionForm.get('strTipoVeh')?.dirty),
              }" />
@@ -116,7 +116,7 @@
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="intCapacidad" class="form-label">CAPACIDAD<b class="asteriscos">*</b> </label><input
                     type="text" minlength="2" maxlength="4" formControlName="intCapacidad" id="intCapacidad"
-                    name="intCapacidad" autocomplete="off" class="form-control" [ngClass]="{
+                    name="intCapacidad" autocomplete="off" class="form-control" placeholder="Escribe capacidad" [ngClass]="{
             'is-invalid': datosConcesionForm.get('intCapacidad')?.invalid && (datosConcesionForm.get('intCapacidad')?.touched || datosConcesionForm.get('intCapacidad')?.dirty), 
             'is-valid': datosConcesionForm.get('intCapacidad')?.valid && (datosConcesionForm.get('intCapacidad')?.touched || datosConcesionForm.get('intCapacidad')?.dirty),
              }" />
@@ -128,8 +128,8 @@
                 </div>
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="intCilindros" class="form-label">CILINDROS<b class="asteriscos">*</b> </label>
-                  <input appNumeric type="number" formControlName="intCilindros" id="intCilindros" name="intCilindros"
-                    class="form-control" [ngClass]="{
+                  <input appNumeric type="text" formControlName="intCilindros" id="intCilindros" name="intCilindros"
+                    class="form-control" placeholder="Escribe el número de cilindros" [ngClass]="{
             'is-invalid': datosConcesionForm.get('intCilindros')?.invalid && (datosConcesionForm.get('intCilindros')?.touched || datosConcesionForm.get('intCilindros')?.dirty), 
             'is-valid': datosConcesionForm.get('intCilindros')?.valid && (datosConcesionForm.get('intCilindros')?.touched || datosConcesionForm.get('intCilindros')?.dirty),
              }" />
@@ -142,7 +142,7 @@
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="strCombustible" class="form-label">COMBUSTIBLE <b class="asteriscos">*</b></label><input
                     type="text" minlength="4" maxlength="4" formControlName="strCombustible" id="strCombustible"
-                    name="strCombustible" autocomplete="off" class="form-control" [ngClass]="{
+                    name="strCombustible" autocomplete="off" class="form-control" placeholder="Escribe tipo de combustible" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strCombustible')?.invalid && (datosConcesionForm.get('strCombustible')?.touched || datosConcesionForm.get('strCombustible')?.dirty), 
             'is-valid': datosConcesionForm.get('strCombustible')?.valid && (datosConcesionForm.get('strCombustible')?.touched || datosConcesionForm.get('strCombustible')?.dirty),
              }" />
@@ -155,7 +155,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strColor" class="form-label">COLOR<b class="asteriscos">*</b> </label><input type="text"
                     minlength="4" formControlName="strColor" id="strColor" name="strColor" autocomplete="off"
-                    class="form-control" [ngClass]="{
+                    class="form-control" placeholder="Escribe color del vehículo" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strColor')?.invalid && (datosConcesionForm.get('strColor')?.touched || datosConcesionForm.get('strColor')?.dirty), 
             'is-valid': datosConcesionForm.get('strColor')?.valid && (datosConcesionForm.get('strColor')?.touched || datosConcesionForm.get('strColor')?.dirty),
              }" />
@@ -168,7 +168,7 @@
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="intPuertas" class="form-label">PUERTAS <b class="asteriscos">*</b></label><input
                     appNumeric type="text" maxlength="4" formControlName="intPuertas" id="intPuertas" name="intPuertas"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe número de puertas" [ngClass]="{
             'is-invalid': datosConcesionForm.get('intPuertas')?.invalid && (datosConcesionForm.get('intPuertas')?.touched || datosConcesionForm.get('intPuertas')?.dirty), 
             'is-valid': datosConcesionForm.get('intPuertas')?.valid && (datosConcesionForm.get('intPuertas')?.touched || datosConcesionForm.get('intPuertas')?.dirty),
              }" />
@@ -181,7 +181,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strUnidadMedida" class="form-label">UNIDAD DE MEDIDA<b class="asteriscos">*</b>
                   </label><input type="text" minlength="4" formControlName="strUnidadMedida" id="strUnidadMedida"
-                    name="strUnidadMedida" autocomplete="off" class="form-control" [ngClass]="{
+                    name="strUnidadMedida" autocomplete="off" class="form-control" placeholder="Escribe unidad de medida" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strUnidadMedida')?.invalid && (datosConcesionForm.get('strUnidadMedida')?.touched || datosConcesionForm.get('strUnidadMedida')?.dirty), 
             'is-valid': datosConcesionForm.get('strUnidadMedida')?.valid && (datosConcesionForm.get('strUnidadMedida')?.touched || datosConcesionForm.get('strUnidadMedida')?.dirty),
              }" />
@@ -194,7 +194,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strEntFed" class="form-label">ENTIDAD FEDERATIVA <b class="asteriscos">*</b></label><input
                     type="text" minlength="4" formControlName="strEntFed" id="strEntFed" name="strEntFed"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe entidad federativa" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strEntFed')?.invalid && (datosConcesionForm.get('strEntFed')?.touched || datosConcesionForm.get('strEntFed')?.dirty), 
             'is-valid': datosConcesionForm.get('strEntFed')?.valid && (datosConcesionForm.get('strEntFed')?.touched || datosConcesionForm.get('strEntFed')?.dirty),
              }" />
@@ -207,7 +207,8 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="dtFechaFact" class="form-label">FECHA DE LA FACTURA <b
                       class="asteriscos">*</b></label><input type="text" minlength="4" formControlName="dtFechaFact"
-                    id="dtFechaFact" name="dtFechaFact" autocomplete="off" class="form-control" [ngClass]="{
+                    id="dtFechaFact" name="dtFechaFact" autocomplete="off" class="form-control" placeholder="Escribe fecha de la factura" 
+                    [ngClass]="{
             'is-invalid': datosConcesionForm.get('dtFechaFact')?.invalid && (datosConcesionForm.get('dtFechaFact')?.touched || datosConcesionForm.get('dtFechaFact')?.dirty), 
             'is-valid': datosConcesionForm.get('dtFechaFact')?.valid && (datosConcesionForm.get('dtFechaFact')?.touched || datosConcesionForm.get('dtFechaFact')?.dirty),
              }" />
@@ -220,7 +221,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strNoFact" class="form-label">NO. FACTURA <b class="asteriscos">*</b></label><input
                     type="text" minlength="4" formControlName="strNoFact" id="strNoFact" name="strNoFact"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe número de factura" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strNoFact')?.invalid && (datosConcesionForm.get('strNoFact')?.touched || datosConcesionForm.get('strNoFact')?.dirty), 
             'is-valid': datosConcesionForm.get('strNoFact')?.valid && (datosConcesionForm.get('strNoFact')?.touched || datosConcesionForm.get('strNoFact')?.dirty),
              }" />
@@ -233,7 +234,8 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strImporteFact" class="form-label">IMPORTE DE FACTURA <b
                       class="asteriscos">*</b></label><input type="text" minlength="4" formControlName="strImporteFact"
-                    id="strImporteFact" name="strImporteFact" autocomplete="off" class="form-control" [ngClass]="{
+                    id="strImporteFact" name="strImporteFact" autocomplete="off" class="form-control" placeholder="Escribe importe de factura"
+                    [ngClass]="{
             'is-invalid': datosConcesionForm.get('strImporteFact')?.invalid && (datosConcesionForm.get('strImporteFact')?.touched || datosConcesionForm.get('strImporteFact')?.dirty), 
             'is-valid': datosConcesionForm.get('strImporteFact')?.valid && (datosConcesionForm.get('strImporteFact')?.touched || datosConcesionForm.get('strImporteFact')?.dirty),
              }" />
@@ -246,7 +248,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strProcedencia" class="form-label">PROCEDENCIA <b class="asteriscos">*</b></label><input
                     type="text" minlength="4" formControlName="strProcedencia" id="strProcedencia" name="strProcedencia"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe procedencia" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strProcedencia')?.invalid && (datosConcesionForm.get('strProcedencia')?.touched || datosConcesionForm.get('strProcedencia')?.dirty), 
             'is-valid': datosConcesionForm.get('strProcedencia')?.valid && (datosConcesionForm.get('strProcedencia')?.touched || datosConcesionForm.get('strProcedencia')?.dirty),
              }" />
@@ -259,7 +261,7 @@
                 <div class="col-12 col-md-12 col-lg-6">
                   <label for="strAgenciaDist" class="form-label">AGENCIA DISTRIBUIDORA<b class="asteriscos">*</b>
                   </label><input type="text" minlength="4" formControlName="strAgenciaDist" id="strAgenciaDist"
-                    name="strAgenciaDist" autocomplete="off" class="form-control" [ngClass]="{
+                    name="strAgenciaDist" autocomplete="off" class="form-control" placeholder="Escribe agencia distribuidora" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strAgenciaDist')?.invalid && (datosConcesionForm.get('strAgenciaDist')?.touched || datosConcesionForm.get('strAgenciaDist')?.dirty), 
             'is-valid': datosConcesionForm.get('strAgenciaDist')?.valid && (datosConcesionForm.get('strAgenciaDist')?.touched || datosConcesionForm.get('strAgenciaDist')?.dirty),
              }" />
@@ -272,7 +274,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strTipoServ" class="form-label">TIPO DE SERVICIO <b class="asteriscos">*</b></label><input
                     type="text" minlength="4" formControlName="strTipoServ" id="strTipoServ" name="strTipoServ"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe tipo de servicio" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strTipoServ')?.invalid && (datosConcesionForm.get('strTipoServ')?.touched || datosConcesionForm.get('strTipoServ')?.dirty), 
             'is-valid': datosConcesionForm.get('strTipoServ')?.valid && (datosConcesionForm.get('strTipoServ')?.touched || datosConcesionForm.get('strTipoServ')?.dirty),
              }" />
@@ -285,7 +287,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strUsoVeh" class="form-label">USO DEL VEHÍCULO <b class="asteriscos">*</b></label><input
                     type="text" minlength="4" formControlName="strUsoVeh" id="strUsoVeh" name="strUsoVeh"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe uso del vvehículo" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strUsoVeh')?.invalid && (datosConcesionForm.get('strUsoVeh')?.touched || datosConcesionForm.get('strUsoVeh')?.dirty), 
             'is-valid': datosConcesionForm.get('strUsoVeh')?.valid && (datosConcesionForm.get('strUsoVeh')?.touched || datosConcesionForm.get('strUsoVeh')?.dirty),
              }" />
@@ -298,7 +300,7 @@
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strRepuve" class="form-label">REPUVE <b class="asteriscos">*</b></label><input type="text"
                     minlength="4" formControlName="strRepuve" id="strRepuve" name="strRepuve" autocomplete="off"
-                    class="form-control" [ngClass]="{
+                    class="form-control" placeholder="Escribe repuve" [ngClass]="{
             'is-invalid': datosConcesionForm.get('strRepuve')?.invalid && (datosConcesionForm.get('strRepuve')?.touched || datosConcesionForm.get('strRepuve')?.dirty), 
             'is-valid': datosConcesionForm.get('strRepuve')?.valid && (datosConcesionForm.get('strRepuve')?.touched || datosConcesionForm.get('strRepuve')?.dirty),
              }" />
@@ -331,6 +333,7 @@
               </p>
             </form>
           </mat-step>
+          <!-- Step 2 - DATOS DEL PERMISIONARIO -->
           <!-- Step 2 - DATOS DEL PERMISIONARIO -->
           <mat-step [stepControl]="datosPermisionarioForm">
             <ng-template matStepLabel>
@@ -369,7 +372,7 @@
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-4">
                   <label for="strCurp" class="form-label">CURP </label><input appAlphanumeric formControlName="strCurp"
                     type="text" minlength="18" maxlength="18" id="strCurp" name="strCurp" autocomplete="off"
-                    class="form-control" [ngClass]="{
+                    class="form-control" placeholder="CURP: LLLL000000LLLLLLA0" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strCurp')?.invalid && (datosPermisionarioForm.get('strCurp')?.touched || datosPermisionarioForm.get('strCurp')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strCurp')?.valid && (datosPermisionarioForm.get('strCurp')?.touched || datosPermisionarioForm.get('strCurp')?.dirty),
                        }" />
@@ -382,7 +385,7 @@
                 <div class="col-12 col-md-12 col-lg-4">
                   <label for="strNombre" class="form-label"> {{ esPersonaFisica ? 'NOMBRE' : 'RAZÓN SOCIAL' }}
                   </label><input appAlphanumeric formControlName="strNombre" type="text" minlength="4" id="strNombre"
-                    name="strNombre" autocomplete="off" class="form-control" [ngClass]="{
+                    name="strNombre" autocomplete="off" class="form-control" [placeholder]="esPersonaFisica ? 'Escribe tu nombre' : 'Escribe tu razón social'" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strNombre')?.invalid && (datosPermisionarioForm.get('strNombre')?.touched || datosPermisionarioForm.get('strNombre')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strNombre')?.valid && (datosPermisionarioForm.get('strNombre')?.touched || datosPermisionarioForm.get('strNombre')?.dirty),
                        }" />
@@ -395,7 +398,7 @@
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-4">
                   <label for="strApPaterno" class="form-label">APELLIDO PATERNO </label><input appAlphanumeric
                     formControlName="strApPaterno" type="text" minlength="4" id="strApPaterno" name="strApPaterno"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe tu apellido paterno"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strApPaterno')?.invalid && (datosPermisionarioForm.get('strApPaterno')?.touched || datosPermisionarioForm.get('strApPaterno')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strApPaterno')?.valid && (datosPermisionarioForm.get('strApPaterno')?.touched || datosPermisionarioForm.get('strApPaterno')?.dirty),
                        }" />
@@ -408,7 +411,7 @@
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-4">
                   <label for="strApMaterno" class="form-label">APELLIDO MATERNO </label><input appAlphanumeric
                     formControlName="strApMaterno" type="text" minlength="4" id="strApMaterno" name="strApMaterno"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe tu apellido materno"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strApMaterno')?.invalid && (datosPermisionarioForm.get('strApMaterno')?.touched || datosPermisionarioForm.get('strApMaterno')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strApMaterno')?.valid && (datosPermisionarioForm.get('strApMaterno')?.touched || datosPermisionarioForm.get('strApMaterno')?.dirty),
                        }" />
@@ -420,7 +423,8 @@
                 </div>
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-2">
                   <label for="strSexo" class="form-label">SEXO </label><input formControlName="strSexo" type="text"
-                    minlength="4" id="strSexo" name="strSexo" autocomplete="off" class="form-control" [ngClass]="{
+                    minlength="4" id="strSexo" name="strSexo" autocomplete="off" class="form-control" placeholder="Sexo"
+                    [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strSexo')?.invalid && (datosPermisionarioForm.get('strSexo')?.touched || datosPermisionarioForm.get('strSexo')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strSexo')?.valid && (datosPermisionarioForm.get('strSexo')?.touched || datosPermisionarioForm.get('strSexo')?.dirty),
                        }" />
@@ -433,7 +437,7 @@
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-2">
                   <label for="strFechaNac" class="form-label">FECHA NACIMIENTO </label><input
                     formControlName="strFechaNac" type="text" minlength="4" id="strFechaNac" name="strFechaNac"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Fecha de nacimiento" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strFechaNac')?.invalid && (datosPermisionarioForm.get('strFechaNac')?.touched || datosPermisionarioForm.get('strFechaNac')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strFechaNac')?.valid && (datosPermisionarioForm.get('strFechaNac')?.touched || datosPermisionarioForm.get('strFechaNac')?.dirty),
                        }" />
@@ -446,7 +450,7 @@
                 <div class="col-12 col-md-12 col-lg-8">
                   <label for="strCalleProp" class="form-label">CALLE </label><input appAlphanumeric
                     formControlName="strCalleProp" type="text" minlength="4" id="strCalleProp" name="strCalleProp"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe la calle de tu domicilio"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strCalleProp')?.invalid && (datosPermisionarioForm.get('strCalleProp')?.touched || datosPermisionarioForm.get('strCalleProp')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strCalleProp')?.valid && (datosPermisionarioForm.get('strCalleProp')?.touched || datosPermisionarioForm.get('strCalleProp')?.dirty),
                        }" />
@@ -459,7 +463,7 @@
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="strNumExt" class="form-label">NÚMERO EXTERIOR </label><input appAlphanumeric
                     formControlName="strNumExt" type="text" id="strNumExt" name="strNumExt" autocomplete="off"
-                    class="form-control" [ngClass]="{
+                    class="form-control" placeholder="Escribe número exterior"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strNumExt')?.invalid && (datosPermisionarioForm.get('strNumExt')?.touched || datosPermisionarioForm.get('strNumExt')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strNumExt')?.valid && (datosPermisionarioForm.get('strNumExt')?.touched || datosPermisionarioForm.get('strNumExt')?.dirty),
                        }" />
@@ -472,7 +476,7 @@
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="strNumInt" class="form-label">NÚMERO INTERIOR </label><input appAlphanumeric
                     formControlName="strNumInt" type="text" id="strNumInt" name="strNumInt" autocomplete="off"
-                    class="form-control" [ngClass]="{
+                    class="form-control" placeholder="Escribe número interior"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strNumInt')?.invalid && (datosPermisionarioForm.get('strNumInt')?.touched || datosPermisionarioForm.get('strNumInt')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strNumInt')?.valid && (datosPermisionarioForm.get('strNumInt')?.touched || datosPermisionarioForm.get('strNumInt')?.dirty),
                        }" />
@@ -485,7 +489,7 @@
                 <div class="col-12 col-md-12 col-lg-4">
                   <label for="estado" class="form-label">ESTADO </label><input appAlphanumeric formControlName="estado"
                     type="text" minlength="4" id="estado" name="estado" autocomplete="off" class="form-control"
-                    [ngClass]="{
+                    placeholder="Seleccione Estado" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('estado')?.invalid && (datosPermisionarioForm.get('estado')?.touched || datosPermisionarioForm.get('estado')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('estado')?.valid && (datosPermisionarioForm.get('estado')?.touched || datosPermisionarioForm.get('estado')?.dirty),
                        }" />
@@ -502,6 +506,7 @@
                       'is-invalid': datosPermisionarioForm.get('strMunicipio')?.invalid && datosPermisionarioForm.get('strMunicipio')?.touched,
                       'is-valid': datosPermisionarioForm.get('strMunicipio')?.valid && datosPermisionarioForm.get('strMunicipio')?.touched
                     }" class="form-select">
+                    <option value="" selected disabled> Seleccione su municipio</option>
                     <option *ngFor="let municipio of listaMunicipios" [value]="municipio.intIdMunicipio">
                       {{ municipio.strNombreMunicipio }}
                     </option>
@@ -522,6 +527,7 @@
                       'is-invalid': datosPermisionarioForm.get('strLocalidad')?.invalid && datosPermisionarioForm.get('strLocalidad')?.touched,
                       'is-valid': datosPermisionarioForm.get('strLocalidad')?.valid && datosPermisionarioForm.get('strLocalidad')?.touched
                     }" class="form-select">
+                    <option value="" selected disabled> Seleccione su localidad</option>
                     <option *ngFor="let localidad of listaLocalidades" [value]="localidad.intIdLocalidad">
                       {{ localidad.strNombreLocalidad }}
                     </option>
@@ -534,7 +540,8 @@
                 </div>
                 <div class="col-12 col-md-12 col-lg-4">
                   <label for="strCP" class="form-label">CÓDIGO POSTAL </label><input formControlName="strCP" type="text"
-                    id="strCP" name="strCP" autocomplete="off" class="form-control" [ngClass]="{
+                    id="strCP" name="strCP" autocomplete="off" class="form-control" placeholder="Escribe tu código postal"
+                    [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strCP')?.invalid && (datosPermisionarioForm.get('strCP')?.touched || datosPermisionarioForm.get('strCP')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strCP')?.valid && (datosPermisionarioForm.get('strCP')?.touched || datosPermisionarioForm.get('strCP')?.dirty),
                        }" />
@@ -547,7 +554,7 @@
                 <div class="col-12 col-md-12 col-lg-4">
                   <label for="strColonia" class="form-label">COLONIA </label><input appAlphanumeric
                     formControlName="strColonia" type="text" minlength="4" id="strColonia" name="strColonia"
-                    autocomplete="off" class="form-control" [ngClass]="{
+                    autocomplete="off" class="form-control" placeholder="Escribe tu colonia"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strColonia')?.invalid && (datosPermisionarioForm.get('strColonia')?.touched || datosPermisionarioForm.get('strColonia')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strColonia')?.valid && (datosPermisionarioForm.get('strColonia')?.touched || datosPermisionarioForm.get('strColonia')?.dirty),
                        }" />
