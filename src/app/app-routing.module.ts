@@ -5,23 +5,23 @@ import { AltaTransporteEspecializado } from './components/alta-transporte-especi
 
 const routes: Routes = [
   {
-    path: 'alta-vehiculo-especializado-fisica',
+    path: 'persona-fisica',
     component: AltaTransporteEspecializado,
     data: {tipo: 'F'}
   },
   {
-    path: 'alta-vehiculo-especializado-moral',
+    path: 'persona-moral',
     component: AltaTransporteEspecializado,
     data: {tipo: 'M'}
   },
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'alta-vehiculo-especializado-fisica'
+    redirectTo: 'persona-fisica'
   },
   {
     path: '**',
-    redirectTo: 'alta-vehiculo-especializado-fisica'
+    redirectTo: 'persona-fisica'
   },
 ];
 

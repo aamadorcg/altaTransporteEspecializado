@@ -370,7 +370,7 @@
                   </div>
                 </div>
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-4">
-                  <label for="strCurp" class="form-label">CURP </label><input appAlphanumeric formControlName="strCurp"
+                  <label for="strCurp" class="form-label">CURP <b class="asteriscos">*</b></label><input appAlphanumeric formControlName="strCurp"
                     type="text" minlength="18" maxlength="18" id="strCurp" name="strCurp" autocomplete="off"
                     class="form-control" placeholder="CURP: LLLL000000LLLLLLA0" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strCurp')?.invalid && (datosPermisionarioForm.get('strCurp')?.touched || datosPermisionarioForm.get('strCurp')?.dirty), 
@@ -383,7 +383,7 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strNombre" class="form-label"> {{ esPersonaFisica ? 'NOMBRE' : 'RAZÓN SOCIAL' }}
+                  <label for="strNombre" class="form-label"> {{ esPersonaFisica ? 'NOMBRE' : 'RAZÓN SOCIAL' }} <b class="asteriscos">*</b>
                   </label><input appAlphanumeric formControlName="strNombre" type="text" minlength="4" id="strNombre"
                     name="strNombre" autocomplete="off" class="form-control" [placeholder]="esPersonaFisica ? 'Escribe tu nombre' : 'Escribe tu razón social'" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strNombre')?.invalid && (datosPermisionarioForm.get('strNombre')?.touched || datosPermisionarioForm.get('strNombre')?.dirty), 
@@ -396,7 +396,7 @@
                   </div>
                 </div>
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-4">
-                  <label for="strApPaterno" class="form-label">APELLIDO PATERNO </label><input appAlphanumeric
+                  <label for="strApPaterno" class="form-label">APELLIDO PATERNO <b class="asteriscos">*</b></label><input appAlphanumeric
                     formControlName="strApPaterno" type="text" minlength="4" id="strApPaterno" name="strApPaterno"
                     autocomplete="off" class="form-control" placeholder="Escribe tu apellido paterno"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strApPaterno')?.invalid && (datosPermisionarioForm.get('strApPaterno')?.touched || datosPermisionarioForm.get('strApPaterno')?.dirty), 
@@ -409,7 +409,7 @@
                   </div>
                 </div>
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-4">
-                  <label for="strApMaterno" class="form-label">APELLIDO MATERNO </label><input appAlphanumeric
+                  <label for="strApMaterno" class="form-label">APELLIDO MATERNO <b class="asteriscos">*</b></label><input appAlphanumeric
                     formControlName="strApMaterno" type="text" minlength="4" id="strApMaterno" name="strApMaterno"
                     autocomplete="off" class="form-control" placeholder="Escribe tu apellido materno"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strApMaterno')?.invalid && (datosPermisionarioForm.get('strApMaterno')?.touched || datosPermisionarioForm.get('strApMaterno')?.dirty), 
@@ -422,7 +422,7 @@
                   </div>
                 </div>
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-2">
-                  <label for="strSexo" class="form-label">SEXO </label><input formControlName="strSexo" type="text"
+                  <label for="strSexo" class="form-label">SEXO <b class="asteriscos">*</b></label><input formControlName="strSexo" type="text"
                     minlength="4" id="strSexo" name="strSexo" autocomplete="off" class="form-control" placeholder="Sexo"
                     [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strSexo')?.invalid && (datosPermisionarioForm.get('strSexo')?.touched || datosPermisionarioForm.get('strSexo')?.dirty), 
@@ -435,7 +435,7 @@
                   </div>
                 </div>
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-2">
-                  <label for="strFechaNac" class="form-label">FECHA NACIMIENTO </label><input
+                  <label for="strFechaNac" class="form-label">FECHA NACIMIENTO <b class="asteriscos">*</b></label><input
                     formControlName="strFechaNac" type="text" minlength="4" id="strFechaNac" name="strFechaNac"
                     autocomplete="off" class="form-control" placeholder="Fecha de nacimiento" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strFechaNac')?.invalid && (datosPermisionarioForm.get('strFechaNac')?.touched || datosPermisionarioForm.get('strFechaNac')?.dirty), 
@@ -448,7 +448,7 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-8">
-                  <label for="strCalleProp" class="form-label">CALLE </label><input appAlphanumeric
+                  <label for="strCalleProp" class="form-label">CALLE <b class="asteriscos">*</b></label><input appAlphanumeric
                     formControlName="strCalleProp" type="text" minlength="4" id="strCalleProp" name="strCalleProp"
                     autocomplete="off" class="form-control" placeholder="Escribe la calle de tu domicilio"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strCalleProp')?.invalid && (datosPermisionarioForm.get('strCalleProp')?.touched || datosPermisionarioForm.get('strCalleProp')?.dirty), 
@@ -461,7 +461,7 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-2">
-                  <label for="strNumExt" class="form-label">NÚMERO EXTERIOR </label><input appAlphanumeric
+                  <label for="strNumExt" class="form-label">NÚMERO EXTERIOR <b class="asteriscos">*</b></label><input appAlphanumeric
                     formControlName="strNumExt" type="text" id="strNumExt" name="strNumExt" autocomplete="off"
                     class="form-control" placeholder="Escribe número exterior"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strNumExt')?.invalid && (datosPermisionarioForm.get('strNumExt')?.touched || datosPermisionarioForm.get('strNumExt')?.dirty), 
@@ -474,7 +474,7 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-2">
-                  <label for="strNumInt" class="form-label">NÚMERO INTERIOR </label><input appAlphanumeric
+                  <label for="strNumInt" class="form-label">NÚMERO INTERIOR<b class="asteriscos">*</b> </label><input appAlphanumeric
                     formControlName="strNumInt" type="text" id="strNumInt" name="strNumInt" autocomplete="off"
                     class="form-control" placeholder="Escribe número interior"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strNumInt')?.invalid && (datosPermisionarioForm.get('strNumInt')?.touched || datosPermisionarioForm.get('strNumInt')?.dirty), 
@@ -487,7 +487,7 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="estado" class="form-label">ESTADO </label><input appAlphanumeric formControlName="estado"
+                  <label for="estado" class="form-label">ESTADO <b class="asteriscos">*</b></label><input appAlphanumeric formControlName="estado"
                     type="text" minlength="4" id="estado" name="estado" autocomplete="off" class="form-control"
                     placeholder="Seleccione Estado" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('estado')?.invalid && (datosPermisionarioForm.get('estado')?.touched || datosPermisionarioForm.get('estado')?.dirty), 
@@ -514,7 +514,7 @@
                   <div class="invalid-feedback">Campo obligatorio</div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strLocalidad" class="form-label">LOCALIDAD </label>
+                  <label for="strLocalidad" class="form-label">LOCALIDAD <b class="asteriscos">*</b></label>
                   <!-- <input formControlName="strLocalidad"
                     type="text" id="strLocalidad" name="strLocalidad" autocomplete="off" class="form-control"
                     [ngClass]="{
@@ -539,7 +539,7 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strCP" class="form-label">CÓDIGO POSTAL </label><input formControlName="strCP" type="text"
+                  <label for="strCP" class="form-label">CÓDIGO POSTAL <b class="asteriscos">*</b></label><input formControlName="strCP" type="text"
                     id="strCP" name="strCP" autocomplete="off" class="form-control" placeholder="Escribe tu código postal"
                     [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strCP')?.invalid && (datosPermisionarioForm.get('strCP')?.touched || datosPermisionarioForm.get('strCP')?.dirty), 
@@ -552,7 +552,7 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strColonia" class="form-label">COLONIA </label><input appAlphanumeric
+                  <label for="strColonia" class="form-label">COLONIA<b class="asteriscos">*</b> </label><input appAlphanumeric
                     formControlName="strColonia" type="text" minlength="4" id="strColonia" name="strColonia"
                     autocomplete="off" class="form-control" placeholder="Escribe tu colonia"[ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strColonia')?.invalid && (datosPermisionarioForm.get('strColonia')?.touched || datosPermisionarioForm.get('strColonia')?.dirty), 

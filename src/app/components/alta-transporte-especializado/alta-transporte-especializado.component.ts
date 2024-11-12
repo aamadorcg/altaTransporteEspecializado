@@ -175,8 +175,8 @@ export class AltaTransporteEspecializado {
       strNombre: ['', Validators.required],
       strApPaterno: ['', Validators.required],
       strApMaterno: ['', Validators.required],
-      strSexo: [{ value: '', disabled: true }, Validators.required],
-      strFechaNac: [{ value: '', disabled: true }, Validators.required],
+      strSexo: [{ value: '', disabled: false }, Validators.required],
+      strFechaNac: [{ value: '', disabled: false }, Validators.required],
       strCalleProp: ['', Validators.required],
       strNumExt: ['', Validators.required],
       strNumInt: ['', Validators.required],
@@ -439,6 +439,17 @@ export class AltaTransporteEspecializado {
 
   /*CARGA DE DATOS A FORMULARIO */
   cargarDatosFormulario(formulario: FormGroup, nombreFormulario: ClavesFormulario, desdeNextStep: boolean) {
+   /*  console.log(nombreFormulario);
+    if(nombreFormulario === 'datosPermisionarioForm'){
+      let controlSexo = this.datosPermisionarioForm.get('strSexo');
+      if(controlSexo){
+        this.datosPermisionarioForm.get('strSexo')?.enable();
+        this.datosPermisionarioForm.get('strSexo')?.markAsDirty;
+        this.datosPermisionarioForm.get('strSexo')?.markAsTouched;
+        this.datosPermisionarioForm.get('strSexo')?.updateValueAndValidity;
+        this.datosPermisionarioForm.get('strSexo')?.disable();
+      }
+    } */
     if (formulario.invalid) {
       formulario.markAllAsTouched();
       const primerCampoInvalido = this.obtenerPrimerCampoInvalido(formulario);
