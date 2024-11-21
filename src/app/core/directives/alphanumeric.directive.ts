@@ -5,7 +5,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 })
 export class AlphanumericDirective {
 
-  private regex: RegExp = new RegExp(/^[A-Z0-9]*$/);
+  private regex: RegExp = new RegExp(/^[A-Z0-9\s]*$/);
 
   constructor(private el: ElementRef) {}
 

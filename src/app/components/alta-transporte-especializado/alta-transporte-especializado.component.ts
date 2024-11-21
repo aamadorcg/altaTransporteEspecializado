@@ -11,6 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AltaRevistaService } from 'src/app/services/alta-revista.service';
 import { CardPdfComponent } from '../card-pdf/card-pdf.component';
 import Swal from 'sweetalert2';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { filter, debounceTime, distinctUntilChanged, switchMap, catchError, of } from 'rxjs';
 
 
 type ClavesFormulario = 'datosConcesionForm' | 'datosPermisionarioForm' | 'tramiteForm' | 'documentosUnidadForm';
@@ -108,9 +110,10 @@ export class AltaTransporteEspecializado {
   esModificacion: boolean = false;
   opcCveVeh: any[] = [];
   opcCveVehFiltradas: any[] = [];
-  listaMunicipios: any[] = [];
+  listaColonias: any[] = [];
   listaLocalidades: any[] = [];
   listaDocumentos: any[] = [];
+  listaCombustibles: any[] = [];
 
   datosConcesionForm!: FormGroup;
   datosPermisionarioForm!: FormGroup;
@@ -119,6 +122,13 @@ export class AltaTransporteEspecializado {
 
   defaultPdfUrl: any;
   idTramite: string = "";
+  selectedVehicleId: number | null = null;
+  estadoId: string = "";
+  municipioId: string = "";
+  localidadId: string = "";
+  strEstado: string = "";
+  strMunicipio: string = "";
+  strColonia: string = "";
 
   constructor(
     private formBuilder: FormBuilder,
@@ -155,7 +165,7 @@ export class AltaTransporteEspecializado {
       strColor: ['', Validators.required],
       intPuertas: ['', Validators.required],
       strUnidadMedida: ['', Validators.required],
-      strEntFed: ['', Validators.required],
+      strEntFed: [{ value: 'TLAXCALA', disabled: true }, Validators.required],
       dtFechaFact: ['', Validators.required],
       strNoFact: ['', Validators.required],
       strImporteFact: ['', Validators.required],
@@ -180,11 +190,11 @@ export class AltaTransporteEspecializado {
       strCalleProp: ['', Validators.required],
       strNumExt: ['', Validators.required],
       strNumInt: ['', Validators.required],
-      estado: ['', Validators.required],
-      strMunicipio: ['', Validators.required],
-      strLocalidad: ['', Validators.required],
+      estado: [{ value: '', disabled: true }, Validators.required],
+      strMunicipio: [{ value: '', disabled: true }, Validators.required],
+      strLocalidad: [{ value: '', disabled: true }, Validators.required],
       strCP: ['', Validators.required],
-      strColonia: ['', Validators.required],
+      strColonia: [{ value: '', disabled: false }, Validators.required],
       strTelefonoRepresentante: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]],
       strEmail: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       strTelefonoContacto: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]]
@@ -285,35 +295,39 @@ export class AltaTransporteEspecializado {
 
   /* OBTENER VALORES PARA USAR EN FORMULARIO */
   cargaValoresCamposDinamicos() {
-    /* this.opcCveVeh = [
-      {
-        "strCveVeh": "0000001",
-        "nombre": "Opcion 1"
-      }
-    ]; */
-    this.servicios.obtenerClavesVehiculares().subscribe({
+
+    this.servicios.obtenerCombustibles().subscribe({
       next: (value: any) => {
         this.cargarSpinner = false;
-        this.opcCveVeh = value.data;
-        // this.opcCveVehFiltradas = this.opcCveVeh;
+        this.listaCombustibles = value.data;
       },
       error: (err: HttpErrorResponse) => {
         this.errorGenerico(err);
       },
     });
 
-    let jsonEstados = {
-      intIdEstado: 1
-    }
-    this.servicios.obtenerMunicipios(jsonEstados).subscribe({
+    this.servicios.obtenerClavesVehiculares().subscribe({
       next: (value: any) => {
         this.cargarSpinner = false;
-        this.listaMunicipios = value.data;
+        this.opcCveVeh = value.data;
       },
       error: (err: HttpErrorResponse) => {
         this.errorGenerico(err);
-      }
+      },
     });
+
+    /*  let jsonEstados = {
+       intIdEstado: 1
+     }
+     this.servicios.obtenerMunicipios(jsonEstados).subscribe({
+       next: (value: any) => {
+         this.cargarSpinner = false;
+         this.listaColonias = value.data;
+       },
+       error: (err: HttpErrorResponse) => {
+         this.errorGenerico(err);
+       }
+     }); */
   }
 
   filtrarOpciones(event: Event) {
@@ -324,6 +338,17 @@ export class AltaTransporteEspecializado {
       opcion.strEmpresa.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
       opcion.strModelo.toLowerCase().includes(valorBusqueda.toLowerCase())
     );
+  }
+
+  onOptionSelected(event: MatAutocompleteSelectedEvent): void {
+    const selectedOption = event.option.value;
+    console.log(selectedOption);
+    this.selectedVehicleId = selectedOption.intIdCaCve;
+    // console.log('ID del vehículo seleccionado:', this.selectedVehicleId);
+  }
+
+  displayFn(opcion: any): string {
+    return opcion ? `${opcion.strClaveVehicular} - ${opcion.strEmpresa} - ${opcion.strModelo}` : '';
   }
 
   /* IDENTIFICAR CAMBIOS EN FORMULARIO */
@@ -360,7 +385,6 @@ export class AltaTransporteEspecializado {
         this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
         this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
       }
-
     });
 
     this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
@@ -377,8 +401,70 @@ export class AltaTransporteEspecializado {
         this.datosPermisionarioForm.patchValue({ strSexo: '' });
       }
     });
+
+
+    this.datosPermisionarioForm.get('strCP')?.valueChanges
+      .pipe(
+        filter((codigoPostal: string) => codigoPostal.length === 5),
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((codigoPostal: string) => {
+          this.cargarSpinner = true;
+          return this.servicios.obtenerDireccion(codigoPostal).pipe(
+            catchError((err) => {
+              this.estadoId = "";
+              this.municipioId = "";
+              this.localidadId = ""
+              this.datosPermisionarioForm.get('strCP')?.reset();
+              this.datosPermisionarioForm.get('strMunicipio')?.reset();
+              this.datosPermisionarioForm.get('strLocalidad')?.reset();
+              this.datosPermisionarioForm.get('estado')?.reset();
+              this.errorGenerico(err);
+              return of(null);
+            })
+          );
+        }
+        )
+      )
+      .subscribe((respuesta: any) => {
+        this.cargarSpinner = false;
+        if (respuesta) {
+          let value = respuesta[0];
+          if (value) {
+            this.obtenColonias(respuesta);
+            this.strMunicipio = value.descripcionIdMunicipioCodigoPostal;
+            this.strEstado = value.descripcionidEstadoPais;
+            this.estadoId = value.idEstadoPais;
+            this.municipioId = value.codigoMunicipio;
+            this.localidadId = value.codigoMunicipio;
+            this.datosPermisionarioForm.get('strMunicipio')?.patchValue(this.strMunicipio);
+            this.datosPermisionarioForm.get('strLocalidad')?.patchValue(this.strMunicipio);
+            this.datosPermisionarioForm.get('estado')?.patchValue(this.strEstado);
+          } else {
+            this.strMunicipio = "";
+            this.strEstado = "";
+            this.estadoId = "";
+            this.municipioId = "";
+            this.localidadId = ""
+            this.datosPermisionarioForm.get('strCP')?.reset();
+            this.datosPermisionarioForm.get('strMunicipio')?.reset();
+            this.datosPermisionarioForm.get('strLocalidad')?.reset();
+            this.datosPermisionarioForm.get('estado')?.reset();
+            /* this.datosPermisionarioForm.get('strColonia')?.patchValue('');
+            this.datosPermisionarioForm.get('strCP')?.reset(); */
+            this.muestraError('Error al consultar código postal, inténtelo de nuevo');
+          }
+        }
+      });
   }
 
+  obtenColonias(arregloColonias: any) {
+    this.listaColonias = arregloColonias.map((item: { asentamiento: any; codigoTipoAsentamiento: any; }) => ({
+      asentamiento: item.asentamiento,
+      codigoTipoAsentamiento: item.codigoTipoAsentamiento
+    }));
+
+  }
   validaNiv(value: any) {
     let json = {
       strNiv: value
@@ -434,22 +520,22 @@ export class AltaTransporteEspecializado {
     } else {
       anioCompleto = '20' + anioCorto;
     }
-    return `${dia}-${mes}-${anioCompleto}`;
+    return `${anioCompleto}-${mes}-${dia}`;
   }
 
   /*CARGA DE DATOS A FORMULARIO */
   cargarDatosFormulario(formulario: FormGroup, nombreFormulario: ClavesFormulario, desdeNextStep: boolean) {
-   /*  console.log(nombreFormulario);
-    if(nombreFormulario === 'datosPermisionarioForm'){
-      let controlSexo = this.datosPermisionarioForm.get('strSexo');
-      if(controlSexo){
-        this.datosPermisionarioForm.get('strSexo')?.enable();
-        this.datosPermisionarioForm.get('strSexo')?.markAsDirty;
-        this.datosPermisionarioForm.get('strSexo')?.markAsTouched;
-        this.datosPermisionarioForm.get('strSexo')?.updateValueAndValidity;
-        this.datosPermisionarioForm.get('strSexo')?.disable();
-      }
-    } */
+    /*  console.log(nombreFormulario);
+     if(nombreFormulario === 'datosPermisionarioForm'){
+       let controlSexo = this.datosPermisionarioForm.get('strSexo');
+       if(controlSexo){
+         this.datosPermisionarioForm.get('strSexo')?.enable();
+         this.datosPermisionarioForm.get('strSexo')?.markAsDirty;
+         this.datosPermisionarioForm.get('strSexo')?.markAsTouched;
+         this.datosPermisionarioForm.get('strSexo')?.updateValueAndValidity;
+         this.datosPermisionarioForm.get('strSexo')?.disable();
+       }
+     } */
     if (formulario.invalid) {
       formulario.markAllAsTouched();
       const primerCampoInvalido = this.obtenerPrimerCampoInvalido(formulario);
@@ -614,6 +700,10 @@ export class AltaTransporteEspecializado {
   /* ACTUALIZACIONES DE CAMPOS */
 
   onSelectFocus() {
+    const controlCombustible = this.datosConcesionForm.get('strCombustible');
+    if (controlCombustible && !controlCombustible.value) {
+      controlCombustible.markAsTouched();
+    }
     const controlTramite = this.tramiteForm.get('strTramite');
     if (controlTramite && !controlTramite.value) {
       controlTramite.markAsTouched();
@@ -622,25 +712,35 @@ export class AltaTransporteEspecializado {
     if (controlMunicipio && !controlMunicipio.value) {
       controlMunicipio.markAsTouched();
     }
+
   }
 
-  onSelectChange(event: Event): void {
-    const control = this.tramiteForm.get('strTramite');
-    control?.setErrors(control.value ? null : { required: true });
-    const campoMunicipio = this.datosPermisionarioForm.get('strMunicipio');
-    campoMunicipio?.setErrors(campoMunicipio.value ? null : { required: true });
-    if (campoMunicipio) {
-      const selectElement = event.target as HTMLSelectElement;
-      const selectedValue = selectElement.value;
-      if (selectedValue) {
-        let json = {
-          intIdMunicipio: selectedValue
+  onSelectChange(event: Event, campo: string): void {
+    let control;
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedValue = selectElement.value;
+    switch (campo) {
+      case 'strTramite':
+        control = this.tramiteForm.get('strTramite');
+        break;
+      case 'strMunicipio':
+        control = this.tramiteForm.get('strMunicipio');
+        if (selectedValue) {
+          let json = {
+            intIdMunicipio: selectedValue
+          }
+          this.obtenLocalidades(json, () => {
+          });
         }
-        this.obtenLocalidades(json, () => {
-        });
-      }
+        break;
+      case 'strTramite':
+        control = this.datosConcesionForm.get('strCombustible');
+        break;
+      default:
+        break;
     }
-
+    console.log(campo);
+    control?.setErrors(control.value ? null : { required: true });
   }
 
   obtenLocalidades(idTipoTramite: any, callback: () => void): void {
@@ -680,12 +780,14 @@ export class AltaTransporteEspecializado {
       };
     } else {
       this.obtenDocumentosParaEnviar();
+      const fecha = new Date(this.datosConcesionForm.get('dtFechaFact')?.value);
+      const fechaformato = fecha.toISOString().split('T')[0];
       json = {
         intIdTipoTramite: 13,
         esPersonaFisica: this.esPersonaFisica,
         facturaVo: {
           strNiv: this.formConcesion['strNiv'].value,
-          intIdCaCve: this.formConcesion['strCveVeh'].value,
+          intIdCaCve: this.selectedVehicleId,
           strNumeroMotor: this.formConcesion['strMotor'].value,
           strMarca: this.formConcesion['strMarca'].value,
           intModelo: this.formConcesion['intModelo'].value,
@@ -696,8 +798,8 @@ export class AltaTransporteEspecializado {
           strColor: this.formConcesion['strColor'].value,
           intPuertas: this.formConcesion['intPuertas'].value,
           strUnidadMedida: this.formConcesion['strUnidadMedida'].value,
-          intIdEntidad: this.formConcesion['strEntFed'].value,
-          ldFechaFactura: this.formConcesion['dtFechaFact'].value,
+          intIdEntidad: 1,
+          ldFechaFactura: fechaformato,
           strNumeroFactura: this.formConcesion['strNoFact'].value,
           dblValor: this.formConcesion['strImporteFact'].value,
           strProcedencia: this.formConcesion['strProcedencia'].value,
@@ -712,16 +814,19 @@ export class AltaTransporteEspecializado {
           strNombre: this.formPermisionario['strNombre'].value,
           strApellidoPaterno: this.formPermisionario['strApPaterno'].value,
           strApellidoMaterno: this.formPermisionario['strApMaterno'].value,
-          strSexo: this.formPermisionario['strSexo'].value,
-          ldFechaNacimiento: this.formPermisionario['strFechaNac'].value,
+          strSexo: this.formPermisionario['strSexo'].value.charAt(0),
+          ldFechaNacimiento: this.formPermisionario['strFechaNac'].value,//Modificar
           strCalle: this.formPermisionario['strCalleProp'].value,
           strNumeroInterior: this.formPermisionario['strNumExt'].value,
           strNumeroExterior: this.formPermisionario['strNumInt'].value,
-          intIdEstado: this.formPermisionario['estado'].value,
-          intIdMunicipio: this.formPermisionario['strMunicipio'].value,
-          intIdLocalidad: this.formPermisionario['strLocalidad'].value,
+          intIdEstado: 1,
+          intIdMunicipio: this.municipioId,
+          intIdLocalidad: this.municipioId,
           strCodigoPostal: this.formPermisionario['strCP'].value,
           strColonia: this.formPermisionario['strColonia'].value,
+          strLocalidad: this.strMunicipio,
+          strMunicipio: this.strMunicipio,
+          strEstado: this.strEstado,
           mediosContactoVo:
           {
             strTelefonoRepresentante: this.formPermisionario['strTelefonoRepresentante'].value,
@@ -818,22 +923,22 @@ export class AltaTransporteEspecializado {
     if (this.listaDocumentos) {
       this.listaDocumentos.forEach((documento) => {
         switch (documento.strNombreDocumento) {
-          case 'SOLICITUD AL TITULAR DE SMyT':
+          case 'SOLICITUD DIRIGIDA AL TITULAR DE LA SMyT':
             documento.strArchivo = this.formDocumentos['solicitudTitular'].value
             break;
-          case 'CONVENIO ACTUALIZADO':
+          case 'CONVENIO ACTUALIZADO CON LA EMPRESA':
             documento.strArchivo = this.formDocumentos['convenioEmpresa'].value
             break;
-          case 'POLIZA SEGURO':
+          case 'PÓLIZA DE SEGURO':
             documento.strArchivo = this.formDocumentos['poliza'].value
             break;
-          case 'ULTIMO PERMISO':
+          case 'ÚLTIMO PERMISO':
             documento.strArchivo = this.formDocumentos['ultimoPermiso'].value
             break;
-          case 'TARJETA DE CIRCULACION':
+          case 'TARJETA DE CIRCULACIÓN':
             documento.strArchivo = this.formDocumentos['tarjetaCirculacion'].value
             break;
-          case 'ULTIMO PAGO DE REFRENDO':
+          case 'ÚLTIMO PAGO DE REFRENDO':
             documento.strArchivo = this.formDocumentos['ultimoPagoRefrendo'].value
             break;
           case 'INE':
@@ -842,7 +947,7 @@ export class AltaTransporteEspecializado {
           case 'CONSTANCIA FISCAL':
             documento.strArchivo = this.formDocumentos['constanciaFis'].value
             break;
-          case 'CARTA FACTURA':
+          case 'FACTURA / CARTA FACTURA':
             documento.strArchivo = this.formDocumentos['factura'].value
             break;
           case 'CURP':
@@ -895,7 +1000,9 @@ export class AltaTransporteEspecializado {
   }
 
   reiniciaFormulario() {
-
+    this.reiniciaDocumentos();
+    this.stepper.reset();
+    this.router.navigate([this.router.url], { skipLocationChange: true });
   }
 
   /* UTILIDADES  */

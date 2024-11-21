@@ -15,6 +15,7 @@ import { UppercaseDirective } from '../core/directives/uppercase.directive';
 import { CurpDirective } from '../core/directives/curp.directive';
 import { NumericDirective } from '../core/directives/numeric.directive';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatNativeDateModule} from '@angular/material/core';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatDatepickerModule,
     MatTooltipModule,
     MatRippleModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatNativeDateModule
   ],
   exports: [
     MatIconModule,

@@ -13,9 +13,11 @@ import { environment } from "../environments/environment";
 export class AltaRevistaService {
 
   private apiUrl: string;
+  private apiCpUrl: string;
   public configuracion: any = [];
   constructor(private http: HttpClient, private alerta: AlertaUtility) {
     this.apiUrl = environment.apiUrl;
+    this.apiCpUrl = environment.apiCodigoPostalUrl;
   }
 
   obtenerDatosFormulario(url: string, body: any) {
@@ -52,6 +54,10 @@ export class AltaRevistaService {
     return this.http.get<any>(`${this.apiUrl}/tramites/obtenerDocumentacion`);
   }
 
+  obtenerCombustibles(){
+    return this.http.get<any>(`${this.apiUrl}/tramites/obtenerCombustible`);
+  }
+
   obtenerClavesVehiculares(){
     return this.http.get<any>(`${this.apiUrl}/tramites/obtenerClavesVehiculares`);
   }
@@ -83,6 +89,12 @@ export class AltaRevistaService {
 
   corregirTramite(body: any) {
     return this.http.post(`${this.apiUrl}/documentos/actualizarDocumento`, body);
+  }
+
+  obtenerDireccion(codigoPostal: string){
+    let params = new HttpParams().set('codigoPostal', codigoPostal);
+    return this.http.get<RespuestaGenerica>(`${this.apiCpUrl}`, { params });
+    //https://catalogos-publicos.sefintlax.gob.mx/CatalogosPublicos/catalogosINEGI/catCodigoPostal?codigoPostal=75505
   }
 
 }

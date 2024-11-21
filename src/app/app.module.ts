@@ -13,6 +13,7 @@ import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TerminosCondicionesComponent } from './components/terminos-condiciones/terminos-condiciones.component';
 import { CardPdfComponent } from './components/card-pdf/card-pdf.component';
+import { DivisaDirective } from './core/directives/divisa.directive';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CardPdfComponent } from './components/card-pdf/card-pdf.component';
     FooterComponent,
     AltaTransporteEspecializado,
     TerminosCondicionesComponent,
-    CardPdfComponent
+    CardPdfComponent,
+    DivisaDirective
   ],
   imports: [
     BrowserModule,
