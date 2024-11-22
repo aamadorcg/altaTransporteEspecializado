@@ -412,10 +412,12 @@ export class AltaTransporteEspecializado {
           this.cargarSpinner = true;
           return this.servicios.obtenerDireccion(codigoPostal).pipe(
             catchError((err) => {
+              this.strMunicipio = "";
+              this.strEstado = "";
               this.estadoId = "";
               this.municipioId = "";
               this.localidadId = ""
-              this.datosPermisionarioForm.get('strCP')?.reset();
+              this.datosPermisionarioForm.get('strCP')?.patchValue('');
               this.datosPermisionarioForm.get('strMunicipio')?.reset();
               this.datosPermisionarioForm.get('strLocalidad')?.reset();
               this.datosPermisionarioForm.get('estado')?.reset();
@@ -446,7 +448,7 @@ export class AltaTransporteEspecializado {
             this.estadoId = "";
             this.municipioId = "";
             this.localidadId = ""
-            this.datosPermisionarioForm.get('strCP')?.reset();
+            this.datosPermisionarioForm.get('strCP')?.patchValue('');
             this.datosPermisionarioForm.get('strMunicipio')?.reset();
             this.datosPermisionarioForm.get('strLocalidad')?.reset();
             this.datosPermisionarioForm.get('estado')?.reset();

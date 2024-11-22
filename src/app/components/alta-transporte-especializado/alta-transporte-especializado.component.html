@@ -573,7 +573,7 @@
                          'is-invalid': datosPermisionarioForm.get('strColonia')?.invalid && datosPermisionarioForm.get('strColonia')?.touched,
                          'is-valid': datosPermisionarioForm.get('strColonia')?.valid && datosPermisionarioForm.get('strColonia')?.touched
                        }" class="form-select">
-                    <option value="" selected disabled> Seleccione su municipio</option>
+                    <option value="" selected disabled> Seleccione su colonia</option>
                     <option *ngFor="let colonia of listaColonias" [value]="colonia.asentamiento">
                       {{ colonia.asentamiento }}
                     </option>
