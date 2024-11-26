@@ -198,7 +198,6 @@ export class AltaTransporteEspecializado {
       strTelefonoRepresentante: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]],
       strEmail: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       strTelefonoContacto: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]]
-
     });
 
     this.tramiteForm = this.formBuilder.group({
@@ -315,19 +314,6 @@ export class AltaTransporteEspecializado {
         this.errorGenerico(err);
       },
     });
-
-    /*  let jsonEstados = {
-       intIdEstado: 1
-     }
-     this.servicios.obtenerMunicipios(jsonEstados).subscribe({
-       next: (value: any) => {
-         this.cargarSpinner = false;
-         this.listaColonias = value.data;
-       },
-       error: (err: HttpErrorResponse) => {
-         this.errorGenerico(err);
-       }
-     }); */
   }
 
   filtrarOpciones(event: Event) {
@@ -373,14 +359,14 @@ export class AltaTransporteEspecializado {
     });
 
     this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
-      if (rfc.length <= 10) {
+      if (rfc?.length <= 10) {
         this.datosPermisionarioForm.patchValue({ strCurp: rfc });
-        if (rfc.length < 10) {
+        if (rfc?.length < 10) {
           this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
         }
       }
-      if (rfc.length >= 10) {
-        const fechaNac = rfc.substring(4, 10);
+      if (rfc?.length >= 10) {
+        const fechaNac = rfc?.substring(4, 10);
         this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
         this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
         this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
@@ -388,8 +374,8 @@ export class AltaTransporteEspecializado {
     });
 
     this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
-      if (curp.length >= 11) {
-        const genderChar = curp.charAt(10);
+      if (curp?.length >= 11) {
+        const genderChar = curp?.charAt(10);
         if (genderChar === 'H') {
           this.datosPermisionarioForm.patchValue({ strSexo: 'MASCULINO' });
         } else if (genderChar === 'M') {
@@ -405,7 +391,7 @@ export class AltaTransporteEspecializado {
 
     this.datosPermisionarioForm.get('strCP')?.valueChanges
       .pipe(
-        filter((codigoPostal: string) => codigoPostal.length === 5),
+        filter((codigoPostal: string) => codigoPostal?.length === 5),
         debounceTime(300),
         distinctUntilChanged(),
         switchMap((codigoPostal: string) => {
@@ -527,17 +513,6 @@ export class AltaTransporteEspecializado {
 
   /*CARGA DE DATOS A FORMULARIO */
   cargarDatosFormulario(formulario: FormGroup, nombreFormulario: ClavesFormulario, desdeNextStep: boolean) {
-    /*  console.log(nombreFormulario);
-     if(nombreFormulario === 'datosPermisionarioForm'){
-       let controlSexo = this.datosPermisionarioForm.get('strSexo');
-       if(controlSexo){
-         this.datosPermisionarioForm.get('strSexo')?.enable();
-         this.datosPermisionarioForm.get('strSexo')?.markAsDirty;
-         this.datosPermisionarioForm.get('strSexo')?.markAsTouched;
-         this.datosPermisionarioForm.get('strSexo')?.updateValueAndValidity;
-         this.datosPermisionarioForm.get('strSexo')?.disable();
-       }
-     } */
     if (formulario.invalid) {
       formulario.markAllAsTouched();
       const primerCampoInvalido = this.obtenerPrimerCampoInvalido(formulario);
@@ -997,6 +972,7 @@ export class AltaTransporteEspecializado {
     if (this.cardPdfs) {
       this.cardPdfs.forEach((cardPdf) => {
         cardPdf.isDefaultPdf = true;
+        cardPdf.pdfUrl = this.defaultPdfUrl;
       });
     }
   }
@@ -1005,8 +981,17 @@ export class AltaTransporteEspecializado {
     this.reiniciaDocumentos();
     this.stepper.reset();
     this.router.navigate([this.router.url], { skipLocationChange: true });
+    this.datosConcesionForm.get('strEntFed')?.setValue('TLAXCALA');
+    this.datosConcesionForm.get('strCombustible')?.reset('');
   }
 
+  mensaje(){
+    this.reiniciaDocumentos();
+    this.stepper.reset();
+    this.router.navigate([this.router.url], { skipLocationChange: true });
+    this.datosConcesionForm.get('strEntFed')?.setValue('TLAXCALA');
+    this.datosConcesionForm.get('strCombustible')?.reset('');
+  }
   /* UTILIDADES  */
 
   private obtenerPrimerCampoInvalido(formulario: FormGroup): string {
@@ -1048,27 +1033,6 @@ export class AltaTransporteEspecializado {
     });
   }
 
-  obtenerURLFormulario(formulario: string) {
-    let endpoint = '';
-    switch (formulario) {
-      case 'datosConcesionForm':
-        endpoint = '';
-        break;
-      case 'datosPermisionarioForm':
-        endpoint = '';
-        break;
-      case 'tramiteForm':
-        endpoint = '';
-        break;
-      case 'documentosUnidadForm':
-        endpoint = '';
-        break;
-      default:
-        throw new Error(`No existe un endpoint para el formulario: ${formulario}`);
-    }
-    return endpoint;
-  }
-
   errorGenerico(err: HttpErrorResponse) {
     this.cargarSpinner = false;
     let message: string;
@@ -1077,7 +1041,7 @@ export class AltaTransporteEspecializado {
     } else if (err.status === 0) {
       message = 'El servicio no está disponible en este momento.<br> Intente nuevamente más tarde.';
     } else {
-      message = err.error.strMessage;
+      message = err.error.message;
     }
     this.alertaUtility.mostrarAlerta({
       message: message,

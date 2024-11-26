@@ -131,7 +131,7 @@
                 </div>
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="intCilindros" class="form-label">CILINDROS<b class="asteriscos">*</b> </label>
-                  <input appNumeric type="text" formControlName="intCilindros" id="intCilindros" name="intCilindros"
+                  <input appNumeric type="text" formControlName="intCilindros" id="intCilindros" name="intCilindros" autocomplete="off"
                     maxlength="2" class="form-control" placeholder="Escribe el número de cilindros" [ngClass]="{
             'is-invalid': datosConcesionForm.get('intCilindros')?.invalid && (datosConcesionForm.get('intCilindros')?.touched || datosConcesionForm.get('intCilindros')?.dirty), 
             'is-valid': datosConcesionForm.get('intCilindros')?.valid && (datosConcesionForm.get('intCilindros')?.touched || datosConcesionForm.get('intCilindros')?.dirty),
@@ -222,8 +222,6 @@
                     <mat-datepicker-toggle matIconPrefix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
-
-
                   <div class="invalid-feedback"
                     *ngIf="datosConcesionForm.get('dtFechaFact')?.invalid && (datosConcesionForm.get('dtFechaFact')?.touched || datosConcesionForm.get('dtFechaFact')?.dirty)">
                     <ng-container *ngIf="datosConcesionForm.get('dtFechaFact')?.hasError('required')"> Campo Obligatorio

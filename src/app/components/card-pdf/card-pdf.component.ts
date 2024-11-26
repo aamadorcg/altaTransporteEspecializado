@@ -87,7 +87,7 @@ export class CardPdfComponent implements OnInit {
 
   muestraError(message: string) {
     this.alertaUtility.mostrarAlerta({
-      message,
+      message: message,
       icon: 'error',
       showConfirmButton: true,
       confirmButtonColor: COLOR_CONFIRMAR,
