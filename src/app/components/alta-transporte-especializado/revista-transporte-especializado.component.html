@@ -15,17 +15,17 @@
             </h6>
           </div>
         </div>
-        <mat-vertical-stepper [linear]="false" #stepper animationDuration="1500"
+        <mat-vertical-stepper [linear]="true" #stepper animationDuration="1500"
           class="fondo-stepper rounded mat-stepper-vertical">
           <!-- Step 1 - DATOS DE LA FACTURA -->
-          <mat-step [stepControl]="datosConcesionForm">
+          <mat-step [stepControl]="datosFacturaForm">
             <ng-template matStepLabel>
               <h6 [ngClass]="esPersonaFisica ? 'tittle' : 'tittleMoral'" class="me-auto p-1 rounded">
                 <span class="bi bi-bus-front stepper-icons"></span>
                 <span> DATOS DE LA FACTURA </span>
               </h6>
             </ng-template>
-            <form [formGroup]="datosConcesionForm">
+            <form [formGroup]="datosFacturaForm">
               <div class="row g-3">
                 <div class="col-12 col-md-12 col-lg-4">
                   <label for="strNiv" class="form-label">NIV <b class="asteriscos">*</b></label>
@@ -33,16 +33,16 @@
                     <input appAlphanumeric type="text" minlength="17" maxlength="17" id="strNiv"
                       placeholder="Escribe NIV" formControlName="strNiv" name="strNiv" autocomplete="off"
                       class="form-control" [ngClass]="{
-             'is-invalid': datosConcesionForm.get('strNiv')?.invalid && (datosConcesionForm.get('strNiv')?.touched || datosConcesionForm.get('strNiv')?.dirty), 
-             'is-valid': datosConcesionForm.get('strNiv')?.valid && (datosConcesionForm.get('strNiv')?.touched || datosConcesionForm.get('strNiv')?.dirty),
+             'is-invalid': datosFacturaForm.get('strNiv')?.invalid && (datosFacturaForm.get('strNiv')?.touched || datosFacturaForm.get('strNiv')?.dirty), 
+             'is-valid': datosFacturaForm.get('strNiv')?.valid && (datosFacturaForm.get('strNiv')?.touched || datosFacturaForm.get('strNiv')?.dirty),
               }" />
                     <div class="invalid-feedback"
-                      *ngIf="datosConcesionForm.get('strNiv')?.invalid && (datosConcesionForm.get('strNiv')?.touched || datosConcesionForm.get('strNiv')?.dirty)">
-                      <ng-container *ngIf="datosConcesionForm.get('strNiv')?.hasError('required')"> Campo Obligatorio
+                      *ngIf="datosFacturaForm.get('strNiv')?.invalid && (datosFacturaForm.get('strNiv')?.touched || datosFacturaForm.get('strNiv')?.dirty)">
+                      <ng-container *ngIf="datosFacturaForm.get('strNiv')?.hasError('required')"> Campo Obligatorio
                       </ng-container>
-                      <ng-container *ngIf="datosConcesionForm.get('strNiv')?.hasError('minlength')"> Debe tener al menos
+                      <ng-container *ngIf="datosFacturaForm.get('strNiv')?.hasError('minlength')"> Debe tener al menos
                         17 caracteres </ng-container>
-                      <ng-container *ngIf="datosConcesionForm.get('strNiv')?.hasError('maxlength')"> No puede tener más
+                      <ng-container *ngIf="datosFacturaForm.get('strNiv')?.hasError('maxlength')"> No puede tener más
                         de 17 caracteres </ng-container>
                     </div>
                   </div>
@@ -52,8 +52,8 @@
                   <input type="text" formControlName="strCveVeh" id="strCveVeh" name="strCveVeh" autocomplete="off"
                     class="form-control" [matAutocomplete]="auto" placeholder="Escribe la clave vehicular"
                     (input)="filtrarOpciones($event)" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strCveVeh')?.invalid && (datosConcesionForm.get('strCveVeh')?.touched || datosConcesionForm.get('strCveVeh')?.dirty), 
-            'is-valid': datosConcesionForm.get('strCveVeh')?.valid && (datosConcesionForm.get('strCveVeh')?.touched || datosConcesionForm.get('strCveVeh')?.dirty),
+            'is-invalid': datosFacturaForm.get('strCveVeh')?.invalid && (datosFacturaForm.get('strCveVeh')?.touched || datosFacturaForm.get('strCveVeh')?.dirty), 
+            'is-valid': datosFacturaForm.get('strCveVeh')?.valid && (datosFacturaForm.get('strCveVeh')?.touched || datosFacturaForm.get('strCveVeh')?.dirty),
              }">
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)"
                     [displayWith]="displayFn">
@@ -67,12 +67,12 @@
                   <input appAlphanumeric type="text" minlength="1" maxlength="20" formControlName="strMotor"
                     id="strMotor" name="strMotor" autocomplete="off" class="form-control"
                     placeholder="Escribe el número del motor" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strMotor')?.invalid && (datosConcesionForm.get('strMotor')?.touched || datosConcesionForm.get('strMotor')?.dirty), 
-            'is-valid': datosConcesionForm.get('strMotor')?.valid && (datosConcesionForm.get('strMotor')?.touched || datosConcesionForm.get('strMotor')?.dirty),
+            'is-invalid': datosFacturaForm.get('strMotor')?.invalid && (datosFacturaForm.get('strMotor')?.touched || datosFacturaForm.get('strMotor')?.dirty), 
+            'is-valid': datosFacturaForm.get('strMotor')?.valid && (datosFacturaForm.get('strMotor')?.touched || datosFacturaForm.get('strMotor')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strMotor')?.invalid && (datosConcesionForm.get('strMotor')?.touched || datosConcesionForm.get('strMotor')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strMotor')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('strMotor')?.invalid && (datosFacturaForm.get('strMotor')?.touched || datosFacturaForm.get('strMotor')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strMotor')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
@@ -80,12 +80,12 @@
                   <label for="strMarca" class="form-label">MARCA <b class="asteriscos">*</b></label><input
                     appAlphanumeric type="text" formControlName="strMarca" id="strMarca" name="strMarca"
                     autocomplete="off" class="form-control" placeholder="Escribe la marca del vehículo" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strMarca')?.invalid && (datosConcesionForm.get('strMarca')?.touched || datosConcesionForm.get('strMarca')?.dirty), 
-            'is-valid': datosConcesionForm.get('strMarca')?.valid && (datosConcesionForm.get('strMarca')?.touched || datosConcesionForm.get('strMarca')?.dirty),
+            'is-invalid': datosFacturaForm.get('strMarca')?.invalid && (datosFacturaForm.get('strMarca')?.touched || datosFacturaForm.get('strMarca')?.dirty), 
+            'is-valid': datosFacturaForm.get('strMarca')?.valid && (datosFacturaForm.get('strMarca')?.touched || datosFacturaForm.get('strMarca')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strMarca')?.invalid && (datosConcesionForm.get('strMarca')?.touched || datosConcesionForm.get('strMarca')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strMarca')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('strMarca')?.invalid && (datosFacturaForm.get('strMarca')?.touched || datosFacturaForm.get('strMarca')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strMarca')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
@@ -93,12 +93,12 @@
                   <label for="intModelo" class="form-label">MODELO <b class="asteriscos">*</b></label><input appNumeric
                     type="text" minlength="4" maxlength="4" formControlName="intModelo" id="intModelo" name="intModelo"
                     autocomplete="off" class="form-control" placeholder="Escribe modelo" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('intModelo')?.invalid && (datosConcesionForm.get('intModelo')?.touched || datosConcesionForm.get('intModelo')?.dirty), 
-            'is-valid': datosConcesionForm.get('intModelo')?.valid && (datosConcesionForm.get('intModelo')?.touched || datosConcesionForm.get('intModelo')?.dirty),
+            'is-invalid': datosFacturaForm.get('intModelo')?.invalid && (datosFacturaForm.get('intModelo')?.touched || datosFacturaForm.get('intModelo')?.dirty), 
+            'is-valid': datosFacturaForm.get('intModelo')?.valid && (datosFacturaForm.get('intModelo')?.touched || datosFacturaForm.get('intModelo')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('intModelo')?.invalid && (datosConcesionForm.get('intModelo')?.touched || datosConcesionForm.get('intModelo')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('intModelo')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('intModelo')?.invalid && (datosFacturaForm.get('intModelo')?.touched || datosFacturaForm.get('intModelo')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('intModelo')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
@@ -106,48 +106,50 @@
                   <label for="strTipoVeh" class="form-label">TIPO<b class="asteriscos">*</b> </label><input
                     appAlphanumeric type="text" formControlName="strTipoVeh" id="strTipoVeh" name="strTipoVeh"
                     autocomplete="off" class="form-control" placeholder="Escribe tipo vehículo" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strTipoVeh')?.invalid && (datosConcesionForm.get('strTipoVeh')?.touched || datosConcesionForm.get('strTipoVeh')?.dirty), 
-            'is-valid': datosConcesionForm.get('strTipoVeh')?.valid && (datosConcesionForm.get('strTipoVeh')?.touched || datosConcesionForm.get('strTipoVeh')?.dirty),
+            'is-invalid': datosFacturaForm.get('strTipoVeh')?.invalid && (datosFacturaForm.get('strTipoVeh')?.touched || datosFacturaForm.get('strTipoVeh')?.dirty), 
+            'is-valid': datosFacturaForm.get('strTipoVeh')?.valid && (datosFacturaForm.get('strTipoVeh')?.touched || datosFacturaForm.get('strTipoVeh')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strTipoVeh')?.invalid && (datosConcesionForm.get('strTipoVeh')?.touched || datosConcesionForm.get('strTipoVeh')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strTipoVeh')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('strTipoVeh')?.invalid && (datosFacturaForm.get('strTipoVeh')?.touched || datosFacturaForm.get('strTipoVeh')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strTipoVeh')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="intCapacidad" class="form-label">CAPACIDAD<b class="asteriscos">*</b> </label><input
-                    appNumeric type="text" minlength="2" formControlName="intCapacidad" id="intCapacidad"
+                    appNumeric type="text" minlength="1" formControlName="intCapacidad" id="intCapacidad"
                     name="intCapacidad" autocomplete="off" class="form-control" placeholder="Escribe capacidad"
                     [ngClass]="{
-            'is-invalid': datosConcesionForm.get('intCapacidad')?.invalid && (datosConcesionForm.get('intCapacidad')?.touched || datosConcesionForm.get('intCapacidad')?.dirty), 
-            'is-valid': datosConcesionForm.get('intCapacidad')?.valid && (datosConcesionForm.get('intCapacidad')?.touched || datosConcesionForm.get('intCapacidad')?.dirty),
+            'is-invalid': datosFacturaForm.get('intCapacidad')?.invalid && (datosFacturaForm.get('intCapacidad')?.touched || datosFacturaForm.get('intCapacidad')?.dirty), 
+            'is-valid': datosFacturaForm.get('intCapacidad')?.valid && (datosFacturaForm.get('intCapacidad')?.touched || datosFacturaForm.get('intCapacidad')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('intCapacidad')?.invalid && (datosConcesionForm.get('intCapacidad')?.touched || datosConcesionForm.get('intCapacidad')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('intCapacidad')?.hasError('required')"> Campo
+                    *ngIf="datosFacturaForm.get('intCapacidad')?.invalid && (datosFacturaForm.get('intCapacidad')?.touched || datosFacturaForm.get('intCapacidad')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('intCapacidad')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="intCilindros" class="form-label">CILINDROS<b class="asteriscos">*</b> </label>
-                  <input appNumeric type="text" formControlName="intCilindros" id="intCilindros" name="intCilindros" autocomplete="off"
-                    maxlength="2" class="form-control" placeholder="Escribe el número de cilindros" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('intCilindros')?.invalid && (datosConcesionForm.get('intCilindros')?.touched || datosConcesionForm.get('intCilindros')?.dirty), 
-            'is-valid': datosConcesionForm.get('intCilindros')?.valid && (datosConcesionForm.get('intCilindros')?.touched || datosConcesionForm.get('intCilindros')?.dirty),
+                  <input appNumeric type="text" formControlName="intCilindros" id="intCilindros" name="intCilindros"
+                    autocomplete="off" maxlength="2" class="form-control" placeholder="Escribe el número de cilindros"
+                    [ngClass]="{
+            'is-invalid': datosFacturaForm.get('intCilindros')?.invalid && (datosFacturaForm.get('intCilindros')?.touched || datosFacturaForm.get('intCilindros')?.dirty), 
+            'is-valid': datosFacturaForm.get('intCilindros')?.valid && (datosFacturaForm.get('intCilindros')?.touched || datosFacturaForm.get('intCilindros')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('intCilindros')?.invalid && (datosConcesionForm.get('intCilindros')?.touched || datosConcesionForm.get('intCilindros')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('intCilindros')?.hasError('required')"> Campo
+                    *ngIf="datosFacturaForm.get('intCilindros')?.invalid && (datosFacturaForm.get('intCilindros')?.touched || datosFacturaForm.get('intCilindros')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('intCilindros')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-2">
                   <label for="strCombustible" class="form-label">COMBUSTIBLE <b class="asteriscos">*</b></label>
                   <select formControlName="strCombustible" id="strCombustible" name="strCombustible"
-                    (focus)="onSelectFocus()" (change)="onSelectChange($event, 'strCombustible')" [ngClass]="{
-                      'is-invalid': datosConcesionForm.get('strCombustible')?.invalid && datosConcesionForm.get('strCombustible')?.touched,
-                      'is-valid': datosConcesionForm.get('strCombustible')?.valid && datosConcesionForm.get('strCombustible')?.touched
+                    (focus)="onSelectFocus('strCombustible')" (change)="onSelectChange($event, 'strCombustible')"
+                    [ngClass]="{
+                      'is-invalid': datosFacturaForm.get('strCombustible')?.invalid && datosFacturaForm.get('strCombustible')?.touched,
+                      'is-valid': datosFacturaForm.get('strCombustible')?.valid && datosFacturaForm.get('strCombustible')?.touched
                     }" class="form-select">
                     <option value="" selected disabled> Seleccione combustible</option>
                     <option *ngFor="let combustible of listaCombustibles" [value]="combustible.intIdCombustible">
@@ -160,12 +162,12 @@
                   <label for="strColor" class="form-label">COLOR<b class="asteriscos">*</b> </label><input
                     appAlphanumeric type="text" minlength="4" formControlName="strColor" id="strColor" name="strColor"
                     autocomplete="off" class="form-control" placeholder="Escribe color del vehículo" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strColor')?.invalid && (datosConcesionForm.get('strColor')?.touched || datosConcesionForm.get('strColor')?.dirty), 
-            'is-valid': datosConcesionForm.get('strColor')?.valid && (datosConcesionForm.get('strColor')?.touched || datosConcesionForm.get('strColor')?.dirty),
+            'is-invalid': datosFacturaForm.get('strColor')?.invalid && (datosFacturaForm.get('strColor')?.touched || datosFacturaForm.get('strColor')?.dirty), 
+            'is-valid': datosFacturaForm.get('strColor')?.valid && (datosFacturaForm.get('strColor')?.touched || datosFacturaForm.get('strColor')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strColor')?.invalid && (datosConcesionForm.get('strColor')?.touched || datosConcesionForm.get('strColor')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strColor')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('strColor')?.invalid && (datosFacturaForm.get('strColor')?.touched || datosFacturaForm.get('strColor')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strColor')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
@@ -174,27 +176,13 @@
                     appNumeric type="text" maxlength="4" formControlName="intPuertas" id="intPuertas" name="intPuertas"
                     maxlength="2" autocomplete="off" class="form-control" placeholder="Escribe número de puertas"
                     [ngClass]="{
-            'is-invalid': datosConcesionForm.get('intPuertas')?.invalid && (datosConcesionForm.get('intPuertas')?.touched || datosConcesionForm.get('intPuertas')?.dirty), 
-            'is-valid': datosConcesionForm.get('intPuertas')?.valid && (datosConcesionForm.get('intPuertas')?.touched || datosConcesionForm.get('intPuertas')?.dirty),
+            'is-invalid': datosFacturaForm.get('intPuertas')?.invalid && (datosFacturaForm.get('intPuertas')?.touched || datosFacturaForm.get('intPuertas')?.dirty), 
+            'is-valid': datosFacturaForm.get('intPuertas')?.valid && (datosFacturaForm.get('intPuertas')?.touched || datosFacturaForm.get('intPuertas')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('intPuertas')?.invalid && (datosConcesionForm.get('intPuertas')?.touched || datosConcesionForm.get('intPuertas')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('intPuertas')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('intPuertas')?.invalid && (datosFacturaForm.get('intPuertas')?.touched || datosFacturaForm.get('intPuertas')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('intPuertas')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
-                  </div>
-                </div>
-                <div class="col-12 col-md-12 col-lg-3">
-                  <label for="strUnidadMedida" class="form-label">UNIDAD DE MEDIDA<b class="asteriscos">*</b>
-                  </label><input appAlphanumeric type="text" minlength="4" formControlName="strUnidadMedida"
-                    id="strUnidadMedida" name="strUnidadMedida" autocomplete="off" class="form-control"
-                    placeholder="Escribe unidad de medida" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strUnidadMedida')?.invalid && (datosConcesionForm.get('strUnidadMedida')?.touched || datosConcesionForm.get('strUnidadMedida')?.dirty), 
-            'is-valid': datosConcesionForm.get('strUnidadMedida')?.valid && (datosConcesionForm.get('strUnidadMedida')?.touched || datosConcesionForm.get('strUnidadMedida')?.dirty),
-             }" />
-                  <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strUnidadMedida')?.invalid && (datosConcesionForm.get('strUnidadMedida')?.touched || datosConcesionForm.get('strUnidadMedida')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strUnidadMedida')?.hasError('required')"> Campo
-                      Obligatorio </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-3">
@@ -202,70 +190,76 @@
                     appAlphanumeric type="text" minlength="4" formControlName="strEntFed" id="strEntFed"
                     name="strEntFed" autocomplete="off" class="form-control" placeholder="Escribe entidad federativa"
                     [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strEntFed')?.invalid && (datosConcesionForm.get('strEntFed')?.touched || datosConcesionForm.get('strEntFed')?.dirty), 
-            'is-valid': datosConcesionForm.get('strEntFed')?.valid && (datosConcesionForm.get('strEntFed')?.touched || datosConcesionForm.get('strEntFed')?.dirty),
+            'is-invalid': datosFacturaForm.get('strEntFed')?.invalid && (datosFacturaForm.get('strEntFed')?.touched || datosFacturaForm.get('strEntFed')?.dirty), 
+            'is-valid': datosFacturaForm.get('strEntFed')?.valid && (datosFacturaForm.get('strEntFed')?.touched || datosFacturaForm.get('strEntFed')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strEntFed')?.invalid && (datosConcesionForm.get('strEntFed')?.touched || datosConcesionForm.get('strEntFed')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strEntFed')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('strEntFed')?.invalid && (datosFacturaForm.get('strEntFed')?.touched || datosFacturaForm.get('strEntFed')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strEntFed')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
+                </div>
+                <div class="col-12 col-md-12 col-lg-3">
                 </div>
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="dtFechaFact" class="form-label">FECHA DE LA FACTURA <b class="asteriscos">*</b></label>
                   <mat-form-field appearance="outline" class="w-100 form-control">
                     <input matInput formControlName="dtFechaFact" id="dtFechaFact" name="dtFechaFact" autocomplete="off"
                       class="form-control" placeholder="Escribe fecha de la factura" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('dtFechaFact')?.invalid && (datosConcesionForm.get('dtFechaFact')?.touched || datosConcesionForm.get('dtFechaFact')?.dirty), 
-            'is-valid': datosConcesionForm.get('dtFechaFact')?.valid && (datosConcesionForm.get('dtFechaFact')?.touched || datosConcesionForm.get('dtFechaFact')?.dirty),
+            'is-invalid': datosFacturaForm.get('dtFechaFact')?.invalid && (datosFacturaForm.get('dtFechaFact')?.touched || datosFacturaForm.get('dtFechaFact')?.dirty), 
+            'is-valid': datosFacturaForm.get('dtFechaFact')?.valid && (datosFacturaForm.get('dtFechaFact')?.touched || datosFacturaForm.get('dtFechaFact')?.dirty),
              }" [matDatepicker]="picker" />
                     <mat-datepicker-toggle matIconPrefix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('dtFechaFact')?.invalid && (datosConcesionForm.get('dtFechaFact')?.touched || datosConcesionForm.get('dtFechaFact')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('dtFechaFact')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('dtFechaFact')?.invalid && (datosFacturaForm.get('dtFechaFact')?.touched || datosFacturaForm.get('dtFechaFact')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('dtFechaFact')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strNoFact" class="form-label">NO. FACTURA <b class="asteriscos">*</b></label><input
-                    appAlphanumeric type="text" minlength="4" formControlName="strNoFact" id="strNoFact" name="strNoFact"
-                    autocomplete="off" class="form-control" placeholder="Escribe número de factura" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strNoFact')?.invalid && (datosConcesionForm.get('strNoFact')?.touched || datosConcesionForm.get('strNoFact')?.dirty), 
-            'is-valid': datosConcesionForm.get('strNoFact')?.valid && (datosConcesionForm.get('strNoFact')?.touched || datosConcesionForm.get('strNoFact')?.dirty),
+                    appAlphanumeric type="text" minlength="4" formControlName="strNoFact" id="strNoFact"
+                    name="strNoFact" autocomplete="off" class="form-control" placeholder="Escribe número de factura"
+                    [ngClass]="{
+            'is-invalid': datosFacturaForm.get('strNoFact')?.invalid && (datosFacturaForm.get('strNoFact')?.touched || datosFacturaForm.get('strNoFact')?.dirty), 
+            'is-valid': datosFacturaForm.get('strNoFact')?.valid && (datosFacturaForm.get('strNoFact')?.touched || datosFacturaForm.get('strNoFact')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strNoFact')?.invalid && (datosConcesionForm.get('strNoFact')?.touched || datosConcesionForm.get('strNoFact')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strNoFact')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('strNoFact')?.invalid && (datosFacturaForm.get('strNoFact')?.touched || datosFacturaForm.get('strNoFact')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strNoFact')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strImporteFact" class="form-label">IMPORTE DE FACTURA <b
-                      class="asteriscos">*</b></label><input appNumeric type="text" minlength="4"
+                      class="asteriscos">*</b></label><input appNumericDecimal type="text" minlength="4"
                     formControlName="strImporteFact" id="strImporteFact" name="strImporteFact" autocomplete="off"
                     class="form-control" placeholder="Escribe importe de factura" [ngClass]="{
-                      'is-invalid': datosConcesionForm.get('strImporteFact')?.invalid && (datosConcesionForm.get('strImporteFact')?.touched || datosConcesionForm.get('strImporteFact')?.dirty),
-                      'is-valid': datosConcesionForm.get('strImporteFact')?.valid && (datosConcesionForm.get('strImporteFact')?.touched || datosConcesionForm.get('strImporteFact')?.dirty)
+                      'is-invalid': datosFacturaForm.get('strImporteFact')?.invalid && (datosFacturaForm.get('strImporteFact')?.touched || datosFacturaForm.get('strImporteFact')?.dirty),
+                      'is-valid': datosFacturaForm.get('strImporteFact')?.valid && (datosFacturaForm.get('strImporteFact')?.touched || datosFacturaForm.get('strImporteFact')?.dirty)
                     }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strImporteFact')?.invalid && (datosConcesionForm.get('strImporteFact')?.touched || datosConcesionForm.get('strImporteFact')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strImporteFact')?.hasError('required')"> Campo
+                    *ngIf="datosFacturaForm.get('strImporteFact')?.invalid && (datosFacturaForm.get('strImporteFact')?.touched || datosFacturaForm.get('strImporteFact')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strImporteFact')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-3">
-                  <label for="strProcedencia" class="form-label">PROCEDENCIA <b class="asteriscos">*</b></label><input
-                    appAlphanumeric type="text" minlength="2" formControlName="strProcedencia" id="strProcedencia"
-                    name="strProcedencia" autocomplete="off" class="form-control" placeholder="Escribe procedencia"
-                    [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strProcedencia')?.invalid && (datosConcesionForm.get('strProcedencia')?.touched || datosConcesionForm.get('strProcedencia')?.dirty), 
-            'is-valid': datosConcesionForm.get('strProcedencia')?.valid && (datosConcesionForm.get('strProcedencia')?.touched || datosConcesionForm.get('strProcedencia')?.dirty),
-             }" />
+                  <label for="strProcedencia" class="form-label">PROCEDENCIA <b class="asteriscos">*</b></label>
+                  <select formControlName="strProcedencia" id="strProcedencia" name="strProcedencia"
+                    (focus)="onSelectFocus('strProcedencia')" [ngClass]="{
+               'is-invalid': datosFacturaForm.get('strProcedencia')?.invalid && datosFacturaForm.get('strProcedencia')?.touched,
+               'is-valid': datosFacturaForm.get('strProcedencia')?.valid && datosFacturaForm.get('strProcedencia')?.touched
+             }" class="form-select">
+                    <option value="" selected disabled> Seleccione procedencia</option>
+                    <option value="Nacional" selected> Nacional</option>
+                    <option value="Extranjero" selected> Extranjero</option>
+                  </select>
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strProcedencia')?.invalid && (datosConcesionForm.get('strProcedencia')?.touched || datosConcesionForm.get('strProcedencia')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strProcedencia')?.hasError('required')"> Campo
+                    *ngIf="datosFacturaForm.get('strProcedencia')?.invalid && (datosFacturaForm.get('strProcedencia')?.touched || datosFacturaForm.get('strProcedencia')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strProcedencia')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
@@ -274,12 +268,12 @@
                   </label><input appAlphanumeric type="text" minlength="3" formControlName="strAgenciaDist"
                     id="strAgenciaDist" name="strAgenciaDist" autocomplete="off" class="form-control"
                     placeholder="Escribe agencia distribuidora" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strAgenciaDist')?.invalid && (datosConcesionForm.get('strAgenciaDist')?.touched || datosConcesionForm.get('strAgenciaDist')?.dirty), 
-            'is-valid': datosConcesionForm.get('strAgenciaDist')?.valid && (datosConcesionForm.get('strAgenciaDist')?.touched || datosConcesionForm.get('strAgenciaDist')?.dirty),
+            'is-invalid': datosFacturaForm.get('strAgenciaDist')?.invalid && (datosFacturaForm.get('strAgenciaDist')?.touched || datosFacturaForm.get('strAgenciaDist')?.dirty), 
+            'is-valid': datosFacturaForm.get('strAgenciaDist')?.valid && (datosFacturaForm.get('strAgenciaDist')?.touched || datosFacturaForm.get('strAgenciaDist')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strAgenciaDist')?.invalid && (datosConcesionForm.get('strAgenciaDist')?.touched || datosConcesionForm.get('strAgenciaDist')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strAgenciaDist')?.hasError('required')"> Campo
+                    *ngIf="datosFacturaForm.get('strAgenciaDist')?.invalid && (datosFacturaForm.get('strAgenciaDist')?.touched || datosFacturaForm.get('strAgenciaDist')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strAgenciaDist')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
@@ -288,46 +282,56 @@
                     appAlphanumeric type="text" minlength="4" formControlName="strTipoServ" id="strTipoServ"
                     name="strTipoServ" autocomplete="off" class="form-control" placeholder="Escribe tipo de servicio"
                     [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strTipoServ')?.invalid && (datosConcesionForm.get('strTipoServ')?.touched || datosConcesionForm.get('strTipoServ')?.dirty), 
-            'is-valid': datosConcesionForm.get('strTipoServ')?.valid && (datosConcesionForm.get('strTipoServ')?.touched || datosConcesionForm.get('strTipoServ')?.dirty),
+            'is-invalid': datosFacturaForm.get('strTipoServ')?.invalid && (datosFacturaForm.get('strTipoServ')?.touched || datosFacturaForm.get('strTipoServ')?.dirty), 
+            'is-valid': datosFacturaForm.get('strTipoServ')?.valid && (datosFacturaForm.get('strTipoServ')?.touched || datosFacturaForm.get('strTipoServ')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strTipoServ')?.invalid && (datosConcesionForm.get('strTipoServ')?.touched || datosConcesionForm.get('strTipoServ')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strTipoServ')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('strTipoServ')?.invalid && (datosFacturaForm.get('strTipoServ')?.touched || datosFacturaForm.get('strTipoServ')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strTipoServ')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-3">
-                  <label for="strUsoVeh" class="form-label">USO DEL VEHÍCULO <b class="asteriscos">*</b></label><input
+                  <label for="strUsoVeh" class="form-label">USO DEL VEHÍCULO <b class="asteriscos">*</b></label>
+                  <!-- <input
                     appAlphanumeric type="text" minlength="4" formControlName="strUsoVeh" id="strUsoVeh"
                     name="strUsoVeh" autocomplete="off" class="form-control" placeholder="Escribe uso del vvehículo"
                     [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strUsoVeh')?.invalid && (datosConcesionForm.get('strUsoVeh')?.touched || datosConcesionForm.get('strUsoVeh')?.dirty), 
-            'is-valid': datosConcesionForm.get('strUsoVeh')?.valid && (datosConcesionForm.get('strUsoVeh')?.touched || datosConcesionForm.get('strUsoVeh')?.dirty),
-             }" />
+            'is-invalid': datosFacturaForm.get('strUsoVeh')?.invalid && (datosFacturaForm.get('strUsoVeh')?.touched || datosFacturaForm.get('strUsoVeh')?.dirty), 
+            'is-valid': datosFacturaForm.get('strUsoVeh')?.valid && (datosFacturaForm.get('strUsoVeh')?.touched || datosFacturaForm.get('strUsoVeh')?.dirty),
+             }" /> -->
+                  <select formControlName="strUsoVeh" id="strUsoVeh" name="strUsoVeh"
+                    (focus)="onSelectFocus('strUsoVeh')" [ngClass]="{
+                'is-invalid': datosFacturaForm.get('strUsoVeh')?.invalid && datosFacturaForm.get('strUsoVeh')?.touched,
+                'is-valid': datosFacturaForm.get('strUsoVeh')?.valid && datosFacturaForm.get('strUsoVeh')?.touched
+              }" class="form-select">
+                    <option value="" selected disabled> Seleccione uso del vehículo</option>
+                    <option value="Personal" selected> Personal</option>
+                    <option value="Escolar" selected> Escolar</option>
+                  </select>
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strUsoVeh')?.invalid && (datosConcesionForm.get('strUsoVeh')?.touched || datosConcesionForm.get('strUsoVeh')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strUsoVeh')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('strUsoVeh')?.invalid && (datosFacturaForm.get('strUsoVeh')?.touched || datosFacturaForm.get('strUsoVeh')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strUsoVeh')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strRepuve" class="form-label">REPUVE <b class="asteriscos">*</b></label><input type="text"
-                    appAlphanumeric minlength="2" formControlName="strRepuve" id="strRepuve" name="strRepuve"
-                    autocomplete="off" class="form-control" placeholder="Escribe repuve" [ngClass]="{
-            'is-invalid': datosConcesionForm.get('strRepuve')?.invalid && (datosConcesionForm.get('strRepuve')?.touched || datosConcesionForm.get('strRepuve')?.dirty), 
-            'is-valid': datosConcesionForm.get('strRepuve')?.valid && (datosConcesionForm.get('strRepuve')?.touched || datosConcesionForm.get('strRepuve')?.dirty),
+                    appAlphanumeric minlength="2" maxlength="8" formControlName="strRepuve" id="strRepuve"
+                    name="strRepuve" autocomplete="off" class="form-control" placeholder="Escribe repuve" [ngClass]="{
+            'is-invalid': datosFacturaForm.get('strRepuve')?.invalid && (datosFacturaForm.get('strRepuve')?.touched || datosFacturaForm.get('strRepuve')?.dirty), 
+            'is-valid': datosFacturaForm.get('strRepuve')?.valid && (datosFacturaForm.get('strRepuve')?.touched || datosFacturaForm.get('strRepuve')?.dirty),
              }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosConcesionForm.get('strRepuve')?.invalid && (datosConcesionForm.get('strRepuve')?.touched || datosConcesionForm.get('strRepuve')?.dirty)">
-                    <ng-container *ngIf="datosConcesionForm.get('strRepuve')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosFacturaForm.get('strRepuve')?.invalid && (datosFacturaForm.get('strRepuve')?.touched || datosFacturaForm.get('strRepuve')?.dirty)">
+                    <ng-container *ngIf="datosFacturaForm.get('strRepuve')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
               </div>
               <br />
               <div class="col-12 d-grid gap-1 d-md-flex justify-content-md-end">
-                <button (click)="cargarDatosFormulario(datosConcesionForm, 'datosConcesionForm',true)" mat-button
+                <button (click)="cargarDatosFormulario(datosFacturaForm, 'datosFacturaForm',true)" mat-button
                   matTooltip="Siguiente paso" matTooltipPosition="above" class="text-white boton-siguiente"
                   aria-describedby="cdk-describedby-message-pdb-1-2" cdk-describedby-host="pdb-1">
                   <span class="mdc-button__label">Siguiente
@@ -566,8 +570,8 @@
                 <div class="col-12 col-md-12 col-lg-4">
                   <label for="strColonia" class="form-label">COLONIA<b class="asteriscos">*</b> </label>
 
-                  <select formControlName="strColonia" id="strColonia" name="strColonia" (focus)="onSelectFocus()"
-                    (change)="onSelectChange($event, 'strColonia')" [ngClass]="{
+                  <select formControlName="strColonia" id="strColonia" name="strColonia"
+                    (focus)="onSelectFocus('strColonia')" (change)="onSelectChange($event, 'strColonia')" [ngClass]="{
                          'is-invalid': datosPermisionarioForm.get('strColonia')?.invalid && datosPermisionarioForm.get('strColonia')?.touched,
                          'is-valid': datosPermisionarioForm.get('strColonia')?.valid && datosPermisionarioForm.get('strColonia')?.touched
                        }" class="form-select">
@@ -714,8 +718,8 @@
               <div class="row g-3 ">
                 <div class="col-12 col-md-12 col-lg-4">
                   <label for="strTramite" class="form-label">TIPO REVISTA <b class="asteriscos">*</b></label>
-                  <select formControlName="strTramite" id="strTramite" name="strTramite" (focus)="onSelectFocus()"
-                    (change)="onSelectChange($event, 'strTramite')" [ngClass]="{
+                  <select formControlName="strTramite" id="strTramite" name="strTramite"
+                    (focus)="onSelectFocus('strTramite')" (change)="onSelectChange($event, 'strTramite')" [ngClass]="{
                       'is-invalid': tramiteForm.get('strTramite')?.invalid && tramiteForm.get('strTramite')?.touched,
                       'is-valid': tramiteForm.get('strTramite')?.valid && tramiteForm.get('strTramite')?.touched
                     }" class="form-select">
@@ -839,9 +843,14 @@
                   [documentChecked]="documentCheckedStatus['constanciaFis']" [esModificado]="esModificacion">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['factura']" [title]="'FACTURA / CARTA FACTURA'"
-                  [controlName]="'factura'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                <app-card-pdf [pdfUrl]="pdfUrls['factura']" [title]="'FACTURA'" [controlName]="'factura'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
                   [documentChecked]="documentCheckedStatus['factura']" [esModificado]="esModificacion">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['cartaFactura']" [title]="'CARTA FACTURA (VIGENCIA NO MAYOR A 30 DÍAS)'"
+                  [controlName]="'cartaFactura'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['cartaFactura']" [esModificado]="esModificacion">
                 </app-card-pdf>
 
                 <app-card-pdf [pdfUrl]="pdfUrls['curp']" [title]="'CURP'" [controlName]="'curp'"
@@ -858,7 +867,25 @@
                   [controlName]="'antPenales'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
                   [documentChecked]="documentCheckedStatus['antPenales']" [esModificado]="esModificacion">
                 </app-card-pdf>
+                <app-card-pdf [pdfUrl]="pdfUrls['facturaUno']" [title]="'FACTURA 1'" [controlName]="'antPenales'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['facturaUno']" [esModificado]="esModificacion">
+                </app-card-pdf>
 
+                <app-card-pdf [pdfUrl]="pdfUrls['facturaDos']" [title]="'FACTURA 2'" [controlName]="'antPenales'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['facturaDos']" [esModificado]="esModificacion">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['facturaTres']" [title]="'FACTURA 3'" [controlName]="'antPenales'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['facturaTres']" [esModificado]="esModificacion">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['facturaCuatro']" [title]="'FACTURA 4'" [controlName]="'antPenales'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['facturaCuatro']" [esModificado]="esModificacion">
+                </app-card-pdf>
               </div>
               <br><br>
               <div class="row g-3  mt-3">

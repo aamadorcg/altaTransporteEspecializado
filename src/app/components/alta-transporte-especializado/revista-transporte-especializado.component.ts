@@ -15,12 +15,12 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { filter, debounceTime, distinctUntilChanged, switchMap, catchError, of } from 'rxjs';
 
 
-type ClavesFormulario = 'datosConcesionForm' | 'datosPermisionarioForm' | 'tramiteForm' | 'documentosUnidadForm';
+type ClavesFormulario = 'datosFacturaForm' | 'datosPermisionarioForm' | 'tramiteForm' | 'documentosUnidadForm';
 
 @Component({
   selector: 'app-base',
-  templateUrl: './alta-transporte-especializado.component.html',
-  styleUrls: ['./alta-transporte-especializado.component.css'],
+  templateUrl: './revista-transporte-especializado.component.html',
+  styleUrls: ['./revista-transporte-especializado.component.css'],
 })
 
 export class AltaTransporteEspecializado {
@@ -46,7 +46,6 @@ export class AltaTransporteEspecializado {
     strCombustible: `El campo <strong>Combustible</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
     strColor: `El campo <strong>Color</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
     intPuertas: `El campo <strong>Puertas</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
-    strUnidadMedida: `El campo <strong>Unidad de Medida</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
     strEntFed: `El campo <strong>Entidad Federativa</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
     dtFechaFact: `El campo <strong>Fecha de la Factura</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
     strNoFact: `El campo <strong>No. Factura</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`,
@@ -115,7 +114,7 @@ export class AltaTransporteEspecializado {
   listaDocumentos: any[] = [];
   listaCombustibles: any[] = [];
 
-  datosConcesionForm!: FormGroup;
+  datosFacturaForm!: FormGroup;
   datosPermisionarioForm!: FormGroup;
   tramiteForm!: FormGroup;
   documentosUnidadForm!: FormGroup;
@@ -129,6 +128,7 @@ export class AltaTransporteEspecializado {
   strEstado: string = "";
   strMunicipio: string = "";
   strColonia: string = "";
+  ID_TRAMITE: string = "1";
 
   constructor(
     private formBuilder: FormBuilder,
@@ -151,7 +151,7 @@ export class AltaTransporteEspecializado {
   }
 
   private inicializarFormularios() {
-    this.datosConcesionForm = this.formBuilder.group({
+    this.datosFacturaForm = this.formBuilder.group({
       intId: 0,
       strNiv: ['', Validators.required],
       strCveVeh: ['', Validators.required],
@@ -164,7 +164,6 @@ export class AltaTransporteEspecializado {
       strCombustible: ['', Validators.required],
       strColor: ['', Validators.required],
       intPuertas: ['', Validators.required],
-      strUnidadMedida: ['', Validators.required],
       strEntFed: [{ value: 'TLAXCALA', disabled: true }, Validators.required],
       dtFechaFact: ['', Validators.required],
       strNoFact: ['', Validators.required],
@@ -208,15 +207,20 @@ export class AltaTransporteEspecializado {
       solicitudTitular: [null, Validators.required],
       convenioEmpresa: [null, Validators.required],
       poliza: [null, Validators.required],
-      ultimoPermiso: [null, Validators.required],
+      ultimoPermiso: [null],
       tarjetaCirculacion: [null, Validators.required],
       ultimoPagoRefrendo: [null, Validators.required],
       ine: [null, Validators.required],
       constanciaFis: [null, Validators.required],
       factura: [null, Validators.required],
+      cartaFactura: [null],
       curp: [null, Validators.required],
       comprobanteDom: [null, Validators.required],
       antPenales: [null, Validators.required],
+      facturaUno: [null],
+      facturaDos: [null],
+      facturaTres: [null],
+      facturaCuatro: [null],
       aceptaTerminos: [false, Validators.requiredTrue]
     });
   }
@@ -339,7 +343,7 @@ export class AltaTransporteEspecializado {
 
   /* IDENTIFICAR CAMBIOS EN FORMULARIO */
   private observarFormularios() {
-    this.datosConcesionForm.get('strNiv')?.valueChanges.subscribe((strNiv) => {
+    this.datosFacturaForm.get('strNiv')?.valueChanges.subscribe((strNiv) => {
       if (this.actualizarForm) return;
       setTimeout(() => {
         if (strNiv?.length === 17) {
@@ -459,7 +463,7 @@ export class AltaTransporteEspecializado {
     }
     this.servicios.validaNiv(json).subscribe({
       error: (err: HttpErrorResponse) => {
-        this.resetFormulario('datosConcesionForm');
+        this.resetFormulario('datosFacturaForm');
         this.errorGenerico(err);
       }
     })
@@ -667,6 +671,46 @@ export class AltaTransporteEspecializado {
               });
             }
             break;
+          case 'facturaUno':
+            if (this.esPersonaMoral) {
+              this.documentCheckedStatus['facturaUno'] = status;
+              this.pdfUrls['facturaUno'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+              this.documentValidatedStatus['facturaUno'] = !status;
+              this.documentosUnidadForm.patchValue({
+                facturaUno: doc.strArchivo
+              });
+            }
+            break;
+          case 'facturaDos':
+            if (this.esPersonaMoral) {
+              this.documentCheckedStatus['facturaDos'] = status;
+              this.pdfUrls['facturaDos'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+              this.documentValidatedStatus['facturaDos'] = !status;
+              this.documentosUnidadForm.patchValue({
+                facturaDos: doc.strArchivo
+              });
+            }
+            break;
+          case 'facturaTres':
+            if (this.esPersonaMoral) {
+              this.documentCheckedStatus['facturaTres'] = status;
+              this.pdfUrls['facturaTres'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+              this.documentValidatedStatus['facturaTres'] = !status;
+              this.documentosUnidadForm.patchValue({
+                facturaTres: doc.strArchivo
+              });
+            }
+            break;
+          case 'facturaCuatro':
+            if (this.esPersonaMoral) {
+              this.documentCheckedStatus['facturaCuatro'] = status;
+              this.pdfUrls['facturaCuatro'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
+              this.documentValidatedStatus['facturaCuatro'] = !status;
+              this.documentosUnidadForm.patchValue({
+                facturaCuatro: doc.strArchivo
+              });
+            }
+            break;
           default:
             break;
         }
@@ -676,19 +720,43 @@ export class AltaTransporteEspecializado {
 
   /* ACTUALIZACIONES DE CAMPOS */
 
-  onSelectFocus() {
-    const controlCombustible = this.datosConcesionForm.get('strCombustible');
-    if (controlCombustible && !controlCombustible.value) {
-      controlCombustible.markAsTouched();
+  onSelectFocus(componente: string) {
+    switch (componente) {
+      case 'strCombustible':
+        const controlCombustible = this.datosFacturaForm.get('strCombustible');
+        if (controlCombustible && !controlCombustible.value) {
+          controlCombustible.markAsTouched();
+        }
+        break;
+      case 'strTramite':
+        const controlTramite = this.tramiteForm.get('strTramite');
+        if (controlTramite && !controlTramite.value) {
+          controlTramite.markAsTouched();
+        }
+        break;
+      case 'strMunicipio':
+        const controlMunicipio = this.tramiteForm.get('strMunicipio');
+        if (controlMunicipio && !controlMunicipio.value) {
+          controlMunicipio.markAsTouched();
+        }
+        break;
+      case 'strProcedencia':
+        const controlProcedencia = this.datosFacturaForm.get('strProcedencia');
+        if (controlProcedencia && !controlProcedencia.value) {
+          controlProcedencia.markAsTouched();
+        }
+        break;
+      case 'strUsoVeh':
+        const controlUsoVehiculo = this.datosFacturaForm.get('strUsoVeh');
+        if (controlUsoVehiculo && !controlUsoVehiculo.value) {
+          controlUsoVehiculo.markAsTouched();
+        }
+        break;
+      default:
+        break;
     }
-    const controlTramite = this.tramiteForm.get('strTramite');
-    if (controlTramite && !controlTramite.value) {
-      controlTramite.markAsTouched();
-    }
-    const controlMunicipio = this.tramiteForm.get('strMunicipio');
-    if (controlMunicipio && !controlMunicipio.value) {
-      controlMunicipio.markAsTouched();
-    }
+
+
 
   }
 
@@ -711,7 +779,7 @@ export class AltaTransporteEspecializado {
         }
         break;
       case 'strTramite':
-        control = this.datosConcesionForm.get('strCombustible');
+        control = this.datosFacturaForm.get('strCombustible');
         break;
       default:
         break;
@@ -757,10 +825,11 @@ export class AltaTransporteEspecializado {
       };
     } else {
       this.obtenDocumentosParaEnviar();
-      const fecha = new Date(this.datosConcesionForm.get('dtFechaFact')?.value);
+      console.log(this.listaDocumentos)
+      const fecha = new Date(this.datosFacturaForm.get('dtFechaFact')?.value);
       const fechaformato = fecha.toISOString().split('T')[0];
       json = {
-        intIdTipoTramite: 13,
+        intIdTipoTramite: this.ID_TRAMITE,
         esPersonaFisica: this.esPersonaFisica,
         facturaVo: {
           strNiv: this.formConcesion['strNiv'].value,
@@ -774,7 +843,6 @@ export class AltaTransporteEspecializado {
           intIdCombustible: this.formConcesion['strCombustible'].value,
           strColor: this.formConcesion['strColor'].value,
           intPuertas: this.formConcesion['intPuertas'].value,
-          strUnidadMedida: this.formConcesion['strUnidadMedida'].value,
           intIdEntidad: 1,
           ldFechaFactura: fechaformato,
           strNumeroFactura: this.formConcesion['strNoFact'].value,
@@ -924,8 +992,11 @@ export class AltaTransporteEspecializado {
           case 'CONSTANCIA FISCAL':
             documento.strArchivo = this.formDocumentos['constanciaFis'].value
             break;
-          case 'FACTURA / CARTA FACTURA':
+          case 'FACTURA':
             documento.strArchivo = this.formDocumentos['factura'].value
+            break;
+          case 'CARTA FACTURA':
+            documento.strArchivo = this.formDocumentos['cartaFactura'].value
             break;
           case 'CURP':
             documento.strArchivo = this.formDocumentos['curp'].value
@@ -936,10 +1007,23 @@ export class AltaTransporteEspecializado {
           case 'CARTA DE ANTECEDENTES NO PENALES':
             documento.strArchivo = this.formDocumentos['antPenales'].value
             break;
+          case 'FACTURA UNO':
+            documento.strArchivo = this.formDocumentos['facturaUno'].value
+            break;
+          case 'FACTURA DOS':
+            documento.strArchivo = this.formDocumentos['facturaDos'].value
+            break;
+          case 'FACTURA TRES':
+            documento.strArchivo = this.formDocumentos['facturaTres'].value
+            break;
+          case 'FACTURA CUATRO':
+            documento.strArchivo = this.formDocumentos['facturaCuatro'].value
+            break;
           default:
             break;
         }
       });
+      this.listaDocumentos = this.listaDocumentos.filter(item => item.strArchivo !== null);
     }
   }
 
@@ -948,7 +1032,7 @@ export class AltaTransporteEspecializado {
 
   private limpiarFormulariosSiguientes(formularioActual: ClavesFormulario) {
     const formularios: ClavesFormulario[] = [
-      'datosConcesionForm',
+      'datosFacturaForm',
       'datosPermisionarioForm',
       'tramiteForm',
       'documentosUnidadForm',
@@ -981,16 +1065,16 @@ export class AltaTransporteEspecializado {
     this.reiniciaDocumentos();
     this.stepper.reset();
     this.router.navigate([this.router.url], { skipLocationChange: true });
-    this.datosConcesionForm.get('strEntFed')?.setValue('TLAXCALA');
-    this.datosConcesionForm.get('strCombustible')?.reset('');
+    this.datosFacturaForm.get('strEntFed')?.setValue('TLAXCALA');
+    this.datosFacturaForm.get('strCombustible')?.reset('');
   }
 
-  mensaje(){
+  mensaje() {
     this.reiniciaDocumentos();
     this.stepper.reset();
     this.router.navigate([this.router.url], { skipLocationChange: true });
-    this.datosConcesionForm.get('strEntFed')?.setValue('TLAXCALA');
-    this.datosConcesionForm.get('strCombustible')?.reset('');
+    this.datosFacturaForm.get('strEntFed')?.setValue('TLAXCALA');
+    this.datosFacturaForm.get('strCombustible')?.reset('');
   }
   /* UTILIDADES  */
 
@@ -1071,7 +1155,7 @@ export class AltaTransporteEspecializado {
   }
 
   get formConcesion() {
-    return this.datosConcesionForm.controls;
+    return this.datosFacturaForm.controls;
   }
 
   get formPermisionario() {

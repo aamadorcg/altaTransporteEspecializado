@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AltaTransporteEspecializado } from './components/alta-transporte-especializado/alta-transporte-especializado.component';
+import { AltaTransporteEspecializado } from './components/alta-transporte-especializado/revista-transporte-especializado.component';
 
 
 const routes: Routes = [

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AltaTransporteEspecializado } from './alta-transporte-especializado.component';
+import { AltaTransporteEspecializado } from './revista-transporte-especializado.component';
 
 describe('AltaTransporteEspecializado', () => {
   let component: AltaTransporteEspecializado;
