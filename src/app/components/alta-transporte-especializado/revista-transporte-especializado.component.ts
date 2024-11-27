@@ -184,8 +184,8 @@ export class AltaTransporteEspecializado {
       strNombre: ['', Validators.required],
       strApPaterno: ['', Validators.required],
       strApMaterno: ['', Validators.required],
-      strSexo: [{ value: '', disabled: false }, Validators.required],
-      strFechaNac: [{ value: '', disabled: false }, Validators.required],
+      strSexo: [{ value: '', disabled: true }, Validators.required],
+      strFechaNac: [{ value: '', disabled: true }, Validators.required],
       strCalleProp: ['', Validators.required],
       strNumExt: ['', Validators.required],
       strNumInt: ['', Validators.required],
@@ -1125,7 +1125,7 @@ export class AltaTransporteEspecializado {
     } else if (err.status === 0) {
       message = 'El servicio no está disponible en este momento.<br> Intente nuevamente más tarde.';
     } else {
-      message = err.error.message;
+      message = err.error.strMessage;
     }
     this.alertaUtility.mostrarAlerta({
       message: message,

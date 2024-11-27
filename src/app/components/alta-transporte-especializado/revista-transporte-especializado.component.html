@@ -254,8 +254,8 @@
                'is-valid': datosFacturaForm.get('strProcedencia')?.valid && datosFacturaForm.get('strProcedencia')?.touched
              }" class="form-select">
                     <option value="" selected disabled> Seleccione procedencia</option>
-                    <option value="Nacional" selected> Nacional</option>
-                    <option value="Extranjero" selected> Extranjero</option>
+                    <option value="NACIONAL" selected> NACIONAL</option>
+                    <option value="EXTRANJERO" selected> EXTRANJERO</option>
                   </select>
                   <div class="invalid-feedback"
                     *ngIf="datosFacturaForm.get('strProcedencia')?.invalid && (datosFacturaForm.get('strProcedencia')?.touched || datosFacturaForm.get('strProcedencia')?.dirty)">
@@ -306,8 +306,8 @@
                 'is-valid': datosFacturaForm.get('strUsoVeh')?.valid && datosFacturaForm.get('strUsoVeh')?.touched
               }" class="form-select">
                     <option value="" selected disabled> Seleccione uso del vehículo</option>
-                    <option value="Personal" selected> Personal</option>
-                    <option value="Escolar" selected> Escolar</option>
+                    <option value="PERSONAL" selected> PERSONAL</option>
+                    <option value="ESCOLAR" selected> ESCOLAR</option>
                   </select>
                   <div class="invalid-feedback"
                     *ngIf="datosFacturaForm.get('strUsoVeh')?.invalid && (datosFacturaForm.get('strUsoVeh')?.touched || datosFacturaForm.get('strUsoVeh')?.dirty)">
@@ -555,7 +555,7 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strCP" class="form-label">CÓDIGO POSTAL <b class="asteriscos">*</b></label><input
+                  <label for="strCP" class="form-label">CÓDIGO POSTAL <b class="asteriscos">*</b></label><input appNumeric
                     formControlName="strCP" type="text" maxlength="5" minlength="5" id="strCP" name="strCP"
                     autocomplete="off" class="form-control" placeholder="Escribe tu código postal" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strCP')?.invalid && (datosPermisionarioForm.get('strCP')?.touched || datosPermisionarioForm.get('strCP')?.dirty), 
