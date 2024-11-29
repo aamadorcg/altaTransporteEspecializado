@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "frontend_permiso_fuera_ruta": {
+    "revistaesp": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -16,7 +16,7 @@
             "allowedCommonJsDependencies": [
               "sweetalert2"
             ],
-            "outputPath": "dist/frontend_permiso_fuera_ruta",
+            "outputPath": "dist/revistaesp",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -56,6 +56,22 @@
               ],
               "outputHashing": "all"
             },
+            "cuatitos": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/environments/environment.ts",
+                  "with": "src/app/environments/environment.prod.cuatitos.ts"
+                }
+              ]
+            },
+            "smyt": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/environments/environment.ts",
+                  "with": "src/app/environments/environment.prod.smyt.ts"
+                }
+              ]
+            },
             "development": {
               "buildOptimizer": false,
               "optimization": false,
@@ -71,10 +87,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "frontend_permiso_fuera_ruta:build:production"
+              "browserTarget": "revistaesp:build:production"
             },
             "development": {
-              "browserTarget": "frontend_permiso_fuera_ruta:build:development"
+              "browserTarget": "revistaesp:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +98,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "frontend_permiso_fuera_ruta:build"
+            "browserTarget": "revistaesp:build"
           }
         },
         "test": {
