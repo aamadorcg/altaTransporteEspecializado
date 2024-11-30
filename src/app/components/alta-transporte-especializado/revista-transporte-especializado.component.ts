@@ -32,6 +32,7 @@ export class AltaTransporteEspecializado {
   FORM_DATOS_CONCESIONARIO = 'Datos del Permisionario';
   FORM_TRAMITE = 'Tipo de Trámite';
   FORM_DATOS_DOCUMENTOS = 'Documentos de la Unidad';
+  
 
   descripciones: { [key: string]: string } = {
     //Formulario Datos Factura
@@ -58,7 +59,6 @@ export class AltaTransporteEspecializado {
     //Formulario Permisionario
     strRfc: `El campo <strong>RFC</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strCurp: `El campo <strong>CURP</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
-    strNombre: `El campo <strong>Nombre</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strApPaterno: `El campo <strong>Apellido Paterno</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strApMaterno: `El campo <strong>Apellido Materno</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strSexo: `El campo <strong>SEXO</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
@@ -104,8 +104,8 @@ export class AltaTransporteEspecializado {
 
   RFC_FISICA_PATTERN = '^([A-ZÑ&]{4})(\\d{6})([A-Z\\d]{3})$';
   RFC_MORAL_PATTERN = '^([A-ZÑ&]{3})(\\d{6})([A-Z\\d]{3})$';
-  esPersonaFisica: boolean = false;
   esPersonaMoral: boolean = false;
+  esPersonaFisica: boolean = false;
   esModificacion: boolean = false;
   opcCveVeh: any[] = [];
   opcCveVehFiltradas: any[] = [];
@@ -129,6 +129,7 @@ export class AltaTransporteEspecializado {
   strMunicipio: string = "";
   strColonia: string = "";
   ID_TRAMITE: string = "1";
+  esSeleccionadoPorAutocomplete: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -144,6 +145,7 @@ export class AltaTransporteEspecializado {
   ngOnInit() {
     this.inicializarFormularios();
     this.configurarRFCFisicaMoral();
+    this.desactivaCampos();
     this.cargarDefaultPDFs();
     this.cargaDocumentosTramite();
     this.cargaValoresCamposDinamicos();
@@ -277,6 +279,15 @@ export class AltaTransporteEspecializado {
     });
   }
 
+  desactivaCampos(){
+    const campoCurp = this.datosPermisionarioForm.get('strCurp');
+    if (this.esPersonaFisica) {
+      campoCurp?.setValidators(Validators.required);
+    } else {
+      campoCurp?.clearValidators();
+    }
+  }
+
   private cargarDefaultPDFs() {
     this.defaultPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/documents/subirArchivo.pdf');
   }
@@ -321,6 +332,7 @@ export class AltaTransporteEspecializado {
   }
 
   filtrarOpciones(event: Event) {
+    this.esSeleccionadoPorAutocomplete = false;
     const inputElement = event.target as HTMLInputElement;
     const valorBusqueda = inputElement?.value || '';
     this.opcCveVehFiltradas = this.opcCveVeh.filter(opcion =>
@@ -331,14 +343,15 @@ export class AltaTransporteEspecializado {
   }
 
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.esSeleccionadoPorAutocomplete = true;
     const selectedOption = event.option.value;
     console.log(selectedOption);
+    this.datosFacturaForm.get('strCveVeh')?.setValue(selectedOption);
     this.selectedVehicleId = selectedOption.intIdCaCve;
-    // console.log('ID del vehículo seleccionado:', this.selectedVehicleId);
   }
 
   displayFn(opcion: any): string {
-    return opcion ? `${opcion.strClaveVehicular} - ${opcion.strEmpresa} - ${opcion.strModelo}` : '';
+    return opcion ? `${opcion.strClaveVehicular}-${opcion.strEmpresa}-${opcion.strModelo}` : '';
   }
 
   /* IDENTIFICAR CAMBIOS EN FORMULARIO */
@@ -515,6 +528,37 @@ export class AltaTransporteEspecializado {
     return `${anioCompleto}-${mes}-${dia}`;
   }
 
+  validaClaveVehicular(event: Event): void {
+    setTimeout(() => {
+      if (this.esSeleccionadoPorAutocomplete) {
+        this.esSeleccionadoPorAutocomplete = false;
+        return; 
+      }
+      const selectElement = event.target as HTMLInputElement;
+      const value = selectElement.value;
+      if (!value) {
+        console.log('Campo vacío, no se envía la petición');
+        return;
+      }
+      let json = {
+        strDescripcion: value
+      };
+      this.cargarSpinner = true;
+      this.servicios.validarClaveVehicular(json).subscribe({
+        next: (response: any) => {
+          this.cargarSpinner = false;
+          console.log(response);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.datosFacturaForm.get('strCveVeh')?.reset();
+          this.datosFacturaForm.get('strCveVeh')?.markAsTouched();
+          this.errorGenerico(err);
+        }
+      });
+    }, 1000);
+  }
+  
+
   /*CARGA DE DATOS A FORMULARIO */
   cargarDatosFormulario(formulario: FormGroup, nombreFormulario: ClavesFormulario, desdeNextStep: boolean) {
     if (formulario.invalid) {
@@ -522,7 +566,14 @@ export class AltaTransporteEspecializado {
       const primerCampoInvalido = this.obtenerPrimerCampoInvalido(formulario);
       if (primerCampoInvalido) {
         console.log(primerCampoInvalido);
-        const descripcion = this.descripciones[primerCampoInvalido] || 'Este campo es obligatorio';
+        let descripcion = this.descripciones[primerCampoInvalido] || 'Este campo es obligatorio';
+        if(primerCampoInvalido == 'strNombre'){
+          if(this.esPersonaFisica){
+            descripcion = `El campo <strong>NOMBRE</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`
+          }else{
+            descripcion = `El campo <strong>RAZÓN SOCIAL</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`
+          }
+        }
         this.alertaUtility.mostrarAlerta({
           message: descripcion,
           icon: 'warning',
@@ -1122,7 +1173,7 @@ export class AltaTransporteEspecializado {
     let message: string;
     if (err.error instanceof ErrorEvent) {
       message = 'Ocurrió un problema con la conexión de red. Por favor, verifica tu conexión a internet.';
-    } else if (err.status === 0) {
+    } else if (err.status === 0 || err.status === 404) {
       message = 'El servicio no está disponible en este momento.<br> Intente nuevamente más tarde.';
     } else {
       message = err.error.strMessage;

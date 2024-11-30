@@ -97,4 +97,11 @@ export class AltaRevistaService {
     //https://catalogos-publicos.sefintlax.gob.mx/CatalogosPublicos/catalogosINEGI/catCodigoPostal?codigoPostal=75505
   }
 
+  validarClaveVehicular(json: {}){
+    return this.http.post(`${this.apiUrl}/tramites/validarClaveVehicular`, json);
+  }
+
+  validarVidaUtil(json: {}){
+    return this.http.post(`${this.apiUrl}/tramites/validarVidaUtil`, json);
+  }
 }

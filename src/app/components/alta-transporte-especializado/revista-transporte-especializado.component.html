@@ -50,7 +50,7 @@
                 <div class="col-12 col-md-12 col-lg-8">
                   <label for="strCveVeh" class="form-label">CLAVE VEHICULAR<b class="asteriscos">*</b></label>
                   <input type="text" formControlName="strCveVeh" id="strCveVeh" name="strCveVeh" autocomplete="off"
-                    class="form-control" [matAutocomplete]="auto" placeholder="Escribe la clave vehicular"
+                    class="form-control" [matAutocomplete]="auto" placeholder="Escribe la clave vehicular"  (blur)="validaClaveVehicular($event)" 
                     (input)="filtrarOpciones($event)" [ngClass]="{
             'is-invalid': datosFacturaForm.get('strCveVeh')?.invalid && (datosFacturaForm.get('strCveVeh')?.touched || datosFacturaForm.get('strCveVeh')?.dirty), 
             'is-valid': datosFacturaForm.get('strCveVeh')?.valid && (datosFacturaForm.get('strCveVeh')?.touched || datosFacturaForm.get('strCveVeh')?.dirty),
@@ -58,7 +58,7 @@
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)"
                     [displayWith]="displayFn">
                     <mat-option *ngFor="let opcion of opcCveVehFiltradas.slice(0,3)" [value]="opcion">
-                      {{ opcion.strClaveVehicular }} - {{ opcion.strEmpresa }} - {{ opcion.strModelo }}
+                      {{opcion.strClaveVehicular}}-{{opcion.strEmpresa}}-{{opcion.strModelo}}
                     </mat-option>
                   </mat-autocomplete>
                 </div>
