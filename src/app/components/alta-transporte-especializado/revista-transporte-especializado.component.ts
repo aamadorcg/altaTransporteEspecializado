@@ -158,9 +158,9 @@ export class AltaTransporteEspecializado {
       strNiv: ['', Validators.required],
       strCveVeh: ['', Validators.required],
       strMotor: ['', Validators.required],
-      strMarca: ['', Validators.required],
+      strMarca: [{ value: '', disabled: true }, Validators.required],
       intModelo: ['', Validators.required],
-      strTipoVeh: ['', Validators.required],
+      strTipoVeh: [{ value: '', disabled: true }, Validators.required],
       intCapacidad: ['', Validators.required],
       intCilindros: ['', Validators.required],
       strCombustible: ['', Validators.required],
@@ -347,6 +347,10 @@ export class AltaTransporteEspecializado {
     const selectedOption = event.option.value;
     console.log(selectedOption);
     this.datosFacturaForm.get('strCveVeh')?.setValue(selectedOption);
+    this.datosFacturaForm.get('strMarca')?.setValue(selectedOption.strEmpresa);
+    this.datosFacturaForm.get('strMarca')?.markAsTouched();
+    this.datosFacturaForm.get('strTipoVeh')?.setValue(selectedOption.strModelo);
+    this.datosFacturaForm.get('strTipoVeh')?.markAsTouched();
     this.selectedVehicleId = selectedOption.intIdCaCve;
   }
 
@@ -459,6 +463,21 @@ export class AltaTransporteEspecializado {
             this.datosPermisionarioForm.get('strCP')?.reset(); */
             this.muestraError('Error al consultar código postal, inténtelo de nuevo');
           }
+        }
+      });
+
+      this.datosFacturaForm.get('intModelo')?.valueChanges.subscribe((modelo: string) => {
+        if (modelo?.length == 4) {
+          let json = {
+            intModelo: modelo
+          }
+          this.servicios.validarVidaUtil(json).subscribe({
+            error: (err: HttpErrorResponse) => {
+              this.datosFacturaForm.get('intModelo')?.reset();
+              this.datosFacturaForm.get('intModelo')?.markAsDirty();
+              this.errorGenerico(err);
+            }
+          })
         }
       });
   }
@@ -1173,9 +1192,10 @@ export class AltaTransporteEspecializado {
     let message: string;
     if (err.error instanceof ErrorEvent) {
       message = 'Ocurrió un problema con la conexión de red. Por favor, verifica tu conexión a internet.';
-    } else if (err.status === 0 || err.status === 404) {
+    } else if (err.status === 0) {
       message = 'El servicio no está disponible en este momento.<br> Intente nuevamente más tarde.';
-    } else {
+    }
+     else {
       message = err.error.strMessage;
     }
     this.alertaUtility.mostrarAlerta({
