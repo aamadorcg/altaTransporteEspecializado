@@ -281,10 +281,16 @@ export class AltaTransporteEspecializado {
 
   desactivaCampos(){
     const campoCurp = this.datosPermisionarioForm.get('strCurp');
+    const campoApaterno = this.datosPermisionarioForm.get('strApPaterno');
+    const campoAmaterno = this.datosPermisionarioForm.get('strApMaterno');
     if (this.esPersonaFisica) {
       campoCurp?.setValidators(Validators.required);
+      campoApaterno?.setValidators(Validators.required);
+      campoAmaterno?.setValidators(Validators.required);
     } else {
       campoCurp?.clearValidators();
+      campoApaterno?.clearValidators();
+      campoAmaterno?.clearValidators();
     }
   }
 
