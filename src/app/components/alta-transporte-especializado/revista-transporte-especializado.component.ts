@@ -32,7 +32,7 @@ export class AltaTransporteEspecializado {
   FORM_DATOS_CONCESIONARIO = 'Datos del Permisionario';
   FORM_TRAMITE = 'Tipo de Trámite';
   FORM_DATOS_DOCUMENTOS = 'Documentos de la Unidad';
-  
+
 
   descripciones: { [key: string]: string } = {
     //Formulario Datos Factura
@@ -86,6 +86,7 @@ export class AltaTransporteEspecializado {
   documentoGas: any;
   /*Control Documentos Visibles*/
   esSolicitudTitularVis: boolean = false;
+  facturaEndosadaVis: boolean = false;
   esConvenioActualizadoVis: boolean = false;
   esTarjetaCirculacionVis: boolean = false;
   esRepuveVis: boolean = false;
@@ -98,6 +99,8 @@ export class AltaTransporteEspecializado {
   esConstFiscalVis: boolean = false;
   esAntNoPenalesVis: boolean = false;
   esActaConstVis: boolean = false;
+
+
   buscaRFC = false;
   documentCheckedStatus: { [key: string]: boolean } = {};
   documentValidatedStatus: { [key: string]: boolean } = {};
@@ -107,11 +110,16 @@ export class AltaTransporteEspecializado {
   esPersonaMoral: boolean = false;
   esPersonaFisica: boolean = false;
   esModificacion: boolean = false;
+  esUnidadUsada: boolean = false;
+  esUnidadNueva: boolean = false;
+  esNuevaPagando: boolean = false;
+  esNuevaPagada: boolean = false;
   opcCveVeh: any[] = [];
   opcCveVehFiltradas: any[] = [];
   listaColonias: any[] = [];
   listaLocalidades: any[] = [];
   listaDocumentos: any[] = [];
+  listaDocumentosOriginal: any[] = [];
   listaCombustibles: any[] = [];
 
   datosFacturaForm!: FormGroup;
@@ -206,23 +214,38 @@ export class AltaTransporteEspecializado {
     });
 
     this.documentosUnidadForm = this.formBuilder.group({
+      /*Control Vehiculo Usado General */
       solicitudTitular: [null, Validators.required],
-      convenioEmpresa: [null, Validators.required],
-      poliza: [null, Validators.required],
-      ultimoPermiso: [null],
-      tarjetaCirculacion: [null, Validators.required],
+      facturaEndosada: [null, Validators.required],
+      compraVenta: [null, Validators.required],
+      ineVendedor: [null, Validators.required],
+      ineComprador: [null, Validators.required],
+      ineTestigo: [null, Validators.required],
+      oriBajaUnidad: [null, Validators.required],
+      validacionTenencia: [null, Validators.required],
       ultimoPagoRefrendo: [null, Validators.required],
-      ine: [null, Validators.required],
-      constanciaFis: [null, Validators.required],
-      factura: [null, Validators.required],
-      cartaFactura: [null],
-      curp: [null, Validators.required],
+      polizaViajero: [null, Validators.required],
+      repuve: [null, Validators.required],
       comprobanteDom: [null, Validators.required],
+      curp: [null, Validators.required],
+      convenioEmpresa: [null, Validators.required],
+      constanciaFis: [null, Validators.required],
       antPenales: [null, Validators.required],
-      facturaUno: [null],
-      facturaDos: [null],
-      facturaTres: [null],
-      facturaCuatro: [null],
+      /** Control Vehiculo Usado Persona Moral **/
+      idRepLegal: [null, Validators.required],
+      constanciaFisMoral: [null, Validators.required],
+      actaConstitutiva: [null, Validators.required],
+      /*Control Vehiculo Usado Persona Fisica*/
+      identificacionFisica: [null, Validators.required],
+      /*Control Vehiculo Nuevo General*/
+      constanciaFiscalVN: [null, Validators.required],
+      idPersonaAut: [null, Validators.required],
+      domicilioPersonaAut: [null, Validators.required],
+      /*Control Vehiculo Nuevo General PAGANDO*/
+      facturaOriginal: [null, Validators.required],
+      facturaSinValor: [null, Validators.required],
+      /* Control Campo Select */
+      strTipoVehiculo: [null, Validators.required],
       aceptaTerminos: [false, Validators.requiredTrue]
     });
   }
@@ -279,7 +302,7 @@ export class AltaTransporteEspecializado {
     });
   }
 
-  desactivaCampos(){
+  desactivaCampos() {
     const campoCurp = this.datosPermisionarioForm.get('strCurp');
     const campoApaterno = this.datosPermisionarioForm.get('strApPaterno');
     const campoAmaterno = this.datosPermisionarioForm.get('strApMaterno');
@@ -301,7 +324,8 @@ export class AltaTransporteEspecializado {
   cargaDocumentosTramite() {
     this.servicios.obtenerDocumentosTramite().subscribe({
       next: (value: any) => {
-        this.listaDocumentos = value.data;
+        this.listaDocumentosOriginal = value.data;
+        this.listaDocumentos = JSON.parse(JSON.stringify(this.listaDocumentosOriginal));
       },
       error: (err: HttpErrorResponse) => {
         this.errorGenerico(err);
@@ -472,20 +496,20 @@ export class AltaTransporteEspecializado {
         }
       });
 
-      this.datosFacturaForm.get('intModelo')?.valueChanges.subscribe((modelo: string) => {
-        if (modelo?.length == 4) {
-          let json = {
-            intModelo: modelo
-          }
-          this.servicios.validarVidaUtil(json).subscribe({
-            error: (err: HttpErrorResponse) => {
-              this.datosFacturaForm.get('intModelo')?.reset();
-              this.datosFacturaForm.get('intModelo')?.markAsDirty();
-              this.errorGenerico(err);
-            }
-          })
+    this.datosFacturaForm.get('intModelo')?.valueChanges.subscribe((modelo: string) => {
+      if (modelo?.length == 4) {
+        let json = {
+          intModelo: modelo
         }
-      });
+        this.servicios.validarVidaUtil(json).subscribe({
+          error: (err: HttpErrorResponse) => {
+            this.datosFacturaForm.get('intModelo')?.reset();
+            this.datosFacturaForm.get('intModelo')?.markAsDirty();
+            this.errorGenerico(err);
+          }
+        })
+      }
+    });
   }
 
   obtenColonias(arregloColonias: any) {
@@ -557,7 +581,7 @@ export class AltaTransporteEspecializado {
     setTimeout(() => {
       if (this.esSeleccionadoPorAutocomplete) {
         this.esSeleccionadoPorAutocomplete = false;
-        return; 
+        return;
       }
       const selectElement = event.target as HTMLInputElement;
       const value = selectElement.value;
@@ -582,7 +606,7 @@ export class AltaTransporteEspecializado {
       });
     }, 1000);
   }
-  
+
 
   /*CARGA DE DATOS A FORMULARIO */
   cargarDatosFormulario(formulario: FormGroup, nombreFormulario: ClavesFormulario, desdeNextStep: boolean) {
@@ -592,10 +616,10 @@ export class AltaTransporteEspecializado {
       if (primerCampoInvalido) {
         console.log(primerCampoInvalido);
         let descripcion = this.descripciones[primerCampoInvalido] || 'Este campo es obligatorio';
-        if(primerCampoInvalido == 'strNombre'){
-          if(this.esPersonaFisica){
+        if (primerCampoInvalido == 'strNombre') {
+          if (this.esPersonaFisica) {
             descripcion = `El campo <strong>NOMBRE</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`
-          }else{
+          } else {
             descripcion = `El campo <strong>RAZÓN SOCIAL</strong> de <strong>${this.FORM_DATOS_CONCESION}</strong>, no debe estar vacío o el formato es no válido.`
           }
         }
@@ -828,12 +852,15 @@ export class AltaTransporteEspecializado {
           controlUsoVehiculo.markAsTouched();
         }
         break;
+      case 'strTipoVehiculo':
+        const controlTipoVeh = this.documentosUnidadForm.get('strTipoVehiculo');
+        if (controlTipoVeh && !controlTipoVeh.value) {
+          controlTipoVeh.markAsTouched();
+        }
+        break;
       default:
         break;
     }
-
-
-
   }
 
   onSelectChange(event: Event, campo: string): void {
@@ -857,11 +884,83 @@ export class AltaTransporteEspecializado {
       case 'strTramite':
         control = this.datosFacturaForm.get('strCombustible');
         break;
+      case 'strTipoVehiculo':
+        control = this.documentosUnidadForm.get('strTipoVehiculo');
+        if (selectedValue) {
+          this.reiniciaTipoVehiculo();
+          this.limpiarValidadores();
+          if (selectedValue == "1") {
+            this.esUnidadUsada = true;
+            this.aplicarValidadores(['solicitudTitular', 'facturaEndosada', 'compraVenta', 'ineVendedor', 'ineComprador',
+              'ineTestigo', 'oriBajaUnidad', 'validacionTenencia', 'ultimoPagoRefrendo', 'polizaViajero', 'repuve',
+              'comprobanteDom', 'curp', 'convenioEmpresa', 'constanciaFis', 'antPenales']);
+            if (this.esPersonaMoral) {
+              this.aplicarValidadores(['idRepLegal','constanciaFisMoral', 'actaConstitutiva','idPersonaAut','idPersonaAut']);
+            } else {
+              this.aplicarValidadores(['identificacionFisica']);
+            }
+          } else if (selectedValue == "2" || selectedValue == "3") {
+            this.esUnidadNueva = true;
+            this.aplicarValidadores(['solicitudTitular', 'comprobanteDom', 'constanciaFiscalVN']);
+            if (selectedValue == "2") {//PAGANDO
+              this.esNuevaPagando = true;
+              this.esNuevaPagada = false;
+              this.aplicarValidadores(['facturaOriginal', 'facturaSinValor']);
+            } else {//PAGADO
+              this.esNuevaPagada = true;
+              this.esNuevaPagando = false;
+              this.aplicarValidadores(['facturaEndosada', 'antPenales']);
+            }
+            if (this.esPersonaMoral) {
+              this.aplicarValidadores(['constanciaFisMoral','idRepLegal']);
+            }else{
+              this.aplicarValidadores(['identificacionFisica']);
+            }
+          }
+          console.log(this.documentosUnidadForm.controls);
+        }
+        break;
+
       default:
         break;
     }
-    console.log(campo);
     control?.setErrors(control.value ? null : { required: true });
+  }
+
+  reiniciaTipoVehiculo() {
+    this.reiniciaDocumentos();
+    //this.resetDocumentosForm();
+    this.esUnidadUsada = false;
+    this.esUnidadNueva = false;
+    this.esNuevaPagando = false;
+    this.esNuevaPagada = false;
+  }
+
+  limpiarValidadores(): void {
+    Object.keys(this.documentosUnidadForm.controls).forEach(controlName => {
+      if (controlName !== 'strTipoVehiculo' && controlName !== 'aceptaTerminos') {
+        const control = this.documentosUnidadForm.get(controlName);
+        if (control) {
+          control.reset();
+          control.clearValidators();
+          control.updateValueAndValidity();
+        }
+      }
+    });
+  }
+
+  aplicarValidadores(controles: string[]): void {
+    controles.forEach(controlName => {
+      const control = this.documentosUnidadForm.get(controlName);
+      if (control) {
+        control.setValidators(Validators.required);
+        control.updateValueAndValidity();
+      }
+    });
+  }
+
+  resetDocumentosForm(){
+
   }
 
   obtenLocalidades(idTipoTramite: any, callback: () => void): void {
@@ -1041,59 +1140,94 @@ export class AltaTransporteEspecializado {
   }
 
   obtenDocumentosParaEnviar() {
+    console.log(this.listaDocumentosOriginal);
+    this.listaDocumentos = JSON.parse(JSON.stringify(this.listaDocumentosOriginal));
     if (this.listaDocumentos) {
       this.listaDocumentos.forEach((documento) => {
         switch (documento.strNombreDocumento) {
           case 'SOLICITUD DIRIGIDA AL TITULAR DE LA SMyT':
             documento.strArchivo = this.formDocumentos['solicitudTitular'].value
             break;
-          case 'CONVENIO ACTUALIZADO CON LA EMPRESA':
-            documento.strArchivo = this.formDocumentos['convenioEmpresa'].value
+          case 'FACTURA ENDOSADA A FAVOR DEL CONCESIONARIO(A) O EMPRESA':
+            documento.strArchivo = this.formDocumentos['facturaEndosada'].value
             break;
-          case 'PÓLIZA DE SEGURO':
-            documento.strArchivo = this.formDocumentos['poliza'].value
+          case 'CONTRATO DE COMPRA VENTA':
+            documento.strArchivo = this.formDocumentos['compraVenta'].value
             break;
-          case 'ÚLTIMO PERMISO':
-            documento.strArchivo = this.formDocumentos['ultimoPermiso'].value
+          case 'INE DEL VENDEDOR':
+            documento.strArchivo = this.formDocumentos['ineVendedor'].value
             break;
-          case 'TARJETA DE CIRCULACIÓN':
-            documento.strArchivo = this.formDocumentos['tarjetaCirculacion'].value
+          case 'INE COMPRADOR':
+            documento.strArchivo = this.formDocumentos['ineComprador'].value
             break;
-          case 'ÚLTIMO PAGO DE REFRENDO':
+          case 'INE TESTIGO':
+            documento.strArchivo = this.formDocumentos['ineTestigo'].value
+            break;
+          case 'ORIGINAL DE LA BAJA DE LA UNIDAD QUE ENTRA':
+            documento.strArchivo = this.formDocumentos['oriBajaUnidad'].value
+            break;
+          case 'VALIDACIÓN DE TENENCIAS EN LA DIRECCIÓN DE INGRESOS Y FISCALIZACIÓN':
+            documento.strArchivo = this.formDocumentos['validacionTenencia'].value
+            break;
+          case 'RECIBO DEL ÚLTIMO PAGO DE REFRENDO':
             documento.strArchivo = this.formDocumentos['ultimoPagoRefrendo'].value
             break;
-          case 'INE':
-            documento.strArchivo = this.formDocumentos['ine'].value
+          case 'PÓLIZA SEGURO DEL VIAJERO VIGENCIA MÍNIMA DE 1 MES':
+            documento.strArchivo = this.formDocumentos['polizaViajero'].value
             break;
-          case 'CONSTANCIA FISCAL':
-            documento.strArchivo = this.formDocumentos['constanciaFis'].value
+          case 'REPUVE':
+            documento.strArchivo = this.formDocumentos['repuve'].value
             break;
-          case 'FACTURA':
-            documento.strArchivo = this.formDocumentos['factura'].value
-            break;
-          case 'CARTA FACTURA':
-            documento.strArchivo = this.formDocumentos['cartaFactura'].value
+          case 'COMPROBANTE DE DOMICILIO (MÁXIMO CON UNA ANTIGÜEDAD NO MAYOR DE TRES MESES) DE LUZ':
+            documento.strArchivo = this.formDocumentos['comprobanteDom'].value
             break;
           case 'CURP':
             documento.strArchivo = this.formDocumentos['curp'].value
             break;
-          case 'COMPROBANTE DE DOMICILIO':
-            documento.strArchivo = this.formDocumentos['comprobanteDom'].value
+          case 'CONVENIO ACTUALIZADO CON LA EMPRESA A LA QUE PRESTA EL SERVICIO':
+            documento.strArchivo = this.formDocumentos['convenioEmpresa'].value
             break;
-          case 'CARTA DE ANTECEDENTES NO PENALES':
+          case 'CONSTANCIA DE SITUACIÓN FISCAL QUE INDIQUE ESTA OBLIGACIÓN':
+            documento.strArchivo = this.formDocumentos['constanciaFis'].value
+            break; 
+          case 'CARTA DE ANTECEDENTES NO PENALES CON VIGENCIA NO MAYOR A 3 MESES':
             documento.strArchivo = this.formDocumentos['antPenales'].value
             break;
-          case 'FACTURA UNO':
-            documento.strArchivo = this.formDocumentos['facturaUno'].value
+          case 'IDENTIFICACIÓN OFICIAL DEL REPRESENTANTE LEGAL DE LA EMPRESA CON PODER NOTARIAL':
+            documento.strArchivo = this.formDocumentos['idRepLegal'].value
             break;
-          case 'FACTURA DOS':
-            documento.strArchivo = this.formDocumentos['facturaDos'].value
+          case 'CONSTANCIA DE SITUACIÓN FISCAL QUE INDIQUE ESTA OBLIGACIÓN':
+            documento.strArchivo = this.formDocumentos['constanciaFisMoral'].value
             break;
-          case 'FACTURA TRES':
-            documento.strArchivo = this.formDocumentos['facturaTres'].value
+          case 'ACTA CONSTITUTIVA':
+            documento.strArchivo = this.formDocumentos['actaConstitutiva'].value
             break;
-          case 'FACTURA CUATRO':
-            documento.strArchivo = this.formDocumentos['facturaCuatro'].value
+          case 'IDENTIFICACIÓN OFICIAL CON FOTOGRAFÍA VIGENTE':
+            documento.strArchivo = this.formDocumentos['identificacionFisica'].value
+            break;
+          case 'IDENTIFICACION OFICIAL CON FOTOGRAFIA VIGENTE DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO':
+            documento.strArchivo = this.formDocumentos['idPersonaAut'].value
+            break;
+          case 'COMPROBANTE DE DOMICILIO DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO':
+            documento.strArchivo = this.formDocumentos['domicilioPersonaAut'].value
+            break;
+          case 'CARTA FACTURA ORIGINAL':
+            documento.strArchivo = this.formDocumentos['facturaOriginal'].value
+            break;
+          case 'FACTURA SIN VALOR A FAVOR DEL CONCESIONARIO(A) O EMPRESA':
+            documento.strArchivo = this.formDocumentos['facturaSinValor'].value
+            break;
+          case 'IDENTIFICACION OFICIAL CON FOTOGRAFIA VIGENTE DEL REPRESENTANTE LEGAL':
+            documento.strArchivo = this.formDocumentos['idRepLegal'].value
+            break;
+          case 'CONSTANCIA DE SITUACION FISCAL':
+            documento.strArchivo = this.formDocumentos['constanciaFiscalVN'].value
+            break;
+          case 'ACTA CONSTITUTIVA':
+            documento.strArchivo = this.formDocumentos['actaConstitutiva'].value
+            break;
+          case 'IDENTIFICACIÓN OFICIAL CON FOTOGRAFIA VIGENTE':
+            documento.strArchivo = this.formDocumentos['identificacionFisica'].value
             break;
           default:
             break;
@@ -1146,11 +1280,7 @@ export class AltaTransporteEspecializado {
   }
 
   mensaje() {
-    this.reiniciaDocumentos();
-    this.stepper.reset();
-    this.router.navigate([this.router.url], { skipLocationChange: true });
-    this.datosFacturaForm.get('strEntFed')?.setValue('TLAXCALA');
-    this.datosFacturaForm.get('strCombustible')?.reset('');
+    console.log(this.documentosUnidadForm.controls);
   }
   /* UTILIDADES  */
 
@@ -1201,7 +1331,7 @@ export class AltaTransporteEspecializado {
     } else if (err.status === 0) {
       message = 'El servicio no está disponible en este momento.<br> Intente nuevamente más tarde.';
     }
-     else {
+    else {
       message = err.error.strMessage;
     }
     this.alertaUtility.mostrarAlerta({

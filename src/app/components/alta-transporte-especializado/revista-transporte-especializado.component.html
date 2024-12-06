@@ -50,8 +50,8 @@
                 <div class="col-12 col-md-12 col-lg-8">
                   <label for="strCveVeh" class="form-label">CLAVE VEHICULAR<b class="asteriscos">*</b></label>
                   <input type="text" formControlName="strCveVeh" id="strCveVeh" name="strCveVeh" autocomplete="off"
-                    class="form-control" [matAutocomplete]="auto" placeholder="Escribe la clave vehicular"  (blur)="validaClaveVehicular($event)" 
-                    (input)="filtrarOpciones($event)" [ngClass]="{
+                    class="form-control" [matAutocomplete]="auto" placeholder="Escribe la clave vehicular"
+                    (blur)="validaClaveVehicular($event)" (input)="filtrarOpciones($event)" [ngClass]="{
             'is-invalid': datosFacturaForm.get('strCveVeh')?.invalid && (datosFacturaForm.get('strCveVeh')?.touched || datosFacturaForm.get('strCveVeh')?.dirty), 
             'is-valid': datosFacturaForm.get('strCveVeh')?.valid && (datosFacturaForm.get('strCveVeh')?.touched || datosFacturaForm.get('strCveVeh')?.dirty),
              }">
@@ -555,8 +555,8 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strCP" class="form-label">CÓDIGO POSTAL <b class="asteriscos">*</b></label><input appNumeric
-                    formControlName="strCP" type="text" maxlength="5" minlength="5" id="strCP" name="strCP"
+                  <label for="strCP" class="form-label">CÓDIGO POSTAL <b class="asteriscos">*</b></label><input
+                    appNumeric formControlName="strCP" type="text" maxlength="5" minlength="5" id="strCP" name="strCP"
                     autocomplete="off" class="form-control" placeholder="Escribe tu código postal" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strCP')?.invalid && (datosPermisionarioForm.get('strCP')?.touched || datosPermisionarioForm.get('strCP')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strCP')?.valid && (datosPermisionarioForm.get('strCP')?.touched || datosPermisionarioForm.get('strCP')?.dirty),
@@ -793,99 +793,238 @@
                     </svg> para visualizar el documento seleccionado. </p>
                 </div>
               </div>
-              <!-- <div class="row justify-content-center "> -->
+              <div class="col-12 col-md-12 col-lg-4">
+                <label for="strTipoVehiculo" class="form-label">TIPO VEHICULO <b class="asteriscos">*</b></label>
+                <select formControlName="strTipoVehiculo" id="strTipoVehiculo" name="strTipoVehiculo"
+                  (focus)="onSelectFocus('strTipoVehiculo')" (change)="onSelectChange($event, 'strTipoVehiculo')" [ngClass]="{
+                    'is-invalid': documentosUnidadForm.get('strTipoVehiculo')?.invalid && documentosUnidadForm.get('strTipoVehiculo')?.touched,
+                    'is-valid': documentosUnidadForm.get('strTipoVehiculo')?.valid && documentosUnidadForm.get('strTipoVehiculo')?.touched
+                  }" class="form-select">
+                  <option value="" disabled selected> Seleccione una opción</option>
+                  <option value="1" selected> UNIDAD USADA</option>
+                  <option value="2" selected> UNIDAD NUEVA PAGANDO </option>
+                  <option value="3" selected> UNIDAD NUEVA PAGADA</option>
+                </select>
+                <div class="invalid-feedback">Campo obligatorio</div>
+              </div>
               <div class="cards-container d-grid justify-content-center">
-                <!-- ACTUALMENTE NO SE USARIA EL *ngIf porque si no no se mostraria ningun archivo -->
+
+                <button (click)="mensaje()">Enviar mensaje</button>
+                <!----------------------VEHICULOS USADOS GENERAL------------------------------------------>
                 <app-card-pdf [pdfUrl]="pdfUrls['solicitudTitular']"
                   [title]="'SOLICITUD DIRIGIDA AL TITULAR DE LA SMyT'" [controlName]="'solicitudTitular'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['solicitudTitular']" [esModificado]="esModificacion">
+                  [documentChecked]="documentCheckedStatus['solicitudTitular']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada || esUnidadNueva">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['convenioEmpresa']" [title]="'CONVENIO ACTUALIZADO CON LA EMPRESA'"
-                  [controlName]="'convenioEmpresa'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['convenioEmpresa']" [esModificado]="esModificacion">
-                </app-card-pdf>
-
-                <!-- <app-card-pdf *ngIf="esPolizaVis" [pdfUrl]="pdfUrls['poliza']" [title]="'POLIZA SEGURO'" -->
-                <app-card-pdf [pdfUrl]="pdfUrls['poliza']" [title]="'POLIZA DE SEGURO'" [controlName]="'poliza'"
+                <app-card-pdf [pdfUrl]="pdfUrls['facturaEndosada']"
+                  [title]="'FACTURA ENDOSADA A FAVOR DEL CONCESIONARIO(A) O EMPRESA'" [controlName]="'facturaEndosada'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['poliza']" [esModificado]="esModificacion">
+                  [documentChecked]="documentCheckedStatus['facturaEndosada']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada || (esUnidadNueva && esNuevaPagada)">
                 </app-card-pdf>
 
-
-                <app-card-pdf [pdfUrl]="pdfUrls['ultimoPermiso']" [title]="'ÚLTIMO PERMISO'"
-                  [controlName]="'ultimoPermiso'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['ultimoPermiso']" [esModificado]="esModificacion">
+                <app-card-pdf [pdfUrl]="pdfUrls['compraVenta']" [title]="'CONTRATO DE COMPRA VENTA'"
+                  [controlName]="'compraVenta'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['compraVenta']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
                 </app-card-pdf>
 
-                <!-- <app-card-pdf *ngIf="esTarjetaCirculacionVis" [pdfUrl]="pdfUrls['tarjetaCirculacion']" -->
-                <app-card-pdf [pdfUrl]="pdfUrls['tarjetaCirculacion']" [title]="'TARJETA DE CIRCULACIÓN'"
-                  [controlName]="'tarjetaCirculacion'" [formGroup]="documentosUnidadForm"
-                  [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['tarjetaCirculacion']"
-                  [esModificado]="esModificacion">
+                <app-card-pdf [pdfUrl]="pdfUrls['ineVendedor']" [title]="'INE DEL VENDEDOR'"
+                  [controlName]="'ineVendedor'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['ineVendedor']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['ultimoPagoRefrendo']" [title]="'ÚLTIMO PAGO DE REFRENDO'"
+                <app-card-pdf [pdfUrl]="pdfUrls['ineComprador']" [title]="'INE DEL COMPRADOR'"
+                  [controlName]="'ineComprador'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['ineComprador']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['ineTestigo']" [title]="'INE TESTIGO'" [controlName]="'ineTestigo'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['ineTestigo']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['oriBajaUnidad']" [title]="'ORIGINAL DE LA BAJA DE LA UNIDAD QUE ENTRA'"
+                  [controlName]="'oriBajaUnidad'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['oriBajaUnidad']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['validacionTenencia']"
+                  [title]="'VALIDACIÓN DE TENENCIAS EN LA DIRECCIÓN DE INGRESOS Y FISCALIZACIÓN'"
+                  [controlName]="'validacionTenencia'" [formGroup]="documentosUnidadForm"
+                  [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['validacionTenencia']"
+                  [esModificado]="esModificacion" [esPersonaFisica]="esPersonaFisica" *ngIf="esUnidadUsada">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['ultimoPagoRefrendo']" [title]="'RECIBO DEL ÚLTIMO PAGO DE REFRENDO'"
                   [controlName]="'ultimoPagoRefrendo'" [formGroup]="documentosUnidadForm"
                   [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['ultimoPagoRefrendo']"
-                  [esModificado]="esModificacion">
+                  [esModificado]="esModificacion" [esPersonaFisica]="esPersonaFisica" *ngIf="esUnidadUsada">
                 </app-card-pdf>
 
-                <!-- <app-card-pdf *ngIf="esIneVis" [pdfUrl]="pdfUrls['ine']" [title]="'INE'" [controlName]="'ine'" -->
-                <app-card-pdf [pdfUrl]="pdfUrls['ine']" [title]="'INE'" [controlName]="'ine'"
+                <app-card-pdf [pdfUrl]="pdfUrls['polizaViajero']"
+                  [title]="'PÓLIZA SEGURO DEL VIAJERO VIGENCIA MÍNIMA DE 1 MES'" [controlName]="'polizaViajero'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['ine']" [esModificado]="esModificacion">
+                  [documentChecked]="documentCheckedStatus['polizaViajero']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
                 </app-card-pdf>
+                <!---->
 
-                <app-card-pdf [pdfUrl]="pdfUrls['constanciaFis']" [title]="'CONSTANCIA FISCAL'"
-                  [controlName]="'constanciaFis'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['constanciaFis']" [esModificado]="esModificacion">
-                </app-card-pdf>
-
-                <app-card-pdf [pdfUrl]="pdfUrls['factura']" [title]="'FACTURA'" [controlName]="'factura'"
+                <app-card-pdf [pdfUrl]="pdfUrls['polizaViajero']"
+                  [title]="'EN CASO DE CONVERSIÓN A GAS, ORIGINAL Y COPIA DE '" [controlName]="'polizaViajero'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['factura']" [esModificado]="esModificacion">
+                  [documentChecked]="documentCheckedStatus['polizaViajero']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['cartaFactura']" [title]="'CARTA FACTURA (VIGENCIA NO MAYOR A 30 DÍAS)'"
-                  [controlName]="'cartaFactura'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['cartaFactura']" [esModificado]="esModificacion">
+                <!---->
+
+                <app-card-pdf [pdfUrl]="pdfUrls['repuve']" [title]="'REPUVE'" [controlName]="'repuve'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['repuve']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['comprobanteDom']"
+                  [title]="'COMPROBANTE DE DOMICILIO (MÁXIMO ANTIGÜEDAD DE 3 MESES)'" [controlName]="'comprobanteDom'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['comprobanteDom']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada || esUnidadNueva">
                 </app-card-pdf>
 
                 <app-card-pdf [pdfUrl]="pdfUrls['curp']" [title]="'CURP'" [controlName]="'curp'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['curp']" [esModificado]="esModificacion">
+                  [documentChecked]="documentCheckedStatus['curp']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['comprobanteDom']" [title]="'COMPROBANTE DE DOMICILIO'"
-                  [controlName]="'comprobanteDom'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['comprobanteDom']" [esModificado]="esModificacion">
+                <app-card-pdf [pdfUrl]="pdfUrls['convenioEmpresa']"
+                  [title]="'CONVENIO ACTUALIZADO CON LA EMPRESA A LA QUE SE LE PRESTA EL SERVICIO'"
+                  [controlName]="'convenioEmpresa'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['convenioEmpresa']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['antPenales']" [title]="'CARTA DE ANTECEDENTES NO PENALES'"
+                <app-card-pdf [pdfUrl]="pdfUrls['constanciaFis']"
+                  [title]="'CONSTANCIA DE SITUACIÓN FISCAL QUE INDIQUE ESTA OBLIGACIÓN'" [controlName]="'constanciaFis'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['constanciaFis']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['antPenales']"
+                  [title]="'CARTA DE ANTECEDENTES NO PENALES (VIGENCIA NO MAYOR A 3 MESES)'"
                   [controlName]="'antPenales'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['antPenales']" [esModificado]="esModificacion">
-                </app-card-pdf>
-                <app-card-pdf [pdfUrl]="pdfUrls['facturaUno']" [title]="'FACTURA 1'" [controlName]="'antPenales'"
-                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['facturaUno']" [esModificado]="esModificacion">
+                  [documentChecked]="documentCheckedStatus['antPenales']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada || (esUnidadNueva && esNuevaPagada)">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['facturaDos']" [title]="'FACTURA 2'" [controlName]="'antPenales'"
-                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['facturaDos']" [esModificado]="esModificacion">
+                <!----------------------VEHICULOS USADOS PERSONA MORAL------------------------------------------>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['idRepLegal']"
+                  [title]="'IDENTIFICACIÓN OFICIAL DEL REPRESENTANTE LEGAL DE LA EMPRESA CON PODER NOTARIAL'"
+                  [controlName]="'idRepLegal'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['idRepLegal']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="(esUnidadUsada || esUnidadNueva) && esPersonaMoral">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['facturaTres']" [title]="'FACTURA 3'" [controlName]="'antPenales'"
-                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['facturaTres']" [esModificado]="esModificacion">
+                <app-card-pdf [pdfUrl]="pdfUrls['constanciaFisMoral']"
+                  [title]="'CONSTANCIA DE SITUACIÖN FISCAL QUE INDIQUE ESTA OBLIGACIÓN'"
+                  [controlName]="'constanciaFisMoral'" [formGroup]="documentosUnidadForm"
+                  [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['constanciaFisMoral']"
+                  [esPersonaFisica]="esPersonaFisica"
+                  [esModificado]="esModificacion" *ngIf="esUnidadUsada && esPersonaMoral">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['facturaCuatro']" [title]="'FACTURA 4'" [controlName]="'antPenales'"
-                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['facturaCuatro']" [esModificado]="esModificacion">
+                <app-card-pdf [pdfUrl]="pdfUrls['actaConstitutiva']" [title]="'ACTA CONSTITUTIVA'"
+                  [controlName]="'actaConstitutiva'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['actaConstitutiva']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="(esUnidadUsada || esUnidadNueva )&& esPersonaMoral">
                 </app-card-pdf>
+                <!----------------------VEHICULOS USADOS PERSONA FISICA------------------------------------------>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['identificacionFisica']"
+                  [title]="'IDENTIFICACIÓN OFICIAL CON FOTOGRAFÍA VIGENTE'" [controlName]="'identificacionFisica'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['identificacionFisica']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="(esUnidadUsada || esUnidadNueva) && esPersonaFisica">
+                </app-card-pdf>
+
+                <!----------------------VEHICULOS NUEVO GENERAL------------------------------------------>
+                <!-- Se usa Solicitud SMyT de vehiculo usado-->
+                <!-- Se usa comprobante domicilio de vehiculo usado-->
+                <app-card-pdf [pdfUrl]="pdfUrls['constanciaFiscalVN']" [title]="'CONSTANCIA DE SITUACION FISCAL'"
+                [controlName]="'constanciaFiscalVN'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                [documentChecked]="documentCheckedStatus['constanciaFiscalVN']" [esModificado]="esModificacion" 
+                [esPersonaFisica]="esPersonaFisica"
+                *ngIf="esUnidadNueva">
+              </app-card-pdf>
+
+              <app-card-pdf [pdfUrl]="pdfUrls['idPersonaAut']" [title]="'IDENTIFICACION OFICIAL CON FOTOGRAFIA VIGENTE DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO'"
+                [controlName]="'idPersonaAut'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                [documentChecked]="documentCheckedStatus['idPersonaAut']" [esModificado]="esModificacion" 
+                [esPersonaFisica]="esPersonaFisica"
+                *ngIf="esUnidadNueva">
+              </app-card-pdf>
+
+              <app-card-pdf [pdfUrl]="pdfUrls['domicilioPersonaAut']" [title]="'COMPROBANTE DE DOMICILIO DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO'"
+                [controlName]="'domicilioPersonaAut'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                [documentChecked]="documentCheckedStatus['domicilioPersonaAut']" [esModificado]="esModificacion" 
+                [esPersonaFisica]="esPersonaFisica"
+                *ngIf="esUnidadNueva">
+              </app-card-pdf>
+                  <!-- Faltan desglosar elementos de archivo txt-->
+
+                <!----------------------VEHICULOS NUEVO PAGANDO------------------------------------------>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['facturaOriginal']" [title]="'CARTA FACTURA ORIGINAL'"
+                  [controlName]="'facturaOriginal'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['facturaOriginal']" [esModificado]="esModificacion" 
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadNueva && esNuevaPagando">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['facturaSinValor']" [title]="'FACTURA SIN VALOR A FAVOR DEL CONCESIONARIO(A) O EMPRESA'"
+                  [controlName]="'facturaSinValor'" [formGroup]="documentosUnidadForm"
+                  [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['facturaSinValor']"
+                  [esPersonaFisica]="esPersonaFisica"
+                  [esModificado]="esModificacion" *ngIf="esUnidadNueva && esNuevaPagando">
+                </app-card-pdf>
+
+                <!----------------------VEHICULOS NUEVO PAGADA------------------------------------------>
+                <!-- Se usa factura endosada  de vehiculo usado-->
+                <!-- Se usa antecedentes penales de vehiculo usado-->
+
+                 <!----------------------VEHICULOS NUEVO PERSONAS MORALES------------------------------------------>
+                 <!-- Se usa acta constitutiva  de vehiculo usado PM-->
+                 <!-- Se usa Identificacion Oficial  de vehiculo usado PM-->
+
+                  <!----------------------VEHICULOS NUEVO PERSONAS FISICAS------------------------------------------>
+                   <!-- Se usa Identificacion Oficial  de vehiculo usado PF--> 
               </div>
               <br><br>
               <div class="row g-3  mt-3">
