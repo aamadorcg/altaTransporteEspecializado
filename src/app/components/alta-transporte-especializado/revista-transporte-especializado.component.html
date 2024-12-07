@@ -802,15 +802,13 @@
                   }" class="form-select">
                   <option value="" disabled selected> Seleccione una opción</option>
                   <option value="1" selected> UNIDAD USADA</option>
-                  <option value="2" selected> UNIDAD NUEVA PAGANDO </option>
+                  <option value="2" selected> UNIDAD NUEVA PAGANDO</option>
                   <option value="3" selected> UNIDAD NUEVA PAGADA</option>
                 </select>
                 <div class="invalid-feedback">Campo obligatorio</div>
               </div>
               <div class="cards-container d-grid justify-content-center">
-
-                <button (click)="mensaje()">Enviar mensaje</button>
-                <!----------------------VEHICULOS USADOS GENERAL------------------------------------------>
+ <!----------------------VEHICULOS USADOS GENERAL------------------------------------------>
                 <app-card-pdf [pdfUrl]="pdfUrls['solicitudTitular']"
                   [title]="'SOLICITUD DIRIGIDA AL TITULAR DE LA SMyT'" [controlName]="'solicitudTitular'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"

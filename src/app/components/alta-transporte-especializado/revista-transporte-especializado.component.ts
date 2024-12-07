@@ -137,6 +137,7 @@ export class AltaTransporteEspecializado {
   strMunicipio: string = "";
   strColonia: string = "";
   ID_TRAMITE: string = "1";
+  tipoVeh: string = "";
   esSeleccionadoPorAutocomplete: boolean = false;
 
   constructor(
@@ -313,7 +314,7 @@ export class AltaTransporteEspecializado {
       if (this.esModificacion && this.idTramite) {
         console.log(this.idTramite);
         this.cargarDatosDelTramite(this.idTramite);
-      }else{
+      } else {
         this.desactivaCampos();
         this.cargaDocumentosTramite();
         this.cargaValoresCamposDinamicos();
@@ -321,8 +322,8 @@ export class AltaTransporteEspecializado {
     });
   }
 
-  cargarDatosDelTramite(idTramite : any){
-    
+  cargarDatosDelTramite(idTramite: any) {
+
   }
 
   desactivaCampos() {
@@ -353,7 +354,7 @@ export class AltaTransporteEspecializado {
   }
 
   /* OBTENER VALORES PARA USAR EN FORMULARIO */
-  cargaValoresCamposDinamicos() { 
+  cargaValoresCamposDinamicos() {
     this.servicios.obtenerCombustibles().subscribe({
       next: (value: any) => {
         this.cargarSpinner = false;
@@ -422,7 +423,7 @@ export class AltaTransporteEspecializado {
       }, 0);
     });
 
-    if(this.esPersonaFisica){
+    if (this.esPersonaFisica) {
       this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
         if (rfc?.length <= 10) {
           this.datosPermisionarioForm.patchValue({ strCurp: rfc });
@@ -438,7 +439,7 @@ export class AltaTransporteEspecializado {
         }
       });
     }
-    
+
 
     this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
       if (curp?.length >= 11) {
@@ -530,7 +531,7 @@ export class AltaTransporteEspecializado {
 
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
     this.esSeleccionadoPorAutocomplete = true;
-    const selectedOption = event.option.value; 
+    const selectedOption = event.option.value;
     this.datosFacturaForm.get('strCveVeh')?.setValue(selectedOption);
     this.datosFacturaForm.get('strMarca')?.setValue(selectedOption.strEmpresa);
     this.datosFacturaForm.get('strMarca')?.markAsTouched();
@@ -553,9 +554,9 @@ export class AltaTransporteEspecializado {
     let json = { strRfc: value, esPersonaFisica: this.esPersonaFisica }
     this.servicios.validaRfc(json).subscribe({
       next: (value: any) => {
-        if(value.data?.strRfc !== null){
+        if (value.data?.strRfc !== null) {
           this.llenaYBloqueaCampos(value.data);
-        }else{
+        } else {
           console.log('Registro nuevo RFC');
         }
       },
@@ -584,7 +585,7 @@ export class AltaTransporteEspecializado {
     }
 
     const anioCorto: string = codigo.substring(0, 2);
-    const mes: string = codigo.substring(2, 4);       
+    const mes: string = codigo.substring(2, 4);
     const dia: string = codigo.substring(4, 6);
 
     let anioCompleto: string;
@@ -614,7 +615,7 @@ export class AltaTransporteEspecializado {
       this.cargarSpinner = true;
       this.servicios.validarClaveVehicular(json).subscribe({
         next: (response: any) => {
-          this.cargarSpinner = false; 
+          this.cargarSpinner = false;
         },
         error: (err: HttpErrorResponse) => {
           this.datosFacturaForm.get('strCveVeh')?.reset();
@@ -912,7 +913,7 @@ export class AltaTransporteEspecializado {
               'ineTestigo', 'oriBajaUnidad', 'validacionTenencia', 'ultimoPagoRefrendo', 'polizaViajero', 'repuve',
               'comprobanteDom', 'curp', 'convenioEmpresa', 'constanciaFis', 'antPenales']);
             if (this.esPersonaMoral) {
-              this.aplicarValidadores(['idRepLegal','constanciaFisMoral', 'actaConstitutiva','idPersonaAut','idPersonaAut']);
+              this.aplicarValidadores(['idRepLegal', 'constanciaFisMoral', 'actaConstitutiva', 'idPersonaAut', 'idPersonaAut']);
             } else {
               this.aplicarValidadores(['identificacionFisica']);
             }
@@ -929,11 +930,11 @@ export class AltaTransporteEspecializado {
               this.aplicarValidadores(['facturaEndosada', 'antPenales']);
             }
             if (this.esPersonaMoral) {
-              this.aplicarValidadores(['constanciaFisMoral','idRepLegal']);
-            }else{
+              this.aplicarValidadores(['constanciaFisMoral', 'idRepLegal']);
+            } else {
               this.aplicarValidadores(['identificacionFisica']);
             }
-          } 
+          }
         }
         break;
 
@@ -975,7 +976,7 @@ export class AltaTransporteEspecializado {
     });
   }
 
-  resetDocumentosForm(){
+  resetDocumentosForm() {
 
   }
 
@@ -1016,7 +1017,8 @@ export class AltaTransporteEspecializado {
       };
     } else {
       this.obtenDocumentosParaEnviar();
-      console.log(this.listaDocumentos)
+      this.obtenTipoVehiculo();
+      //console.log(this.listaDocumentos)
       const fecha = new Date(this.datosFacturaForm.get('dtFechaFact')?.value);
       const fechaformato = fecha.toISOString().split('T')[0];
       json = {
@@ -1042,8 +1044,9 @@ export class AltaTransporteEspecializado {
           strAgencia: this.formConcesion['strAgenciaDist'].value,
           strTipoServicio: this.formConcesion['strTipoServ'].value,
           strUso: this.formConcesion['strUsoVeh'].value,
-          strRepuve: this.formConcesion['strRepuve'].value, 
-          intIdTipoRevista: this.formRevista['strTramite'].value
+          strRepuve: this.formConcesion['strRepuve'].value,
+          intIdTipoRevista: this.formRevista['strTramite'].value,
+          strTipoUnidad: this.tipoVeh
         },
         permisionarioVo: {
           strRfc: this.formPermisionario['strRfc'].value,
@@ -1052,7 +1055,7 @@ export class AltaTransporteEspecializado {
           strApellidoPaterno: this.formPermisionario['strApPaterno'].value,
           strApellidoMaterno: this.formPermisionario['strApMaterno'].value,
           strSexo: this.formPermisionario['strSexo'].value.charAt(0),
-          ldFechaNacimiento: this.esPersonaFisica? this.formPermisionario['strFechaNac'].value : '',
+          ldFechaNacimiento: this.esPersonaFisica ? this.formPermisionario['strFechaNac'].value : '',
           strCalle: this.formPermisionario['strCalleProp'].value,
           strNumeroInterior: this.formPermisionario['strNumExt'].value,
           strNumeroExterior: this.formPermisionario['strNumInt'].value,
@@ -1206,7 +1209,7 @@ export class AltaTransporteEspecializado {
             break;
           case 'CONSTANCIA DE SITUACIÓN FISCAL QUE INDIQUE ESTA OBLIGACIÓN':
             documento.strArchivo = this.formDocumentos['constanciaFis'].value
-            break; 
+            break;
           case 'CARTA DE ANTECEDENTES NO PENALES CON VIGENCIA NO MAYOR A 3 MESES':
             documento.strArchivo = this.formDocumentos['antPenales'].value
             break;
@@ -1251,6 +1254,24 @@ export class AltaTransporteEspecializado {
         }
       });
       this.listaDocumentos = this.listaDocumentos.filter(item => item.strArchivo !== null);
+    }
+  }
+
+  obtenTipoVehiculo() {
+    let tipoVehiculo = this.formDocumentos['ineComprador'].value
+    if (tipoVehiculo) {
+      switch (tipoVehiculo) {
+        case "1":
+          this.tipoVeh = "UNIDAD USADA";
+          break;
+        case "2":
+          this.tipoVeh = "UNIDAD NUEVA PAGANDO";
+          break;
+        case "3":
+          this.tipoVeh = "UNIDAD NUEVA PAGADA";
+          break;
+        default: break;
+      }
     }
   }
 
