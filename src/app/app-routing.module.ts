@@ -15,6 +15,16 @@ const routes: Routes = [
     data: {tipo: 'M'}
   },
   {
+    path: 'persona-fisica/modificar/:intIdTramite',
+    component: AltaTransporteEspecializado,
+    data: { tipo: 'F', modo: 'modificar' }
+  },
+  {
+    path: 'persona-moral/modificar/:intIdTramite',
+    component: AltaTransporteEspecializado,
+    data: { tipo: 'M', modo: 'modificar' }
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'persona-fisica'

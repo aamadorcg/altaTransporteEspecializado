@@ -153,10 +153,8 @@ export class AltaTransporteEspecializado {
   ngOnInit() {
     this.inicializarFormularios();
     this.configurarRFCFisicaMoral();
-    this.desactivaCampos();
     this.cargarDefaultPDFs();
-    this.cargaDocumentosTramite();
-    this.cargaValoresCamposDinamicos();
+    this.detectarTipoTramite();
     this.observarFormularios();
   }
 
@@ -250,6 +248,30 @@ export class AltaTransporteEspecializado {
     });
   }
 
+  configurarRFCFisicaMoral() {
+    this.activatedRoute.data.subscribe((param: any) => {
+      if (param.tipo === 'F') {
+        this.formPermisionario['strRfc'].setValidators([
+          Validators.required,
+          Validators.minLength(13),
+          Validators.maxLength(13),
+          Validators.pattern(this.RFC_FISICA_PATTERN)
+        ]);
+        this.datosPermisionarioForm.get('strRfc')?.updateValueAndValidity();
+        this.esPersonaFisica = true;
+      } else if (param.tipo === 'M') {
+        this.formPermisionario['strRfc'].setValidators([
+          Validators.required,
+          Validators.minLength(12),
+          Validators.maxLength(12),
+          Validators.pattern(this.RFC_MORAL_PATTERN)
+        ]);
+        this.datosPermisionarioForm.get('strRfc')?.updateValueAndValidity();
+        this.esPersonaMoral = true;
+      }
+    });
+  }
+
   rfcValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const esPersonaFisica = this.esPersonaFisica;
@@ -278,28 +300,29 @@ export class AltaTransporteEspecializado {
       : 'L = Letra, 0 = Número, A = Letra ó Número, Formato válido: LLL000000AAA';
   }
 
-  configurarRFCFisicaMoral() {
-    this.activatedRoute.data.subscribe((param: any) => {
-      if (param.tipo === 'F') {
-        this.formPermisionario['strRfc'].setValidators([
-          Validators.required,
-          Validators.minLength(13),
-          Validators.maxLength(13),
-          Validators.pattern(this.RFC_FISICA_PATTERN)
-        ]);
-        this.datosPermisionarioForm.get('strRfc')?.updateValueAndValidity();
-        this.esPersonaFisica = true;
-      } else if (param.tipo === 'M') {
-        this.formPermisionario['strRfc'].setValidators([
-          Validators.required,
-          Validators.minLength(12),
-          Validators.maxLength(12),
-          Validators.pattern(this.RFC_MORAL_PATTERN)
-        ]);
-        this.datosPermisionarioForm.get('strRfc')?.updateValueAndValidity();
-        this.esPersonaMoral = true;
+  private cargarDefaultPDFs() {
+    this.defaultPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/documents/subirArchivo.pdf');
+  }
+
+  detectarTipoTramite() {
+    this.activatedRoute.data.subscribe(data => {
+      this.esModificacion = data['modo'] === 'modificar';
+    });
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.idTramite = params.get('intIdTramite') ?? '';
+      if (this.esModificacion && this.idTramite) {
+        console.log(this.idTramite);
+        this.cargarDatosDelTramite(this.idTramite);
+      }else{
+        this.desactivaCampos();
+        this.cargaDocumentosTramite();
+        this.cargaValoresCamposDinamicos();
       }
     });
+  }
+
+  cargarDatosDelTramite(idTramite : any){
+    
   }
 
   desactivaCampos() {
@@ -317,10 +340,6 @@ export class AltaTransporteEspecializado {
     }
   }
 
-  private cargarDefaultPDFs() {
-    this.defaultPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/documents/subirArchivo.pdf');
-  }
-
   cargaDocumentosTramite() {
     this.servicios.obtenerDocumentosTramite().subscribe({
       next: (value: any) => {
@@ -333,13 +352,8 @@ export class AltaTransporteEspecializado {
     })
   }
 
-  ngAfterViewInit() {
-    this.validaCamposConAutocomplete();
-  }
-
   /* OBTENER VALORES PARA USAR EN FORMULARIO */
-  cargaValoresCamposDinamicos() {
-
+  cargaValoresCamposDinamicos() { 
     this.servicios.obtenerCombustibles().subscribe({
       next: (value: any) => {
         this.cargarSpinner = false;
@@ -361,6 +375,10 @@ export class AltaTransporteEspecializado {
     });
   }
 
+  ngAfterViewInit() {
+    this.validaCamposConAutocomplete();
+  }
+
   filtrarOpciones(event: Event) {
     this.esSeleccionadoPorAutocomplete = false;
     const inputElement = event.target as HTMLInputElement;
@@ -372,20 +390,15 @@ export class AltaTransporteEspecializado {
     );
   }
 
-  onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-    this.esSeleccionadoPorAutocomplete = true;
-    const selectedOption = event.option.value;
-    console.log(selectedOption);
-    this.datosFacturaForm.get('strCveVeh')?.setValue(selectedOption);
-    this.datosFacturaForm.get('strMarca')?.setValue(selectedOption.strEmpresa);
-    this.datosFacturaForm.get('strMarca')?.markAsTouched();
-    this.datosFacturaForm.get('strTipoVeh')?.setValue(selectedOption.strModelo);
-    this.datosFacturaForm.get('strTipoVeh')?.markAsTouched();
-    this.selectedVehicleId = selectedOption.intIdCaCve;
-  }
-
   displayFn(opcion: any): string {
     return opcion ? `${opcion.strClaveVehicular}-${opcion.strEmpresa}-${opcion.strModelo}` : '';
+  }
+
+  obtenColonias(arregloColonias: any) {
+    this.listaColonias = arregloColonias.map((item: { asentamiento: any; codigoTipoAsentamiento: any; }) => ({
+      asentamiento: item.asentamiento,
+      codigoTipoAsentamiento: item.codigoTipoAsentamiento
+    }));
   }
 
   /* IDENTIFICAR CAMBIOS EN FORMULARIO */
@@ -409,20 +422,23 @@ export class AltaTransporteEspecializado {
       }, 0);
     });
 
-    this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
-      if (rfc?.length <= 10) {
-        this.datosPermisionarioForm.patchValue({ strCurp: rfc });
-        if (rfc?.length < 10) {
-          this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
+    if(this.esPersonaFisica){
+      this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
+        if (rfc?.length <= 10) {
+          this.datosPermisionarioForm.patchValue({ strCurp: rfc });
+          if (rfc?.length < 10) {
+            this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
+          }
         }
-      }
-      if (rfc?.length >= 10) {
-        const fechaNac = rfc?.substring(4, 10);
-        this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
-        this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
-        this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
-      }
-    });
+        if (rfc?.length >= 10) {
+          const fechaNac = rfc?.substring(4, 10);
+          this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
+          this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
+          this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
+        }
+      });
+    }
+    
 
     this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
       if (curp?.length >= 11) {
@@ -512,17 +528,19 @@ export class AltaTransporteEspecializado {
     });
   }
 
-  obtenColonias(arregloColonias: any) {
-    this.listaColonias = arregloColonias.map((item: { asentamiento: any; codigoTipoAsentamiento: any; }) => ({
-      asentamiento: item.asentamiento,
-      codigoTipoAsentamiento: item.codigoTipoAsentamiento
-    }));
-
+  onOptionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.esSeleccionadoPorAutocomplete = true;
+    const selectedOption = event.option.value; 
+    this.datosFacturaForm.get('strCveVeh')?.setValue(selectedOption);
+    this.datosFacturaForm.get('strMarca')?.setValue(selectedOption.strEmpresa);
+    this.datosFacturaForm.get('strMarca')?.markAsTouched();
+    this.datosFacturaForm.get('strTipoVeh')?.setValue(selectedOption.strModelo);
+    this.datosFacturaForm.get('strTipoVeh')?.markAsTouched();
+    this.selectedVehicleId = selectedOption.intIdCaCve;
   }
+
   validaNiv(value: any) {
-    let json = {
-      strNiv: value
-    }
+    let json = { strNiv: value }
     this.servicios.validaNiv(json).subscribe({
       error: (err: HttpErrorResponse) => {
         this.resetFormulario('datosFacturaForm');
@@ -532,13 +550,14 @@ export class AltaTransporteEspecializado {
   }
 
   validaRfc(value: any) {
-    let json = {
-      strRfc: value,
-      esPersonaFisica: this.esPersonaFisica
-    }
-    this.servicios.validaNiv(json).subscribe({
+    let json = { strRfc: value, esPersonaFisica: this.esPersonaFisica }
+    this.servicios.validaRfc(json).subscribe({
       next: (value: any) => {
-        this.llenaYBloqueaCampos(value.data);
+        if(value.data?.strRfc !== null){
+          this.llenaYBloqueaCampos(value.data);
+        }else{
+          console.log('Registro nuevo RFC');
+        }
       },
       error: (err: HttpErrorResponse) => {
         this.resetFormulario('datosPermisionarioForm');
@@ -564,8 +583,8 @@ export class AltaTransporteEspecializado {
       throw new Error("El código debe tener 6 dígitos.");
     }
 
-    const anioCorto: string = codigo.substring(0, 2); // YY
-    const mes: string = codigo.substring(2, 4);       // MM
+    const anioCorto: string = codigo.substring(0, 2);
+    const mes: string = codigo.substring(2, 4);       
     const dia: string = codigo.substring(4, 6);
 
     let anioCompleto: string;
@@ -595,8 +614,7 @@ export class AltaTransporteEspecializado {
       this.cargarSpinner = true;
       this.servicios.validarClaveVehicular(json).subscribe({
         next: (response: any) => {
-          this.cargarSpinner = false;
-          console.log(response);
+          this.cargarSpinner = false; 
         },
         error: (err: HttpErrorResponse) => {
           this.datosFacturaForm.get('strCveVeh')?.reset();
@@ -614,7 +632,6 @@ export class AltaTransporteEspecializado {
       formulario.markAllAsTouched();
       const primerCampoInvalido = this.obtenerPrimerCampoInvalido(formulario);
       if (primerCampoInvalido) {
-        console.log(primerCampoInvalido);
         let descripcion = this.descripciones[primerCampoInvalido] || 'Este campo es obligatorio';
         if (primerCampoInvalido == 'strNombre') {
           if (this.esPersonaFisica) {
@@ -881,7 +898,7 @@ export class AltaTransporteEspecializado {
           });
         }
         break;
-      case 'strTramite':
+      case 'strCombustible':
         control = this.datosFacturaForm.get('strCombustible');
         break;
       case 'strTipoVehiculo':
@@ -916,8 +933,7 @@ export class AltaTransporteEspecializado {
             }else{
               this.aplicarValidadores(['identificacionFisica']);
             }
-          }
-          console.log(this.documentosUnidadForm.controls);
+          } 
         }
         break;
 
@@ -1026,7 +1042,8 @@ export class AltaTransporteEspecializado {
           strAgencia: this.formConcesion['strAgenciaDist'].value,
           strTipoServicio: this.formConcesion['strTipoServ'].value,
           strUso: this.formConcesion['strUsoVeh'].value,
-          strRepuve: this.formConcesion['strRepuve'].value
+          strRepuve: this.formConcesion['strRepuve'].value, 
+          intIdTipoRevista: this.formRevista['strTramite'].value
         },
         permisionarioVo: {
           strRfc: this.formPermisionario['strRfc'].value,
@@ -1035,7 +1052,7 @@ export class AltaTransporteEspecializado {
           strApellidoPaterno: this.formPermisionario['strApPaterno'].value,
           strApellidoMaterno: this.formPermisionario['strApMaterno'].value,
           strSexo: this.formPermisionario['strSexo'].value.charAt(0),
-          ldFechaNacimiento: this.formPermisionario['strFechaNac'].value,//Modificar
+          ldFechaNacimiento: this.esPersonaFisica? this.formPermisionario['strFechaNac'].value : '',
           strCalle: this.formPermisionario['strCalleProp'].value,
           strNumeroInterior: this.formPermisionario['strNumExt'].value,
           strNumeroExterior: this.formPermisionario['strNumInt'].value,
