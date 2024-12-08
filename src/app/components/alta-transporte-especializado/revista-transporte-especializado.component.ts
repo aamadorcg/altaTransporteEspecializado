@@ -100,6 +100,8 @@ export class AltaTransporteEspecializado {
   esAntNoPenalesVis: boolean = false;
   esActaConstVis: boolean = false;
 
+  arregloDocumentosVisibles: any[] = [];
+
 
   buscaRFC = false;
   documentCheckedStatus: { [key: string]: boolean } = {};
@@ -311,18 +313,71 @@ export class AltaTransporteEspecializado {
     });
     this.activatedRoute.paramMap.subscribe(params => {
       this.idTramite = params.get('intIdTramite') ?? '';
+      this.cargaValoresCamposDinamicos();
       if (this.esModificacion && this.idTramite) {
-        console.log(this.idTramite);
-        this.cargarDatosDelTramite(this.idTramite);
+       this.cargarDatosDelTramite(this.idTramite);
       } else {
         this.desactivaCampos();
         this.cargaDocumentosTramite();
-        this.cargaValoresCamposDinamicos();
       }
     });
   }
 
   cargarDatosDelTramite(idTramite: any) {
+    this.cargarSpinner = true;
+    this.servicios.obtenerTramiteEditar(idTramite).subscribe({
+      next: (value: any) => {
+        this.cargarSpinner = false;
+        let infoTramite = value.data;
+        if (infoTramite) {
+          if (infoTramite.facturaVo) {
+            this.datosFacturaForm.patchValue(infoTramite.facturaVo, { emitEvent: false });
+            this.datosFacturaForm.get('strCveVeh')?.patchValue(infoTramite.facturaVo.strNumeroMotor, { emitEvent: false });
+            this.datosFacturaForm.get('strMotor')?.patchValue(infoTramite.facturaVo.strNumeroMotor, { emitEvent: false });
+            this.datosFacturaForm.get('strTipoVeh')?.patchValue(infoTramite.facturaVo.strTipo, { emitEvent: false });
+            this.datosFacturaForm.get('strCombustible')?.patchValue(infoTramite.facturaVo.intIdCombustible, { emitEvent: false });
+            this.datosFacturaForm.get('dtFechaFact')?.patchValue(infoTramite.facturaVo.ldFechaFactura, { emitEvent: false });
+            this.datosFacturaForm.get('strNoFact')?.patchValue(infoTramite.facturaVo.strNumeroFactura, { emitEvent: false });
+            this.datosFacturaForm.get('strImporteFact')?.patchValue(infoTramite.facturaVo.dblValor, { emitEvent: false });
+            this.datosFacturaForm.get('strAgenciaDist')?.patchValue(infoTramite.facturaVo.strAgencia, { emitEvent: false });
+            this.datosFacturaForm.get('strTipoServ')?.patchValue(infoTramite.facturaVo.strTipoServicio, { emitEvent: false });
+            this.datosFacturaForm.get('strUsoVeh')?.patchValue(infoTramite.facturaVo.strUso, { emitEvent: false });
+            this.datosFacturaForm.disable();
+
+            this.tramiteForm.get('intIdTipoRevista')?.patchValue(infoTramite.facturaVo.intIdTipoRevista, { emitEvent: false });
+            this.tramiteForm.disable();
+
+            this.documentosUnidadForm.get('strTipoVehiculo')?.patchValue(infoTramite.facturaVo.strTipoUnidad, { emitEvent: false });
+            this.documentosUnidadForm.get('strTipoVehiculo')?.disable();
+          }
+          if (infoTramite.permisionarioVo) {
+            this.datosPermisionarioForm.patchValue(infoTramite.permisionarioVo, { emitEvent: false });
+            this.datosPermisionarioForm.get('strApPaterno')?.patchValue(infoTramite.permisionarioVo.strApellidoPaterno, { emitEvent: false });
+            this.datosPermisionarioForm.get('strApMaterno')?.patchValue(infoTramite.permisionarioVo.strApellidoMaterno, { emitEvent: false });
+            //this.datosPermisionarioForm.get('strSexo')?.patchValue(infoTramite.permisionarioVo,{ emitEvent: false });
+            this.datosPermisionarioForm.get('strFechaNac')?.patchValue(infoTramite.permisionarioVo.ldFechaNacimiento, { emitEvent: false });
+            this.datosPermisionarioForm.get('strCalleProp')?.patchValue(infoTramite.permisionarioVo.strCalle, { emitEvent: false });
+            this.datosPermisionarioForm.get('strNumExt')?.patchValue(infoTramite.permisionarioVo.strNumeroExterior, { emitEvent: false });
+            this.datosPermisionarioForm.get('strNumInt')?.patchValue(infoTramite.permisionarioVo.strNumeroInterior, { emitEvent: false });
+            this.datosPermisionarioForm.get('estado')?.patchValue(infoTramite.permisionarioVo.strEstado, { emitEvent: false });
+            this.datosPermisionarioForm.get('strCP')?.patchValue(infoTramite.permisionarioVo.strCodigoPostal, { emitEvent: false });
+            this.datosPermisionarioForm.get('strColonia')?.patchValue(infoTramite.permisionarioVo.strColonia, { emitEvent: false });
+            this.datosPermisionarioForm.get('strTelefonoRepresentante')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strTelefonoRepresentante, { emitEvent: false });
+            this.datosPermisionarioForm.get('strEmail')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strCorreo, { emitEvent: false });
+            this.datosPermisionarioForm.get('strTelefonoContacto')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strTelefonoConcesionario, { emitEvent: false });
+            this.datosPermisionarioForm.disable();
+          }
+          if (infoTramite.documentacionVo) {
+            this.limpiarValidadores();
+            this.cargaInformacionDocumentos(infoTramite.documentacionVo);
+          }
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorGenerico(err);
+      },
+    });
+
 
   }
 
@@ -404,68 +459,98 @@ export class AltaTransporteEspecializado {
 
   /* IDENTIFICAR CAMBIOS EN FORMULARIO */
   private observarFormularios() {
-    this.datosFacturaForm.get('strNiv')?.valueChanges.subscribe((strNiv) => {
-      if (this.actualizarForm) return;
-      setTimeout(() => {
-        if (strNiv?.length === 17) {
-          this.validaNiv(this.formConcesion['strNiv'].value);
-        }
-      }, 0);
-    });
-
-    this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((strRfc) => {
-      if (this.actualizarForm) return;
-      setTimeout(() => {
-        if ((strRfc && strRfc.length === 13 && this.esPersonaFisica && this.formPermisionario['strRfc'].valid) ||
-          (strRfc && strRfc.length === 12 && this.esPersonaMoral && this.formPermisionario['strRfc'].valid)) {
-          this.validaRfc(this.formPermisionario['strRfc'].value);
-        }
-      }, 0);
-    });
-
-    if (this.esPersonaFisica) {
-      this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
-        if (rfc?.length <= 10) {
-          this.datosPermisionarioForm.patchValue({ strCurp: rfc });
-          if (rfc?.length < 10) {
-            this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
+    if (!this.esModificacion) {
+      this.datosFacturaForm.get('strNiv')?.valueChanges.subscribe((strNiv) => {
+        if (this.actualizarForm) return;
+        setTimeout(() => {
+          if (strNiv?.length === 17) {
+            this.validaNiv(this.formConcesion['strNiv'].value);
           }
-        }
-        if (rfc?.length >= 10) {
-          const fechaNac = rfc?.substring(4, 10);
-          this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
-          this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
-          this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
+        }, 0);
+      });
+
+      this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((strRfc) => {
+        if (this.actualizarForm) return;
+        setTimeout(() => {
+          if ((strRfc && strRfc.length === 13 && this.esPersonaFisica && this.formPermisionario['strRfc'].valid) ||
+            (strRfc && strRfc.length === 12 && this.esPersonaMoral && this.formPermisionario['strRfc'].valid)) {
+            this.validaRfc(this.formPermisionario['strRfc'].value);
+          }
+        }, 0);
+      });
+
+      if (this.esPersonaFisica) {
+        this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
+          if (rfc?.length <= 10) {
+            this.datosPermisionarioForm.patchValue({ strCurp: rfc });
+            if (rfc?.length < 10) {
+              this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
+            }
+          }
+          if (rfc?.length >= 10) {
+            const fechaNac = rfc?.substring(4, 10);
+            this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
+            this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
+            this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
+          }
+        });
+      }
+
+      this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
+        if (curp?.length >= 11) {
+          const genderChar = curp?.charAt(10);
+          if (genderChar === 'H') {
+            this.datosPermisionarioForm.patchValue({ strSexo: 'MASCULINO' });
+          } else if (genderChar === 'M') {
+            this.datosPermisionarioForm.patchValue({ strSexo: 'FEMENINO' });
+          }
+          this.datosPermisionarioForm.get('strSexo')?.markAsDirty();
+          this.datosPermisionarioForm.get('strSexo')?.markAsTouched();
+        } else {
+          this.datosPermisionarioForm.patchValue({ strSexo: '' });
         }
       });
-    }
 
-
-    this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
-      if (curp?.length >= 11) {
-        const genderChar = curp?.charAt(10);
-        if (genderChar === 'H') {
-          this.datosPermisionarioForm.patchValue({ strSexo: 'MASCULINO' });
-        } else if (genderChar === 'M') {
-          this.datosPermisionarioForm.patchValue({ strSexo: 'FEMENINO' });
-        }
-        this.datosPermisionarioForm.get('strSexo')?.markAsDirty();
-        this.datosPermisionarioForm.get('strSexo')?.markAsTouched();
-      } else {
-        this.datosPermisionarioForm.patchValue({ strSexo: '' });
-      }
-    });
-
-
-    this.datosPermisionarioForm.get('strCP')?.valueChanges
-      .pipe(
-        filter((codigoPostal: string) => codigoPostal?.length === 5),
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap((codigoPostal: string) => {
-          this.cargarSpinner = true;
-          return this.servicios.obtenerDireccion(codigoPostal).pipe(
-            catchError((err) => {
+      this.datosPermisionarioForm.get('strCP')?.valueChanges
+        .pipe(
+          filter((codigoPostal: string) => codigoPostal?.length === 5),
+          debounceTime(300),
+          distinctUntilChanged(),
+          switchMap((codigoPostal: string) => {
+            this.cargarSpinner = true;
+            return this.servicios.obtenerDireccion(codigoPostal).pipe(
+              catchError((err) => {
+                this.strMunicipio = "";
+                this.strEstado = "";
+                this.estadoId = "";
+                this.municipioId = "";
+                this.localidadId = ""
+                this.datosPermisionarioForm.get('strCP')?.patchValue('');
+                this.datosPermisionarioForm.get('strMunicipio')?.reset();
+                this.datosPermisionarioForm.get('strLocalidad')?.reset();
+                this.datosPermisionarioForm.get('estado')?.reset();
+                this.errorGenerico(err);
+                return of(null);
+              })
+            );
+          }
+          )
+        )
+        .subscribe((respuesta: any) => {
+          this.cargarSpinner = false;
+          if (respuesta) {
+            let value = respuesta[0];
+            if (value) {
+              this.obtenColonias(respuesta);
+              this.strMunicipio = value.descripcionIdMunicipioCodigoPostal;
+              this.strEstado = value.descripcionidEstadoPais;
+              this.estadoId = value.idEstadoPais;
+              this.municipioId = value.codigoMunicipio;
+              this.localidadId = value.codigoMunicipio;
+              this.datosPermisionarioForm.get('strMunicipio')?.patchValue(this.strMunicipio);
+              this.datosPermisionarioForm.get('strLocalidad')?.patchValue(this.strMunicipio);
+              this.datosPermisionarioForm.get('estado')?.patchValue(this.strEstado);
+            } else {
               this.strMunicipio = "";
               this.strEstado = "";
               this.estadoId = "";
@@ -475,58 +560,27 @@ export class AltaTransporteEspecializado {
               this.datosPermisionarioForm.get('strMunicipio')?.reset();
               this.datosPermisionarioForm.get('strLocalidad')?.reset();
               this.datosPermisionarioForm.get('estado')?.reset();
-              this.errorGenerico(err);
-              return of(null);
-            })
-          );
-        }
-        )
-      )
-      .subscribe((respuesta: any) => {
-        this.cargarSpinner = false;
-        if (respuesta) {
-          let value = respuesta[0];
-          if (value) {
-            this.obtenColonias(respuesta);
-            this.strMunicipio = value.descripcionIdMunicipioCodigoPostal;
-            this.strEstado = value.descripcionidEstadoPais;
-            this.estadoId = value.idEstadoPais;
-            this.municipioId = value.codigoMunicipio;
-            this.localidadId = value.codigoMunicipio;
-            this.datosPermisionarioForm.get('strMunicipio')?.patchValue(this.strMunicipio);
-            this.datosPermisionarioForm.get('strLocalidad')?.patchValue(this.strMunicipio);
-            this.datosPermisionarioForm.get('estado')?.patchValue(this.strEstado);
-          } else {
-            this.strMunicipio = "";
-            this.strEstado = "";
-            this.estadoId = "";
-            this.municipioId = "";
-            this.localidadId = ""
-            this.datosPermisionarioForm.get('strCP')?.patchValue('');
-            this.datosPermisionarioForm.get('strMunicipio')?.reset();
-            this.datosPermisionarioForm.get('strLocalidad')?.reset();
-            this.datosPermisionarioForm.get('estado')?.reset();
-            /* this.datosPermisionarioForm.get('strColonia')?.patchValue('');
-            this.datosPermisionarioForm.get('strCP')?.reset(); */
-            this.muestraError('Error al consultar código postal, inténtelo de nuevo');
+              this.muestraError('Error al consultar código postal, inténtelo de nuevo');
+            }
           }
+        });
+
+      this.datosFacturaForm.get('intModelo')?.valueChanges.subscribe((modelo: string) => {
+        if (modelo?.length == 4) {
+          let json = {
+            intModelo: modelo
+          }
+          this.servicios.validarVidaUtil(json).subscribe({
+            error: (err: HttpErrorResponse) => {
+              this.datosFacturaForm.get('intModelo')?.reset();
+              this.datosFacturaForm.get('intModelo')?.markAsDirty();
+              this.errorGenerico(err);
+            }
+          })
         }
       });
 
-    this.datosFacturaForm.get('intModelo')?.valueChanges.subscribe((modelo: string) => {
-      if (modelo?.length == 4) {
-        let json = {
-          intModelo: modelo
-        }
-        this.servicios.validarVidaUtil(json).subscribe({
-          error: (err: HttpErrorResponse) => {
-            this.datosFacturaForm.get('intModelo')?.reset();
-            this.datosFacturaForm.get('intModelo')?.markAsDirty();
-            this.errorGenerico(err);
-          }
-        })
-      }
-    });
+    }
   }
 
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
@@ -658,181 +712,248 @@ export class AltaTransporteEspecializado {
   }
 
   cargaInformacionDocumentos(documentos: any) {
-    let campoDoc = '';
-    if (this.esModificacion) {
-      campoDoc = 'strDescDoc';
-    } else {
-      campoDoc = 'strNombreDocumento';
-    }
-    documentos.forEach((doc: any) => {
-      this.listaDocumentos.forEach((doc) => {
-        const status = doc.strAceptado === 'A';
-        switch (doc[campoDoc]) {
-          case 'SOLICITUD AL TITULAR DE SMyT':
-            this.esSolicitudTitularVis = true;
-            this.documentCheckedStatus['solicitudTitular'] = status;
-            this.pdfUrls['solicitudTitular'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['solicitudTitular'] = !status;
-            this.documentosUnidadForm.patchValue({
-              solicitudTitular: doc.strArchivo
-            });
-            break;
-          case 'convenioActualizado':
-            this.esConvenioActualizadoVis = true;
-            this.documentCheckedStatus['convenioActualizado'] = status;
-            this.pdfUrls['convenioActualizado'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['convenioActualizado'] = !status;
-            this.documentosUnidadForm.patchValue({
-              convenioActualizado: doc.strArchivo
-            });
-            break;
-          case 'tarjetaCirculacion':
-            this.esTarjetaCirculacionVis = true;
-            this.documentCheckedStatus['tarjetaCirculacion'] = status;
-            this.pdfUrls['tarjetaCirculacion'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['tarjetaCirculacion'] = !status;
-            this.documentosUnidadForm.patchValue({
-              tarjetaCirculacion: doc.strArchivo
-            });
-            break;
-          case 'repuve':
-            this.esRepuveVis = true;
-            this.documentCheckedStatus['repuve'] = status;
-            this.pdfUrls['repuve'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['repuve'] = !status;
-            this.documentosUnidadForm.patchValue({
-              repuve: doc.strArchivo
-            });
-            break;
-          case 'polizaSeguro':
-            this.esPolizaVis = true;
-            this.documentCheckedStatus['poliza'] = status;
-            this.pdfUrls['poliza'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['poliza'] = !status;
-            this.documentosUnidadForm.patchValue({
-              poliza: doc.strArchivo
-            });
-            break;
-          case 'ultimoPermiso':
-            this.esUltimoPermisoVis = true;
-            this.documentCheckedStatus['ultimoPermiso'] = status;
-            this.pdfUrls['ultimoPermiso'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['ultimoPermiso'] = !status;
-            this.documentosUnidadForm.patchValue({
-              ultimoPermiso: doc.strArchivo
-            });
-            break;
-          case 'refrendoVigenteAnual':
-            this.esUltimoPagoRefVis = true;
-            this.documentCheckedStatus['ultimoPagoRef'] = status;
-            this.pdfUrls['ultimoPagoRef'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['ultimoPagoRef'] = !status;
-            this.documentosUnidadForm.patchValue({
-              ultimoPagoRef: doc.strArchivo
-            });
-            break;
-          case 'ine':
-            this.esIneVis = true;
-            this.documentCheckedStatus['ine'] = status;
-            this.pdfUrls['ine'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['ine'] = !status;
-            this.documentosUnidadForm.patchValue({
-              ine: doc.strArchivo
-            });
-            break;
-          case 'dictamenGas':
-            this.esDictamenGasVis = true;
-            this.documentCheckedStatus['dictamenGas'] = status;
-            this.pdfUrls['dictamenGas'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['dictamenGas'] = !status;
-            this.documentosUnidadForm.patchValue({
-              dictamenGas: doc.strArchivo
-            });
-            break;
-          case 'ultimoPagoTenencia':
-            this.esUltimoPagoTenVis = true;
-            this.documentCheckedStatus['ultimoPagoTen'] = status;
-            this.pdfUrls['ultimoPagoTen'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['ultimoPagoTen'] = !status;
-            this.documentosUnidadForm.patchValue({
-              ultimoPagoTen: doc.strArchivo
-            });
-            break;
-          case 'constanciaFiscal':
-            this.esConstFiscalVis = true;
-            this.documentCheckedStatus['constFiscal'] = status;
-            this.pdfUrls['constFiscal'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-            this.documentValidatedStatus['constFiscal'] = !status;
-            this.documentosUnidadForm.patchValue({
-              constFiscal: doc.strArchivo
-            });
-            break;
-          case 'antecedentesPenales':
-            if (this.esPersonaFisica) {
-              this.esAntNoPenalesVis = true;
-              this.documentCheckedStatus['antNoPenales'] = status;
-              this.pdfUrls['antNoPenales'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-              this.documentValidatedStatus['antNoPenales'] = !status;
-              this.documentosUnidadForm.patchValue({
-                antNoPenales: doc.strArchivo
-              });
-            }
-            break;
-          case 'actaConstitutiva':
-            if (this.esPersonaMoral) {
-              this.esActaConstVis = true;
-              this.documentCheckedStatus['actaConst'] = status;
-              this.pdfUrls['actaConst'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-              this.documentValidatedStatus['actaConst'] = !status;
-              this.documentosUnidadForm.patchValue({
-                actaConst: doc.strArchivo
-              });
-            }
-            break;
-          case 'facturaUno':
-            if (this.esPersonaMoral) {
-              this.documentCheckedStatus['facturaUno'] = status;
-              this.pdfUrls['facturaUno'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-              this.documentValidatedStatus['facturaUno'] = !status;
-              this.documentosUnidadForm.patchValue({
-                facturaUno: doc.strArchivo
-              });
-            }
-            break;
-          case 'facturaDos':
-            if (this.esPersonaMoral) {
-              this.documentCheckedStatus['facturaDos'] = status;
-              this.pdfUrls['facturaDos'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-              this.documentValidatedStatus['facturaDos'] = !status;
-              this.documentosUnidadForm.patchValue({
-                facturaDos: doc.strArchivo
-              });
-            }
-            break;
-          case 'facturaTres':
-            if (this.esPersonaMoral) {
-              this.documentCheckedStatus['facturaTres'] = status;
-              this.pdfUrls['facturaTres'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-              this.documentValidatedStatus['facturaTres'] = !status;
-              this.documentosUnidadForm.patchValue({
-                facturaTres: doc.strArchivo
-              });
-            }
-            break;
-          case 'facturaCuatro':
-            if (this.esPersonaMoral) {
-              this.documentCheckedStatus['facturaCuatro'] = status;
-              this.pdfUrls['facturaCuatro'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo);
-              this.documentValidatedStatus['facturaCuatro'] = !status;
-              this.documentosUnidadForm.patchValue({
-                facturaCuatro: doc.strArchivo
-              });
-            }
-            break;
-          default:
-            break;
-        }
-      });
+    this.listaDocumentos = documentos;
+    this.listaDocumentos.forEach((doc) => {
+      const status = doc.strAceptado === 'A';
+      switch (doc.strNombreDocumento) {
+        case 'SOLICITUD DIRIGIDA AL TITULAR DE LA SMyT':
+          if (!this.arregloDocumentosVisibles.includes('solicitudTitular')) {
+            this.arregloDocumentosVisibles.push('solicitudTitular');
+          }
+          this.documentCheckedStatus['solicitudTitular'] = status;
+          doc.strArchivo != null ? this.pdfUrls['solicitudTitular'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['solicitudTitular'] = !status;
+          this.documentosUnidadForm.patchValue({ solicitudTitular: doc.strArchivo });
+          break;
+        case 'FACTURA ENDOSADA A FAVOR DEL CONCESIONARIO(A) O EMPRESA':
+          if (!this.arregloDocumentosVisibles.includes('facturaEndosada')) {
+            this.arregloDocumentosVisibles.push('facturaEndosada');
+          }
+          this.documentCheckedStatus['facturaEndosada'] = status;
+          doc.strArchivo != null ? this.pdfUrls['facturaEndosada'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['facturaEndosada'] = !status;
+          this.documentosUnidadForm.patchValue({ facturaEndosada: doc.strArchivo });
+          break;
+        case 'CONTRATO DE COMPRA VENTA':
+          if (!this.arregloDocumentosVisibles.includes('compraVenta')) {
+            this.arregloDocumentosVisibles.push('compraVenta');
+          }
+          this.documentCheckedStatus['compraVenta'] = status;
+          doc.strArchivo != null ? this.pdfUrls['compraVenta'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['compraVenta'] = !status;
+          this.documentosUnidadForm.patchValue({ compraVenta: doc.strArchivo  });
+          break;
+        case 'INE DEL VENDEDOR':
+          if (!this.arregloDocumentosVisibles.includes('ineVendedor')) {
+            this.arregloDocumentosVisibles.push('ineVendedor');
+          }
+          this.documentCheckedStatus['ineVendedor'] = status;
+          doc.strArchivo != null ? this.pdfUrls['ineVendedor'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['ineVendedor'] = !status;
+          this.documentosUnidadForm.patchValue({ ineVendedor: doc.strArchivo });
+          break;
+        case 'INE COMPRADOR':
+          if (!this.arregloDocumentosVisibles.includes('ineComprador')) {
+            this.arregloDocumentosVisibles.push('ineComprador');
+          }
+          this.documentCheckedStatus['ineComprador'] = status;
+          doc.strArchivo != null ? this.pdfUrls['ineComprador'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['ineComprador'] = !status;
+          this.documentosUnidadForm.patchValue({ ineComprador: doc.strArchivo });
+          break;
+        case 'INE TESTIGO':
+          if (!this.arregloDocumentosVisibles.includes('ineTestigo')) {
+            this.arregloDocumentosVisibles.push('ineTestigo');
+          }
+          this.documentCheckedStatus['ineTestigo'] = status;
+          doc.strArchivo != null ? this.pdfUrls['ineTestigo'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['ineTestigo'] = !status;
+          this.documentosUnidadForm.patchValue({ ineTestigo: doc.strArchivo });
+          break;
+        case 'ORIGINAL DE LA BAJA DE LA UNIDAD QUE ENTRA':
+          if (!this.arregloDocumentosVisibles.includes('oriBajaUnidad')) {
+            this.arregloDocumentosVisibles.push('oriBajaUnidad');
+          }
+          this.documentCheckedStatus['oriBajaUnidad'] = status;
+          doc.strArchivo != null ? this.pdfUrls['oriBajaUnidad'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['oriBajaUnidad'] = !status;
+          this.documentosUnidadForm.patchValue({  oriBajaUnidad: doc.strArchivo });
+          break;
+        case 'VALIDACIÓN DE TENENCIAS EN LA DIRECCIÓN DE INGRESOS Y FISCALIZACIÓN':
+          if (!this.arregloDocumentosVisibles.includes('validacionTenencia')) {
+            this.arregloDocumentosVisibles.push('validacionTenencia');
+          } 
+          this.documentCheckedStatus['validacionTenencia'] = status;
+          doc.strArchivo != null ? this.pdfUrls['validacionTenencia'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['validacionTenencia'] = !status;
+          this.documentosUnidadForm.patchValue({ validacionTenencia: doc.strArchivo });
+          break;
+        case 'RECIBO DEL ÚLTIMO PAGO DE REFRENDO':
+          if (!this.arregloDocumentosVisibles.includes('ultimoPagoRefrendo')) {
+            this.arregloDocumentosVisibles.push('ultimoPagoRefrendo');
+          } 
+          this.documentCheckedStatus['ultimoPagoRefrendo'] = status;
+          doc.strArchivo != null ? this.pdfUrls['ultimoPagoRefrendo'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['ultimoPagoRefrendo'] = !status;
+          this.documentosUnidadForm.patchValue({  ultimoPagoRefrendo: doc.strArchivo });
+          break;
+        case 'PÓLIZA SEGURO DEL VIAJERO VIGENCIA MÍNIMA DE 1 MES':
+          if (!this.arregloDocumentosVisibles.includes('polizaViajero')) {
+            this.arregloDocumentosVisibles.push('polizaViajero');
+          } 
+          this.documentCheckedStatus['polizaViajero'] = status;
+          doc.strArchivo != null ? this.pdfUrls['polizaViajero'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['polizaViajero'] = !status;
+          this.documentosUnidadForm.patchValue({ polizaViajero: doc.strArchivo });
+          break;
+        case 'REPUVE':
+          if (!this.arregloDocumentosVisibles.includes('repuve')) {
+            this.arregloDocumentosVisibles.push('repuve');
+          } 
+          this.documentCheckedStatus['repuve'] = status;
+          doc.strArchivo != null ? this.pdfUrls['repuve'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['repuve'] = !status;
+          this.documentosUnidadForm.patchValue({  repuve: doc.strArchivo });
+          break;
+        case 'COMPROBANTE DE DOMICILIO (MÁXIMO CON UNA ANTIGÜEDAD NO MAYOR DE TRES MESES) DE LUZ':
+          if (!this.arregloDocumentosVisibles.includes('comprobanteDom')) {
+            this.arregloDocumentosVisibles.push('comprobanteDom');
+          } 
+          this.documentCheckedStatus['comprobanteDom'] = status;
+          doc.strArchivo != null ? this.pdfUrls['comprobanteDom'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['comprobanteDom'] = !status;
+          this.documentosUnidadForm.patchValue({ comprobanteDom: doc.strArchivo });
+          break;
+        case 'CURP':
+          if (!this.arregloDocumentosVisibles.includes('curp')) {
+            this.arregloDocumentosVisibles.push('curp');
+          } 
+          this.esSolicitudTitularVis = true;
+          this.documentCheckedStatus['curp'] = status;
+          doc.strArchivo != null ? this.pdfUrls['curp'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['curp'] = !status;
+          this.documentosUnidadForm.patchValue({ curp: doc.strArchivo });
+          break;
+        case 'CONVENIO ACTUALIZADO CON LA EMPRESA A LA QUE PRESTA EL SERVICIO':
+          if (!this.arregloDocumentosVisibles.includes('convenioEmpresa')) {
+            this.arregloDocumentosVisibles.push('convenioEmpresa');
+          } 
+          this.documentCheckedStatus['convenioEmpresa'] = status;
+          doc.strArchivo != null ? this.pdfUrls['convenioEmpresa'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['convenioEmpresa'] = !status;
+          this.documentosUnidadForm.patchValue({ convenioEmpresa: doc.strArchivo });
+          break;
+        case 'CONSTANCIA DE SITUACIÓN FISCAL QUE INDIQUE ESTA OBLIGACIÓN':
+          if (!this.arregloDocumentosVisibles.includes('constanciaFis')) {
+            this.arregloDocumentosVisibles.push('constanciaFis');
+          } 
+          this.documentCheckedStatus['constanciaFis'] = status;
+          doc.strArchivo != null ? this.pdfUrls['constanciaFis'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['constanciaFis'] = !status;
+          this.documentosUnidadForm.patchValue({ constanciaFis: doc.strArchivo });
+          break;
+        case 'CARTA DE ANTECEDENTES NO PENALES CON VIGENCIA NO MAYOR A 3 MESES':
+          if (!this.arregloDocumentosVisibles.includes('antPenales')) {
+            this.arregloDocumentosVisibles.push('antPenales');
+          } 
+          this.documentCheckedStatus['antPenales'] = status;
+          doc.strArchivo != null ? this.pdfUrls['antPenales'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['antPenales'] = !status;
+          this.documentosUnidadForm.patchValue({ antPenales: doc.strArchivo  });
+          break;
+        case 'IDENTIFICACIÓN OFICIAL DEL REPRESENTANTE LEGAL DE LA EMPRESA CON PODER NOTARIAL':
+          if (!this.arregloDocumentosVisibles.includes('idRepLegal')) {
+            this.arregloDocumentosVisibles.push('idRepLegal');
+          } 
+          this.documentCheckedStatus['idRepLegal'] = status;
+          doc.strArchivo != null ? this.pdfUrls['idRepLegal'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['idRepLegal'] = !status;
+          this.documentosUnidadForm.patchValue({ idRepLegal: doc.strArchivo  });
+          break;
+        case 'CONSTANCIA DE SITUACIÓN FISCAL':
+          if (!this.arregloDocumentosVisibles.includes('constanciaFiscalVN')) {
+            this.arregloDocumentosVisibles.push('constanciaFiscalVN');
+          } 
+          this.documentCheckedStatus['constanciaFiscalVN'] = status;
+          doc.strArchivo != null ? this.pdfUrls['constanciaFiscalVN'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['constanciaFiscalVN'] = !status;
+          this.documentosUnidadForm.patchValue({ constanciaFiscalVN: doc.strArchivo });
+          break;
+        case 'ACTA CONSTITUTIVA':
+          if (!this.arregloDocumentosVisibles.includes('actaConstitutiva')) {
+            this.arregloDocumentosVisibles.push('actaConstitutiva');
+          } 
+          this.documentCheckedStatus['actaConstitutiva'] = status;
+          doc.strArchivo != null ? this.pdfUrls['actaConstitutiva'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['actaConstitutiva'] = !status;
+          this.documentosUnidadForm.patchValue({ actaConstitutiva: doc.strArchivo });
+          break;
+        case 'IDENTIFICACIÓN OFICIAL CON FOTOGRAFÍA VIGENTE':
+          if (!this.arregloDocumentosVisibles.includes('identificacionFisica')) {
+            this.arregloDocumentosVisibles.push('identificacionFisica');
+          } 
+          this.documentCheckedStatus['identificacionFisica'] = status;
+          doc.strArchivo != null ? this.pdfUrls['identificacionFisica'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['identificacionFisica'] = !status;
+          this.documentosUnidadForm.patchValue({ identificacionFisica: doc.strArchivo });
+          break;
+        case 'IDENTIFICACION OFICIAL CON FOTOGRAFIA VIGENTE DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO':
+          if (!this.arregloDocumentosVisibles.includes('idPersonaAut')) {
+            this.arregloDocumentosVisibles.push('idPersonaAut');
+          } 
+          this.documentCheckedStatus['idPersonaAut'] = status;
+          doc.strArchivo != null ? this.pdfUrls['idPersonaAut'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['idPersonaAut'] = !status;
+          this.documentosUnidadForm.patchValue({ idPersonaAut: doc.strArchivo });
+          break;
+        case 'COMPROBANTE DE DOMICILIO DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO':
+          if (!this.arregloDocumentosVisibles.includes('domicilioPersonaAut')) {
+            this.arregloDocumentosVisibles.push('domicilioPersonaAut');
+          } 
+          this.documentCheckedStatus['domicilioPersonaAut'] = status;
+          doc.strArchivo != null ? this.pdfUrls['domicilioPersonaAut'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['domicilioPersonaAut'] = !status;
+          this.documentosUnidadForm.patchValue({ domicilioPersonaAut: doc.strArchivo });
+          break;
+        case 'CARTA FACTURA ORIGINAL':
+          if (!this.arregloDocumentosVisibles.includes('facturaOriginal')) {
+            this.arregloDocumentosVisibles.push('facturaOriginal');
+          } 
+          this.documentCheckedStatus['facturaOriginal'] = status;
+          doc.strArchivo != null ? this.pdfUrls['facturaOriginal'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['facturaOriginal'] = !status;
+          this.documentosUnidadForm.patchValue({ facturaOriginal: doc.strArchivo });
+          break;
+        case 'FACTURA SIN VALOR A FAVOR DEL CONCESIONARIO(A) O EMPRESA':
+          if (!this.arregloDocumentosVisibles.includes('facturaSinValor')) {
+            this.arregloDocumentosVisibles.push('facturaSinValor');
+          } 
+          this.documentCheckedStatus['facturaSinValor'] = status;
+          doc.strArchivo != null ? this.pdfUrls['facturaSinValor'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['facturaSinValor'] = !status;
+          this.documentosUnidadForm.patchValue({ facturaSinValor: doc.strArchivo });
+          break;
+        case 'IDENTIFICACION OFICIAL CON FOTOGRAFIA VIGENTE DEL REPRESENTANTE LEGAL':
+          if (!this.arregloDocumentosVisibles.includes('idRepLegal')) {
+            this.arregloDocumentosVisibles.push('idRepLegal');
+          } 
+          this.documentCheckedStatus['idRepLegal'] = status;
+          doc.strArchivo != null ? this.pdfUrls['idRepLegal'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['idRepLegal'] = !status;
+          this.documentosUnidadForm.patchValue({  idRepLegal: doc.strArchivo });
+          break;
+          case 'CONSTANCIA DE SITUACION FISCAL':
+          if (!this.arregloDocumentosVisibles.includes('constanciaFiscalVN')) {
+            this.arregloDocumentosVisibles.push('constanciaFiscalVN');
+          } 
+          this.documentCheckedStatus['constanciaFiscalVN'] = status;
+          doc.strArchivo != null ? this.pdfUrls['constanciaFiscalVN'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['constanciaFiscalVN'] = !status;
+          this.documentosUnidadForm.patchValue({ constanciaFiscalVN: doc.strArchivo });
+          break;
+        default:
+          break;
+      }
     });
   }
 
@@ -985,7 +1106,6 @@ export class AltaTransporteEspecializado {
       next: (value: any) => {
         this.cargarSpinner = false;
         this.listaLocalidades = value.data;
-        //console.log(this.listaLocalidades);
       },
       error: (err: HttpErrorResponse) => {
         this.errorGenerico(err);
@@ -1011,14 +1131,14 @@ export class AltaTransporteEspecializado {
   registraInformacion() {
     let json = {};
     if (this.esModificacion) {
-      //this.obtenDocumentosParaModificar();
+      this.obtenDocumentosParaModificar();
       json = {
-        intIdTramite: this.idTramite
+        intIdTramite: this.idTramite,
+        documentacionVo: this.listaDocumentos
       };
     } else {
       this.obtenDocumentosParaEnviar();
       this.obtenTipoVehiculo();
-      //console.log(this.listaDocumentos)
       const fecha = new Date(this.datosFacturaForm.get('dtFechaFact')?.value);
       const fechaformato = fecha.toISOString().split('T')[0];
       json = {
@@ -1160,7 +1280,6 @@ export class AltaTransporteEspecializado {
   }
 
   obtenDocumentosParaEnviar() {
-    console.log(this.listaDocumentosOriginal);
     this.listaDocumentos = JSON.parse(JSON.stringify(this.listaDocumentosOriginal));
     if (this.listaDocumentos) {
       this.listaDocumentos.forEach((documento) => {
@@ -1216,8 +1335,97 @@ export class AltaTransporteEspecializado {
           case 'IDENTIFICACIÓN OFICIAL DEL REPRESENTANTE LEGAL DE LA EMPRESA CON PODER NOTARIAL':
             documento.strArchivo = this.formDocumentos['idRepLegal'].value
             break;
+          case 'ACTA CONSTITUTIVA':
+            documento.strArchivo = this.formDocumentos['actaConstitutiva'].value
+            break;
+          case 'IDENTIFICACIÓN OFICIAL CON FOTOGRAFÍA VIGENTE':
+            documento.strArchivo = this.formDocumentos['identificacionFisica'].value
+            break;
+          case 'IDENTIFICACION OFICIAL CON FOTOGRAFIA VIGENTE DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO':
+            documento.strArchivo = this.formDocumentos['idPersonaAut'].value
+            break;
+          case 'COMPROBANTE DE DOMICILIO DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO':
+            documento.strArchivo = this.formDocumentos['domicilioPersonaAut'].value
+            break;
+          case 'CARTA FACTURA ORIGINAL':
+            documento.strArchivo = this.formDocumentos['facturaOriginal'].value
+            break;
+          case 'FACTURA SIN VALOR A FAVOR DEL CONCESIONARIO(A) O EMPRESA':
+            documento.strArchivo = this.formDocumentos['facturaSinValor'].value
+            break;
+          case 'IDENTIFICACION OFICIAL CON FOTOGRAFIA VIGENTE DEL REPRESENTANTE LEGAL':
+            documento.strArchivo = this.formDocumentos['idRepLegal'].value
+            break;
+          case 'CONSTANCIA DE SITUACION FISCAL':
+            documento.strArchivo = this.formDocumentos['constanciaFiscalVN'].value
+            break;
+          case 'IDENTIFICACIÓN OFICIAL CON FOTOGRAFIA VIGENTE':
+            documento.strArchivo = this.formDocumentos['identificacionFisica'].value
+            break;
+          default:
+            break;
+        }
+      });
+      this.listaDocumentos = this.listaDocumentos.filter(item => item.strArchivo !== null);
+    }
+  }
+
+  obtenDocumentosParaModificar(){
+    if (this.listaDocumentos) {
+      let listaDocumentosNecesarios = this.listaDocumentos.filter(item => item.strAceptado !== 'A');
+      listaDocumentosNecesarios = listaDocumentosNecesarios.map(({ strAceptado, ...resto }) => resto);
+      listaDocumentosNecesarios.forEach((documento) => {
+        switch (documento.strNombreDocumento) {
+          case 'SOLICITUD DIRIGIDA AL TITULAR DE LA SMyT':
+            documento.strArchivo = this.formDocumentos['solicitudTitular'].value
+            break;
+          case 'FACTURA ENDOSADA A FAVOR DEL CONCESIONARIO(A) O EMPRESA':
+            documento.strArchivo = this.formDocumentos['facturaEndosada'].value
+            break;
+          case 'CONTRATO DE COMPRA VENTA':
+            documento.strArchivo = this.formDocumentos['compraVenta'].value
+            break;
+          case 'INE DEL VENDEDOR':
+            documento.strArchivo = this.formDocumentos['ineVendedor'].value
+            break;
+          case 'INE COMPRADOR':
+            documento.strArchivo = this.formDocumentos['ineComprador'].value
+            break;
+          case 'INE TESTIGO':
+            documento.strArchivo = this.formDocumentos['ineTestigo'].value
+            break;
+          case 'ORIGINAL DE LA BAJA DE LA UNIDAD QUE ENTRA':
+            documento.strArchivo = this.formDocumentos['oriBajaUnidad'].value
+            break;
+          case 'VALIDACIÓN DE TENENCIAS EN LA DIRECCIÓN DE INGRESOS Y FISCALIZACIÓN':
+            documento.strArchivo = this.formDocumentos['validacionTenencia'].value
+            break;
+          case 'RECIBO DEL ÚLTIMO PAGO DE REFRENDO':
+            documento.strArchivo = this.formDocumentos['ultimoPagoRefrendo'].value
+            break;
+          case 'PÓLIZA SEGURO DEL VIAJERO VIGENCIA MÍNIMA DE 1 MES':
+            documento.strArchivo = this.formDocumentos['polizaViajero'].value
+            break;
+          case 'REPUVE':
+            documento.strArchivo = this.formDocumentos['repuve'].value
+            break;
+          case 'COMPROBANTE DE DOMICILIO (MÁXIMO CON UNA ANTIGÜEDAD NO MAYOR DE TRES MESES) DE LUZ':
+            documento.strArchivo = this.formDocumentos['comprobanteDom'].value
+            break;
+          case 'CURP':
+            documento.strArchivo = this.formDocumentos['curp'].value
+            break;
+          case 'CONVENIO ACTUALIZADO CON LA EMPRESA A LA QUE PRESTA EL SERVICIO':
+            documento.strArchivo = this.formDocumentos['convenioEmpresa'].value
+            break;
           case 'CONSTANCIA DE SITUACIÓN FISCAL QUE INDIQUE ESTA OBLIGACIÓN':
-            documento.strArchivo = this.formDocumentos['constanciaFisMoral'].value
+            documento.strArchivo = this.formDocumentos['constanciaFis'].value
+            break;
+          case 'CARTA DE ANTECEDENTES NO PENALES CON VIGENCIA NO MAYOR A 3 MESES':
+            documento.strArchivo = this.formDocumentos['antPenales'].value
+            break;
+          case 'IDENTIFICACIÓN OFICIAL DEL REPRESENTANTE LEGAL DE LA EMPRESA CON PODER NOTARIAL':
+            documento.strArchivo = this.formDocumentos['idRepLegal'].value
             break;
           case 'ACTA CONSTITUTIVA':
             documento.strArchivo = this.formDocumentos['actaConstitutiva'].value
@@ -1243,9 +1451,6 @@ export class AltaTransporteEspecializado {
           case 'CONSTANCIA DE SITUACION FISCAL':
             documento.strArchivo = this.formDocumentos['constanciaFiscalVN'].value
             break;
-          case 'ACTA CONSTITUTIVA':
-            documento.strArchivo = this.formDocumentos['actaConstitutiva'].value
-            break;
           case 'IDENTIFICACIÓN OFICIAL CON FOTOGRAFIA VIGENTE':
             documento.strArchivo = this.formDocumentos['identificacionFisica'].value
             break;
@@ -1253,7 +1458,7 @@ export class AltaTransporteEspecializado {
             break;
         }
       });
-      this.listaDocumentos = this.listaDocumentos.filter(item => item.strArchivo !== null);
+      this.listaDocumentos = listaDocumentosNecesarios;
     }
   }
 

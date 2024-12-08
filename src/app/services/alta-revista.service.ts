@@ -88,7 +88,7 @@ export class AltaRevistaService {
   }
 
   corregirTramite(body: any) {
-    return this.http.post(`${this.apiUrl}/documentos/actualizarDocumento`, body);
+    return this.http.post(`${this.apiUrl}/tramites/actualizarDocumentos`, body);
   }
 
   obtenerDireccion(codigoPostal: string){
@@ -103,5 +103,10 @@ export class AltaRevistaService {
 
   validarVidaUtil(json: {}){
     return this.http.post(`${this.apiUrl}/tramites/validarVidaUtil`, json);
+  }
+
+  obtenerTramiteEditar(idTramite: string){
+    let params = new HttpParams().set('intIdTramite', idTramite);
+    return this.http.get<RespuestaGenerica>(`${this.apiUrl}/tramites/obtenerTramiteFolio`, { params });
   }
 }
