@@ -16,6 +16,7 @@ import { CurpDirective } from '../core/directives/curp.directive';
 import { NumericDirective } from '../core/directives/numeric.directive';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatNativeDateModule} from '@angular/material/core';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { MatNativeDateModule} from '@angular/material/core';
     MatTooltipModule,
     MatRippleModule,
     MatAutocompleteModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    CurrencyMaskModule
   ],
   exports: [
     MatIconModule,
@@ -52,7 +54,8 @@ import { MatNativeDateModule} from '@angular/material/core';
     UppercaseDirective,
     CurpDirective,
     NumericDirective,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    CurrencyMaskModule
   ]
 })
 export class SharedModule { }

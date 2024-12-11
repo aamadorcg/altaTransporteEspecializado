@@ -415,30 +415,30 @@
                   </div>
                 </div>
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-4">
-                  <label for="strApPaterno" class="form-label">APELLIDO PATERNO <b
-                      class="asteriscos">*</b></label><input appAlphanumeric formControlName="strApPaterno" type="text"
-                    minlength="4" id="strApPaterno" name="strApPaterno" autocomplete="off" class="form-control"
+                  <label for="strApellidoPaterno" class="form-label">APELLIDO PATERNO <b
+                      class="asteriscos">*</b></label><input appAlphanumeric formControlName="strApellidoPaterno" type="text"
+                    minlength="4" id="strApellidoPaterno" name="strApellidoPaterno" autocomplete="off" class="form-control"
                     placeholder="Escribe tu apellido paterno" [ngClass]="{
-                      'is-invalid': datosPermisionarioForm.get('strApPaterno')?.invalid && (datosPermisionarioForm.get('strApPaterno')?.touched || datosPermisionarioForm.get('strApPaterno')?.dirty), 
-                      'is-valid': datosPermisionarioForm.get('strApPaterno')?.valid && (datosPermisionarioForm.get('strApPaterno')?.touched || datosPermisionarioForm.get('strApPaterno')?.dirty),
+                      'is-invalid': datosPermisionarioForm.get('strApellidoPaterno')?.invalid && (datosPermisionarioForm.get('strApellidoPaterno')?.touched || datosPermisionarioForm.get('strApellidoPaterno')?.dirty), 
+                      'is-valid': datosPermisionarioForm.get('strApellidoPaterno')?.valid && (datosPermisionarioForm.get('strApellidoPaterno')?.touched || datosPermisionarioForm.get('strApellidoPaterno')?.dirty),
                        }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosPermisionarioForm.get('strApPaterno')?.invalid && (datosPermisionarioForm.get('strApPaterno')?.touched || datosPermisionarioForm.get('strApPaterno')?.dirty)">
-                    <ng-container *ngIf="datosPermisionarioForm.get('strApPaterno')?.hasError('required')"> Campo
+                    *ngIf="datosPermisionarioForm.get('strApellidoPaterno')?.invalid && (datosPermisionarioForm.get('strApellidoPaterno')?.touched || datosPermisionarioForm.get('strApellidoPaterno')?.dirty)">
+                    <ng-container *ngIf="datosPermisionarioForm.get('strApellidoPaterno')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
                 <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-4">
-                  <label for="strApMaterno" class="form-label">APELLIDO MATERNO <b
-                      class="asteriscos">*</b></label><input appAlphanumeric formControlName="strApMaterno" type="text"
-                    minlength="4" id="strApMaterno" name="strApMaterno" autocomplete="off" class="form-control"
+                  <label for="strApellidoMaterno" class="form-label">APELLIDO MATERNO <b
+                      class="asteriscos">*</b></label><input appAlphanumeric formControlName="strApellidoMaterno" type="text"
+                    minlength="4" id="strApellidoMaterno" name="strApellidoMaterno" autocomplete="off" class="form-control"
                     placeholder="Escribe tu apellido materno" [ngClass]="{
-                      'is-invalid': datosPermisionarioForm.get('strApMaterno')?.invalid && (datosPermisionarioForm.get('strApMaterno')?.touched || datosPermisionarioForm.get('strApMaterno')?.dirty), 
-                      'is-valid': datosPermisionarioForm.get('strApMaterno')?.valid && (datosPermisionarioForm.get('strApMaterno')?.touched || datosPermisionarioForm.get('strApMaterno')?.dirty),
+                      'is-invalid': datosPermisionarioForm.get('strApellidoMaterno')?.invalid && (datosPermisionarioForm.get('strApellidoMaterno')?.touched || datosPermisionarioForm.get('strApellidoMaterno')?.dirty), 
+                      'is-valid': datosPermisionarioForm.get('strApellidoMaterno')?.valid && (datosPermisionarioForm.get('strApellidoMaterno')?.touched || datosPermisionarioForm.get('strApellidoMaterno')?.dirty),
                        }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosPermisionarioForm.get('strApMaterno')?.invalid && (datosPermisionarioForm.get('strApMaterno')?.touched || datosPermisionarioForm.get(' strApMaterno')?.dirty)">
-                    <ng-container *ngIf="datosPermisionarioForm.get('strApMaterno')?.hasError('required')"> Campo
+                    *ngIf="datosPermisionarioForm.get('strApellidoMaterno')?.invalid && (datosPermisionarioForm.get('strApellidoMaterno')?.touched || datosPermisionarioForm.get(' strApellidoMaterno')?.dirty)">
+                    <ng-container *ngIf="datosPermisionarioForm.get('strApellidoMaterno')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
@@ -469,42 +469,42 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-8">
-                  <label for="strCalleProp" class="form-label">CALLE <b class="asteriscos">*</b></label><input
-                    appAlphanumeric formControlName="strCalleProp" type="text" minlength="4" id="strCalleProp"
-                    name="strCalleProp" autocomplete="off" class="form-control"
+                  <label for="strCalle" class="form-label">CALLE <b class="asteriscos">*</b></label><input
+                    appAlphanumeric formControlName="strCalle" type="text" minlength="4" id="strCalle"
+                    name="strCalle" autocomplete="off" class="form-control"
                     placeholder="Escribe la calle de tu domicilio" [ngClass]="{
-                      'is-invalid': datosPermisionarioForm.get('strCalleProp')?.invalid && (datosPermisionarioForm.get('strCalleProp')?.touched || datosPermisionarioForm.get('strCalleProp')?.dirty), 
-                      'is-valid': datosPermisionarioForm.get('strCalleProp')?.valid && (datosPermisionarioForm.get('strCalleProp')?.touched || datosPermisionarioForm.get('strCalleProp')?.dirty),
+                      'is-invalid': datosPermisionarioForm.get('strCalle')?.invalid && (datosPermisionarioForm.get('strCalle')?.touched || datosPermisionarioForm.get('strCalle')?.dirty), 
+                      'is-valid': datosPermisionarioForm.get('strCalle')?.valid && (datosPermisionarioForm.get('strCalle')?.touched || datosPermisionarioForm.get('strCalle')?.dirty),
                        }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosPermisionarioForm.get('strCalleProp')?.invalid && (datosPermisionarioForm.get('strCalleProp')?.touched || datosPermisionarioForm.get('strCalleProp')?.dirty)">
-                    <ng-container *ngIf="datosPermisionarioForm.get('strCalleProp')?.hasError('required')"> Campo
+                    *ngIf="datosPermisionarioForm.get('strCalle')?.invalid && (datosPermisionarioForm.get('strCalle')?.touched || datosPermisionarioForm.get('strCalle')?.dirty)">
+                    <ng-container *ngIf="datosPermisionarioForm.get('strCalle')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-2">
-                  <label for="strNumExt" class="form-label">NÚMERO EXTERIOR <b class="asteriscos">*</b></label><input
-                    appAlphanumeric formControlName="strNumExt" type="text" id="strNumExt" name="strNumExt"
+                  <label for="strNumeroExterior" class="form-label">NÚMERO EXTERIOR <b class="asteriscos">*</b></label><input
+                    appAlphanumeric formControlName="strNumeroExterior" type="text" id="strNumeroExterior" name="strNumeroExterior"
                     autocomplete="off" class="form-control" placeholder="Escribe número exterior" [ngClass]="{
-                      'is-invalid': datosPermisionarioForm.get('strNumExt')?.invalid && (datosPermisionarioForm.get('strNumExt')?.touched || datosPermisionarioForm.get('strNumExt')?.dirty), 
-                      'is-valid': datosPermisionarioForm.get('strNumExt')?.valid && (datosPermisionarioForm.get('strNumExt')?.touched || datosPermisionarioForm.get('strNumExt')?.dirty),
+                      'is-invalid': datosPermisionarioForm.get('strNumeroExterior')?.invalid && (datosPermisionarioForm.get('strNumeroExterior')?.touched || datosPermisionarioForm.get('strNumeroExterior')?.dirty), 
+                      'is-valid': datosPermisionarioForm.get('strNumeroExterior')?.valid && (datosPermisionarioForm.get('strNumeroExterior')?.touched || datosPermisionarioForm.get('strNumeroExterior')?.dirty),
                        }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosPermisionarioForm.get('strNumExt')?.invalid && (datosPermisionarioForm.get('strNumExt')?.touched || datosPermisionarioForm.get('strNumExt')?.dirty)">
-                    <ng-container *ngIf="datosPermisionarioForm.get('strNumExt')?.hasError('required')"> Campo
+                    *ngIf="datosPermisionarioForm.get('strNumeroExterior')?.invalid && (datosPermisionarioForm.get('strNumeroExterior')?.touched || datosPermisionarioForm.get('strNumeroExterior')?.dirty)">
+                    <ng-container *ngIf="datosPermisionarioForm.get('strNumeroExterior')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-2">
-                  <label for="strNumInt" class="form-label">NÚMERO INTERIOR<b class="asteriscos">*</b> </label><input
-                    appAlphanumeric formControlName="strNumInt" type="text" id="strNumInt" name="strNumInt"
+                  <label for="strNumeroInterior" class="form-label">NÚMERO INTERIOR<b class="asteriscos">*</b> </label><input
+                    appAlphanumeric formControlName="strNumeroInterior" type="text" id="strNumeroInterior" name="strNumeroInterior"
                     autocomplete="off" class="form-control" placeholder="Escribe número interior" [ngClass]="{
-                      'is-invalid': datosPermisionarioForm.get('strNumInt')?.invalid && (datosPermisionarioForm.get('strNumInt')?.touched || datosPermisionarioForm.get('strNumInt')?.dirty), 
-                      'is-valid': datosPermisionarioForm.get('strNumInt')?.valid && (datosPermisionarioForm.get('strNumInt')?.touched || datosPermisionarioForm.get('strNumInt')?.dirty),
+                      'is-invalid': datosPermisionarioForm.get('strNumeroInterior')?.invalid && (datosPermisionarioForm.get('strNumeroInterior')?.touched || datosPermisionarioForm.get('strNumeroInterior')?.dirty), 
+                      'is-valid': datosPermisionarioForm.get('strNumeroInterior')?.valid && (datosPermisionarioForm.get('strNumeroInterior')?.touched || datosPermisionarioForm.get('strNumeroInterior')?.dirty),
                        }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosPermisionarioForm.get('strNumInt')?.invalid && (datosPermisionarioForm.get('strNumInt')?.touched || datosPermisionarioForm.get('strNumInt')?.dirty)">
-                    <ng-container *ngIf="datosPermisionarioForm.get('strNumInt')?.hasError('required')"> Campo
+                    *ngIf="datosPermisionarioForm.get('strNumeroInterior')?.invalid && (datosPermisionarioForm.get('strNumeroInterior')?.touched || datosPermisionarioForm.get('strNumeroInterior')?.dirty)">
+                    <ng-container *ngIf="datosPermisionarioForm.get('strNumeroInterior')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
@@ -555,15 +555,15 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strCP" class="form-label">CÓDIGO POSTAL <b class="asteriscos">*</b></label><input
-                    appNumeric formControlName="strCP" type="text" maxlength="5" minlength="5" id="strCP" name="strCP"
+                  <label for="strCodigoPostal" class="form-label">CÓDIGO POSTAL <b class="asteriscos">*</b></label><input
+                    appNumeric formControlName="strCodigoPostal" type="text" maxlength="5" minlength="5" id="strCodigoPostal" name="strCodigoPostal"
                     autocomplete="off" class="form-control" placeholder="Escribe tu código postal" [ngClass]="{
-                      'is-invalid': datosPermisionarioForm.get('strCP')?.invalid && (datosPermisionarioForm.get('strCP')?.touched || datosPermisionarioForm.get('strCP')?.dirty), 
-                      'is-valid': datosPermisionarioForm.get('strCP')?.valid && (datosPermisionarioForm.get('strCP')?.touched || datosPermisionarioForm.get('strCP')?.dirty),
+                      'is-invalid': datosPermisionarioForm.get('strCodigoPostal')?.invalid && (datosPermisionarioForm.get('strCodigoPostal')?.touched || datosPermisionarioForm.get('strCodigoPostal')?.dirty), 
+                      'is-valid': datosPermisionarioForm.get('strCodigoPostal')?.valid && (datosPermisionarioForm.get('strCodigoPostal')?.touched || datosPermisionarioForm.get('strCodigoPostal')?.dirty),
                        }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosPermisionarioForm.get('strCP')?.invalid && (datosPermisionarioForm.get('strCP')?.touched || datosPermisionarioForm.get('strCP')?.dirty)">
-                    <ng-container *ngIf="datosPermisionarioForm.get('strCP')?.hasError('required')"> Campo Obligatorio
+                    *ngIf="datosPermisionarioForm.get('strCodigoPostal')?.invalid && (datosPermisionarioForm.get('strCodigoPostal')?.touched || datosPermisionarioForm.get('strCodigoPostal')?.dirty)">
+                    <ng-container *ngIf="datosPermisionarioForm.get('strCodigoPostal')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
                   </div>
                 </div>
@@ -624,21 +624,21 @@
                 </div>
 
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strEmail" class="form-label">CORREO <b class="asteriscos">*</b></label>
+                  <label for="strCorreo" class="form-label">CORREO <b class="asteriscos">*</b></label>
                   <div class="input-container">
-                    <input type="email" formControlName="strEmail" id="strEmail" [ngClass]="{
-                          'is-invalid': datosPermisionarioForm.get('strEmail')?.invalid && (datosPermisionarioForm.get('strEmail')?.dirty || datosPermisionarioForm.get('strEmail')?.touched),
-                          'is-valid': datosPermisionarioForm.get('strEmail')?.valid 
-                          }" placeholder="Escribe tu correo electrónico" name="strEmail"
+                    <input type="email" formControlName="strCorreo" id="strCorreo" [ngClass]="{
+                          'is-invalid': datosPermisionarioForm.get('strCorreo')?.invalid && (datosPermisionarioForm.get('strCorreo')?.dirty || datosPermisionarioForm.get('strCorreo')?.touched),
+                          'is-valid': datosPermisionarioForm.get('strCorreo')?.valid 
+                          }" placeholder="Escribe tu correo electrónico" name="strCorreo"
                       matTooltip="Formato correo: nombre@ejemplo.com" matTooltipPosition="above" class="form-control" />
                     <i class="fa fa-check"></i>
                     <small
-                      *ngIf="datosPermisionarioForm.get('strEmail')?.hasError('required') && (datosPermisionarioForm.get('strEmail')?.dirty || datosPermisionarioForm.get('strEmail')?.touched)"
+                      *ngIf="datosPermisionarioForm.get('strCorreo')?.hasError('required') && (datosPermisionarioForm.get('strCorreo')?.dirty || datosPermisionarioForm.get('strCorreo')?.touched)"
                       class="text-danger error-message">
                       Campo Obligatorio
                     </small>
                     <small
-                      *ngIf="datosPermisionarioForm.get('strEmail')?.hasError('email') && (datosPermisionarioForm.get('strEmail')?.dirty || datosPermisionarioForm.get('strEmail')?.touched)"
+                      *ngIf="datosPermisionarioForm.get('strCorreo')?.hasError('email') && (datosPermisionarioForm.get('strCorreo')?.dirty || datosPermisionarioForm.get('strCorreo')?.touched)"
                       class="text-danger error-message">
                       Correo electrónico inválido
                     </small>
@@ -646,29 +646,29 @@
                 </div>
 
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strTelefonoContacto" class="form-label">TELÉFONO CONCESIONARIO <b
+                  <label for="strTelefonoConcesionario" class="form-label">TELÉFONO CONCESIONARIO <b
                       class="asteriscos">*</b></label>
                   <div class="input-container">
-                    <input appNumeric formControlName="strTelefonoContacto" name="strTelefonoContacto" type="text"
+                    <input appNumeric formControlName="strTelefonoConcesionario" name="strTelefonoConcesionario" type="text"
                       minlength="10" maxlength="10" matTooltip="Tu número de teléfono debe contener 10 números"
-                      matTooltipPosition="above" id="strTelefonoContacto" placeholder="Escribe teléfono concesionario"
+                      matTooltipPosition="above" id="strTelefonoConcesionario" placeholder="Escribe teléfono concesionario"
                       autocomplete="off" class="form-control" [ngClass]="{
-                        'is-invalid': datosPermisionarioForm.get('strTelefonoContacto')?.invalid && (datosPermisionarioForm.get('strTelefonoContacto')?.dirty || datosPermisionarioForm.get('strTelefonoContacto')?.touched),
-                        'is-valid': datosPermisionarioForm.get('strTelefonoContacto')?.valid 
+                        'is-invalid': datosPermisionarioForm.get('strTelefonoConcesionario')?.invalid && (datosPermisionarioForm.get('strTelefonoConcesionario')?.dirty || datosPermisionarioForm.get('strTelefonoConcesionario')?.touched),
+                        'is-valid': datosPermisionarioForm.get('strTelefonoConcesionario')?.valid 
                         }" />
                     <i class="fa fa-check"></i>
                     <small
-                      *ngIf="datosPermisionarioForm.get('strTelefonoContacto')?.hasError('required') && (datosPermisionarioForm.get('strTelefonoContacto')?.dirty || datosPermisionarioForm.get('strTelefonoContacto')?.touched)"
+                      *ngIf="datosPermisionarioForm.get('strTelefonoConcesionario')?.hasError('required') && (datosPermisionarioForm.get('strTelefonoConcesionario')?.dirty || datosPermisionarioForm.get('strTelefonoConcesionario')?.touched)"
                       class="text-danger error-message">
                       Campo Obligatorio
                     </small>
                     <small
-                      *ngIf="datosPermisionarioForm.get('strTelefonoContacto')?.hasError('minlength') && (datosPermisionarioForm.get('strTelefonoContacto')?.dirty || datosPermisionarioForm.get('strTelefonoContacto')?.touched)"
+                      *ngIf="datosPermisionarioForm.get('strTelefonoConcesionario')?.hasError('minlength') && (datosPermisionarioForm.get('strTelefonoConcesionario')?.dirty || datosPermisionarioForm.get('strTelefonoConcesionario')?.touched)"
                       class="text-danger error-message">
                       Debe tener 10 números
                     </small>
                     <small
-                      *ngIf="datosPermisionarioForm.get('strTelefonoContacto')?.hasError('maxlength') && (datosPermisionarioForm.get('strTelefonoContacto')?.dirty || datosPermisionarioForm.get('strTelefonoContacto')?.touched)"
+                      *ngIf="datosPermisionarioForm.get('strTelefonoConcesionario')?.hasError('maxlength') && (datosPermisionarioForm.get('strTelefonoConcesionario')?.dirty || datosPermisionarioForm.get('strTelefonoConcesionario')?.touched)"
                       class="text-danger error-message">
                       No puede tener más de 10 números
                     </small>
@@ -796,7 +796,8 @@
               <div class="col-12 col-md-12 col-lg-4">
                 <label for="strTipoVehiculo" class="form-label">TIPO VEHICULO <b class="asteriscos">*</b></label>
                 <select formControlName="strTipoVehiculo" id="strTipoVehiculo" name="strTipoVehiculo"
-                  (focus)="onSelectFocus('strTipoVehiculo')" (change)="onSelectChange($event, 'strTipoVehiculo')" [ngClass]="{
+                  (focus)="onSelectFocus('strTipoVehiculo')" (change)="onSelectChange($event, 'strTipoVehiculo')"
+                  [ngClass]="{
                     'is-invalid': documentosUnidadForm.get('strTipoVehiculo')?.invalid && documentosUnidadForm.get('strTipoVehiculo')?.touched,
                     'is-valid': documentosUnidadForm.get('strTipoVehiculo')?.valid && documentosUnidadForm.get('strTipoVehiculo')?.touched
                   }" class="form-select">
@@ -808,7 +809,7 @@
                 <div class="invalid-feedback">Campo obligatorio</div>
               </div>
               <div class="cards-container d-grid justify-content-center">
- <!----------------------VEHICULOS USADOS GENERAL------------------------------------------>
+                <!----------------------VEHICULOS USADOS GENERAL------------------------------------------>
                 <app-card-pdf [pdfUrl]="pdfUrls['solicitudTitular']"
                   [title]="'SOLICITUD DIRIGIDA AL TITULAR DE LA SMyT'" [controlName]="'solicitudTitular'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
@@ -829,7 +830,7 @@
                   [controlName]="'compraVenta'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
                   [documentChecked]="documentCheckedStatus['compraVenta']" [esModificado]="esModificacion"
                   [esPersonaFisica]="esPersonaFisica"
-                  *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('compraVenta')" >
+                  *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('compraVenta')">
                 </app-card-pdf>
 
                 <app-card-pdf [pdfUrl]="pdfUrls['ineVendedor']" [title]="'INE DEL VENDEDOR'"
@@ -864,14 +865,14 @@
                   [title]="'VALIDACIÓN DE TENENCIAS EN LA DIRECCIÓN DE INGRESOS Y FISCALIZACIÓN'"
                   [controlName]="'validacionTenencia'" [formGroup]="documentosUnidadForm"
                   [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['validacionTenencia']"
-                  [esModificado]="esModificacion" [esPersonaFisica]="esPersonaFisica" 
+                  [esModificado]="esModificacion" [esPersonaFisica]="esPersonaFisica"
                   *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('validacionTenencia')">
                 </app-card-pdf>
 
                 <app-card-pdf [pdfUrl]="pdfUrls['ultimoPagoRefrendo']" [title]="'RECIBO DEL ÚLTIMO PAGO DE REFRENDO'"
                   [controlName]="'ultimoPagoRefrendo'" [formGroup]="documentosUnidadForm"
                   [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['ultimoPagoRefrendo']"
-                  [esModificado]="esModificacion" [esPersonaFisica]="esPersonaFisica" 
+                  [esModificado]="esModificacion" [esPersonaFisica]="esPersonaFisica"
                   *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('ultimoPagoRefrendo')">
                 </app-card-pdf>
 
@@ -970,53 +971,56 @@
                 <!-- Se usa Solicitud SMyT de vehiculo usado-->
                 <!-- Se usa comprobante domicilio de vehiculo usado-->
                 <app-card-pdf [pdfUrl]="pdfUrls['constanciaFiscalVN']" [title]="'CONSTANCIA DE SITUACION FISCAL'"
-                [controlName]="'constanciaFiscalVN'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                [documentChecked]="documentCheckedStatus['constanciaFiscalVN']" [esModificado]="esModificacion" 
-                [esPersonaFisica]="esPersonaFisica"
-                *ngIf="esUnidadNueva || arregloDocumentosVisibles.includes('constanciaFiscalVN')">
-              </app-card-pdf>
+                  [controlName]="'constanciaFiscalVN'" [formGroup]="documentosUnidadForm"
+                  [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['constanciaFiscalVN']"
+                  [esModificado]="esModificacion" [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadNueva || arregloDocumentosVisibles.includes('constanciaFiscalVN')">
+                </app-card-pdf>
 
-              <app-card-pdf [pdfUrl]="pdfUrls['idPersonaAut']" [title]="'IDENTIFICACION OFICIAL CON FOTOGRAFIA VIGENTE DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO'"
-                [controlName]="'idPersonaAut'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                [documentChecked]="documentCheckedStatus['idPersonaAut']" [esModificado]="esModificacion" 
-                [esPersonaFisica]="esPersonaFisica"
-                *ngIf="esUnidadNueva || arregloDocumentosVisibles.includes('idPersonaAut')">
-              </app-card-pdf>
+                <app-card-pdf [pdfUrl]="pdfUrls['idPersonaAut']"
+                  [title]="'IDENTIFICACION OFICIAL CON FOTOGRAFIA VIGENTE DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO'"
+                  [controlName]="'idPersonaAut'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['idPersonaAut']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadNueva || arregloDocumentosVisibles.includes('idPersonaAut')">
+                </app-card-pdf>
 
-              <app-card-pdf [pdfUrl]="pdfUrls['domicilioPersonaAut']" [title]="'COMPROBANTE DE DOMICILIO DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO'"
-                [controlName]="'domicilioPersonaAut'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                [documentChecked]="documentCheckedStatus['domicilioPersonaAut']" [esModificado]="esModificacion" 
-                [esPersonaFisica]="esPersonaFisica"
-                *ngIf="esUnidadNueva || arregloDocumentosVisibles.includes('domicilioPersonaAut')">
-              </app-card-pdf>
-                  <!-- Faltan desglosar elementos de archivo txt-->
+                <app-card-pdf [pdfUrl]="pdfUrls['domicilioPersonaAut']"
+                  [title]="'COMPROBANTE DE DOMICILIO DE LA PERSONA QUE AUTORIZA USO DE DOMICILIO'"
+                  [controlName]="'domicilioPersonaAut'" [formGroup]="documentosUnidadForm"
+                  [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['domicilioPersonaAut']"
+                  [esModificado]="esModificacion" [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadNueva || arregloDocumentosVisibles.includes('domicilioPersonaAut')">
+                </app-card-pdf>
+                <!-- Faltan desglosar elementos de archivo txt-->
 
                 <!----------------------VEHICULOS NUEVO PAGANDO------------------------------------------>
 
                 <app-card-pdf [pdfUrl]="pdfUrls['facturaOriginal']" [title]="'CARTA FACTURA ORIGINAL'"
                   [controlName]="'facturaOriginal'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['facturaOriginal']" [esModificado]="esModificacion" 
+                  [documentChecked]="documentCheckedStatus['facturaOriginal']" [esModificado]="esModificacion"
                   [esPersonaFisica]="esPersonaFisica"
                   *ngIf="(esUnidadNueva && esNuevaPagando) || arregloDocumentosVisibles.includes('facturaOriginal')">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['facturaSinValor']" [title]="'FACTURA SIN VALOR A FAVOR DEL CONCESIONARIO(A) O EMPRESA'"
-                  [controlName]="'facturaSinValor'" [formGroup]="documentosUnidadForm"
-                  [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['facturaSinValor']"
-                  [esPersonaFisica]="esPersonaFisica"
-                  [esModificado]="esModificacion" *ngIf="(esUnidadNueva && esNuevaPagando) || arregloDocumentosVisibles.includes('facturaOriginal')">
+                <app-card-pdf [pdfUrl]="pdfUrls['facturaSinValor']"
+                  [title]="'FACTURA SIN VALOR A FAVOR DEL CONCESIONARIO(A) O EMPRESA'" [controlName]="'facturaSinValor'"
+                  [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['facturaSinValor']" [esPersonaFisica]="esPersonaFisica"
+                  [esModificado]="esModificacion"
+                  *ngIf="(esUnidadNueva && esNuevaPagando) || arregloDocumentosVisibles.includes('facturaOriginal')">
                 </app-card-pdf>
 
                 <!----------------------VEHICULOS NUEVO PAGADA------------------------------------------>
                 <!-- Se usa factura endosada  de vehiculo usado-->
                 <!-- Se usa antecedentes penales de vehiculo usado-->
 
-                 <!----------------------VEHICULOS NUEVO PERSONAS MORALES------------------------------------------>
-                 <!-- Se usa acta constitutiva  de vehiculo usado PM-->
-                 <!-- Se usa Identificacion Oficial  de vehiculo usado PM-->
+                <!----------------------VEHICULOS NUEVO PERSONAS MORALES------------------------------------------>
+                <!-- Se usa acta constitutiva  de vehiculo usado PM-->
+                <!-- Se usa Identificacion Oficial  de vehiculo usado PM-->
 
-                  <!----------------------VEHICULOS NUEVO PERSONAS FISICAS------------------------------------------>
-                   <!-- Se usa Identificacion Oficial  de vehiculo usado PF--> 
+                <!----------------------VEHICULOS NUEVO PERSONAS FISICAS------------------------------------------>
+                <!-- Se usa Identificacion Oficial  de vehiculo usado PF-->
               </div>
               <br><br>
               <div class="row g-3  mt-3">

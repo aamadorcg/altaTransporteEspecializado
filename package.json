@@ -1,5 +1,5 @@
 {
-  "name": "frontend_permiso-fuera-ruta",
+  "name": "frontend_revista-transporte-especializado",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -24,6 +24,7 @@
     "animate.css": "^4.1.1",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "ng2-currency-mask": "^13.0.3",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.12.1",
     "tslib": "^2.3.0",

@@ -59,21 +59,21 @@ export class AltaTransporteEspecializado {
     //Formulario Permisionario
     strRfc: `El campo <strong>RFC</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strCurp: `El campo <strong>CURP</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
-    strApPaterno: `El campo <strong>Apellido Paterno</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
-    strApMaterno: `El campo <strong>Apellido Materno</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strApellidoPaterno: `El campo <strong>Apellido Paterno</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strApellidoMaterno: `El campo <strong>Apellido Materno</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strSexo: `El campo <strong>SEXO</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strFechaNac: `El campo <strong>Fecha Nacimiento</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
-    strCalleProp: `El campo <strong>Calle</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
-    strNumExt: `El campo <strong>Número Exterior</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
-    strNumInt: `El campo <strong>Número Interior</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strCalle: `El campo <strong>Calle</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strNumeroExterior: `El campo <strong>Número Exterior</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strNumeroInterior: `El campo <strong>Número Interior</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     estado: `El campo <strong>Estado</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strMunicipio: `El campo <strong>Municipio</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strLocalidad: `El campo <strong>Localidad</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
-    strCp: `El campo <strong>Código Postal</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strCodigoPostal: `El campo <strong>Código Postal</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strColonia: `El campo <strong>Colonia</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
     strTelefonoRepresentante: `El campo <strong>Teléfono Representante</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, debe contener 10 núumeros.`,
-    strEmail: `El campo <strong>Correo</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
-    strTelefonoContacto: `El campo <strong>Teléfono Concesionario</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, debe contener 10 núumeros.`,
+    strCorreo: `El campo <strong>Correo</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, no debe estar vacío o el formato es no válido.`,
+    strTelefonoConcesionario: `El campo <strong>Teléfono Concesionario</strong> de <strong>${this.FORM_DATOS_CONCESIONARIO}</strong>, debe contener 10 núumeros.`,
     //Fromulario Tipo Trámite
     strTramite: `El campo <strong>Revista </strong> de <strong>${this.FORM_TRAMITE}</strong>, debe estar seleccionado.`,
   };
@@ -141,6 +141,15 @@ export class AltaTransporteEspecializado {
   ID_TRAMITE: string = "1";
   tipoVeh: string = "";
   esSeleccionadoPorAutocomplete: boolean = false;
+  currencyOptions = {
+    prefix: '$ ',
+    thousands: ',',
+    decimal: '.',
+    precision: 2,
+    allowNegative: false,
+    align: 'right',
+  };
+  maxDate: Date = new Date();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -176,7 +185,7 @@ export class AltaTransporteEspecializado {
       strColor: ['', Validators.required],
       intPuertas: ['', Validators.required],
       strEntFed: [{ value: 'TLAXCALA', disabled: true }, Validators.required],
-      dtFechaFact: ['', Validators.required],
+      dtFechaFact: ['', [Validators.required, this.validadorMaximaFechaFactura()]],
       strNoFact: ['', Validators.required],
       strImporteFact: ['', Validators.required],
       strProcedencia: ['', Validators.required],
@@ -193,21 +202,21 @@ export class AltaTransporteEspecializado {
       }],
       strCurp: ['', Validators.required],
       strNombre: ['', Validators.required],
-      strApPaterno: ['', Validators.required],
-      strApMaterno: ['', Validators.required],
+      strApellidoPaterno: ['', Validators.required],
+      strApellidoMaterno: ['', Validators.required],
       strSexo: [{ value: '', disabled: true }, Validators.required],
       strFechaNac: [{ value: '', disabled: true }, Validators.required],
-      strCalleProp: ['', Validators.required],
-      strNumExt: ['', Validators.required],
-      strNumInt: ['', Validators.required],
+      strCalle: ['', Validators.required],
+      strNumeroExterior: ['', Validators.required],
+      strNumeroInterior: ['', Validators.required],
       estado: [{ value: '', disabled: true }, Validators.required],
       strMunicipio: [{ value: '', disabled: true }, Validators.required],
       strLocalidad: [{ value: '', disabled: true }, Validators.required],
-      strCP: ['', Validators.required],
+      strCodigoPostal: ['', Validators.required],
       strColonia: [{ value: '', disabled: false }, Validators.required],
       strTelefonoRepresentante: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]],
-      strEmail: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
-      strTelefonoContacto: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]]
+      strCorreo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
+      strTelefonoConcesionario: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^\d+$/)]]
     });
 
     this.tramiteForm = this.formBuilder.group({
@@ -303,6 +312,46 @@ export class AltaTransporteEspecializado {
       : 'L = Letra, 0 = Número, A = Letra ó Número, Formato válido: LLL000000AAA';
   }
 
+  validadorMaximaFechaFactura() {
+    return (control: AbstractControl) => {
+      const selectedDate = new Date(control.value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      console.log(today,selectedDate);
+      console.log(selectedDate > today);
+      if (selectedDate > today) {
+        return { maxDate: true };
+      }
+      return null;
+    };
+  }
+
+  validarFechaManual() {
+    const control = this.datosFacturaForm.get('dtFechaFact');
+    if (control && control.value) {
+      const value = control.value;
+      const selectedDate = new Date(value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); 
+      if (isNaN(selectedDate.getTime())) { 
+        control.setErrors({ invalidDate: true });
+      }else {
+        const year = selectedDate.getFullYear();
+        if (year < 1900) {
+          control.setErrors({ minDate: true });
+        }
+        else if (selectedDate > today) {
+          control.setErrors({ maxDate: true });
+        } else {
+          control.setErrors(null);
+        }
+      }
+    } else { 
+      control?.setErrors({ required: true });
+    }
+  }
+  
+
   private cargarDefaultPDFs() {
     this.defaultPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/documents/subirArchivo.pdf');
   }
@@ -352,19 +401,11 @@ export class AltaTransporteEspecializado {
           }
           if (infoTramite.permisionarioVo) {
             this.datosPermisionarioForm.patchValue(infoTramite.permisionarioVo, { emitEvent: false });
-            this.datosPermisionarioForm.get('strApPaterno')?.patchValue(infoTramite.permisionarioVo.strApellidoPaterno, { emitEvent: false });
-            this.datosPermisionarioForm.get('strApMaterno')?.patchValue(infoTramite.permisionarioVo.strApellidoMaterno, { emitEvent: false });
-            //this.datosPermisionarioForm.get('strSexo')?.patchValue(infoTramite.permisionarioVo,{ emitEvent: false });
             this.datosPermisionarioForm.get('strFechaNac')?.patchValue(infoTramite.permisionarioVo.ldFechaNacimiento, { emitEvent: false });
-            this.datosPermisionarioForm.get('strCalleProp')?.patchValue(infoTramite.permisionarioVo.strCalle, { emitEvent: false });
-            this.datosPermisionarioForm.get('strNumExt')?.patchValue(infoTramite.permisionarioVo.strNumeroExterior, { emitEvent: false });
-            this.datosPermisionarioForm.get('strNumInt')?.patchValue(infoTramite.permisionarioVo.strNumeroInterior, { emitEvent: false });
-            this.datosPermisionarioForm.get('estado')?.patchValue(infoTramite.permisionarioVo.strEstado, { emitEvent: false });
-            this.datosPermisionarioForm.get('strCP')?.patchValue(infoTramite.permisionarioVo.strCodigoPostal, { emitEvent: false });
             this.datosPermisionarioForm.get('strColonia')?.patchValue(infoTramite.permisionarioVo.strColonia, { emitEvent: false });
             this.datosPermisionarioForm.get('strTelefonoRepresentante')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strTelefonoRepresentante, { emitEvent: false });
-            this.datosPermisionarioForm.get('strEmail')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strCorreo, { emitEvent: false });
-            this.datosPermisionarioForm.get('strTelefonoContacto')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strTelefonoConcesionario, { emitEvent: false });
+            this.datosPermisionarioForm.get('strCorreo')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strCorreo, { emitEvent: false });
+            this.datosPermisionarioForm.get('strTelefonoConcesionario')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strTelefonoConcesionario, { emitEvent: false });
             this.datosPermisionarioForm.disable();
           }
           if (infoTramite.documentacionVo) {
@@ -383,8 +424,8 @@ export class AltaTransporteEspecializado {
 
   desactivaCampos() {
     const campoCurp = this.datosPermisionarioForm.get('strCurp');
-    const campoApaterno = this.datosPermisionarioForm.get('strApPaterno');
-    const campoAmaterno = this.datosPermisionarioForm.get('strApMaterno');
+    const campoApaterno = this.datosPermisionarioForm.get('strApellidoPaterno');
+    const campoAmaterno = this.datosPermisionarioForm.get('strApellidoMaterno');
     if (this.esPersonaFisica) {
       campoCurp?.setValidators(Validators.required);
       campoApaterno?.setValidators(Validators.required);
@@ -511,7 +552,7 @@ export class AltaTransporteEspecializado {
         }
       });
 
-      this.datosPermisionarioForm.get('strCP')?.valueChanges
+      this.datosPermisionarioForm.get('strCodigoPostal')?.valueChanges
         .pipe(
           filter((codigoPostal: string) => codigoPostal?.length === 5),
           debounceTime(300),
@@ -525,7 +566,7 @@ export class AltaTransporteEspecializado {
                 this.estadoId = "";
                 this.municipioId = "";
                 this.localidadId = ""
-                this.datosPermisionarioForm.get('strCP')?.patchValue('');
+                this.datosPermisionarioForm.get('strCodigoPostal')?.patchValue('');
                 this.datosPermisionarioForm.get('strMunicipio')?.reset();
                 this.datosPermisionarioForm.get('strLocalidad')?.reset();
                 this.datosPermisionarioForm.get('estado')?.reset();
@@ -556,7 +597,7 @@ export class AltaTransporteEspecializado {
               this.estadoId = "";
               this.municipioId = "";
               this.localidadId = ""
-              this.datosPermisionarioForm.get('strCP')?.patchValue('');
+              this.datosPermisionarioForm.get('strCodigoPostal')?.patchValue('');
               this.datosPermisionarioForm.get('strMunicipio')?.reset();
               this.datosPermisionarioForm.get('strLocalidad')?.reset();
               this.datosPermisionarioForm.get('estado')?.reset();
@@ -606,12 +647,15 @@ export class AltaTransporteEspecializado {
 
   validaRfc(value: any) {
     let json = { strRfc: value, esPersonaFisica: this.esPersonaFisica }
+    this.cargarSpinner = true;
     this.servicios.validaRfc(json).subscribe({
       next: (value: any) => {
         if (value.data?.strRfc !== null) {
           this.llenaYBloqueaCampos(value.data);
+          this.cargarSpinner = false;
         } else {
-          console.log('Registro nuevo RFC');
+          this.limpiaPermisionario();
+          this.cargarSpinner = false;
         }
       },
       error: (err: HttpErrorResponse) => {
@@ -623,13 +667,17 @@ export class AltaTransporteEspecializado {
 
   llenaYBloqueaCampos(data: any) {
     if (data) {
-      this.datosPermisionarioForm.patchValue(data);
-      Object.keys(this.formPermisionario).forEach((campo) => {
-        const control = this.documentosUnidadForm.get(campo);
-        if (control && control.value) {
-          control.disable();
-        }
-      });
+      this.datosPermisionarioForm.patchValue(data, {emitEvent : false});
+      let dataContacto = data.mediosContactoVo;
+      if(dataContacto){
+        this.datosPermisionarioForm.patchValue(dataContacto, {emitEvent : false});
+      }
+      let dataCodigoPostal = data.strCodigoPostal;
+      if(dataCodigoPostal){
+        this.datosPermisionarioForm.get('strCodigoPostal')?.patchValue(dataCodigoPostal);
+        this.datosPermisionarioForm.get('strCodigoPostal')?.updateValueAndValidity();
+      }
+      this.datosPermisionarioForm.markAllAsTouched();
     }
   }
 
@@ -1087,6 +1135,19 @@ export class AltaTransporteEspecializado {
     });
   }
 
+  limpiaPermisionario(): void {
+    Object.keys(this.datosPermisionarioForm.controls).forEach(controlName => {
+      if (controlName !== 'strRfc' && controlName !== 'strCurp' && controlName !== 'strFechaNac') {
+        const control = this.datosPermisionarioForm.get(controlName);
+        if (control) {
+          control.reset();
+          control.clearValidators();
+          control.updateValueAndValidity();
+        }
+      }
+    });
+  }
+
   aplicarValidadores(controles: string[]): void {
     controles.forEach(controlName => {
       const control = this.documentosUnidadForm.get(controlName);
@@ -1114,14 +1175,14 @@ export class AltaTransporteEspecializado {
   }
 
   validaCamposConAutocomplete() {
-    const strEmailElement = document.getElementById('strEmail') as HTMLInputElement;
-    if (strEmailElement) {
-      strEmailElement.addEventListener('input', () => {
-        const strEmailControl = this.datosPermisionarioForm.get('strEmail');
-        if (strEmailControl) {
-          strEmailControl.markAsDirty();
-          strEmailControl.markAsTouched();
-          strEmailControl.updateValueAndValidity();
+    const strCorreoElement = document.getElementById('strCorreo') as HTMLInputElement;
+    if (strCorreoElement) {
+      strCorreoElement.addEventListener('input', () => {
+        const strCorreoControl = this.datosPermisionarioForm.get('strCorreo');
+        if (strCorreoControl) {
+          strCorreoControl.markAsDirty();
+          strCorreoControl.markAsTouched();
+          strCorreoControl.updateValueAndValidity();
         }
       });
     }
@@ -1172,17 +1233,17 @@ export class AltaTransporteEspecializado {
           strRfc: this.formPermisionario['strRfc'].value,
           strCurp: this.formPermisionario['strCurp'].value,
           strNombre: this.formPermisionario['strNombre'].value,
-          strApellidoPaterno: this.formPermisionario['strApPaterno'].value,
-          strApellidoMaterno: this.formPermisionario['strApMaterno'].value,
+          strApellidoPaterno: this.formPermisionario['strApellidoPaterno'].value,
+          strApellidoMaterno: this.formPermisionario['strApellidoMaterno'].value,
           strSexo: this.formPermisionario['strSexo'].value.charAt(0),
           ldFechaNacimiento: this.esPersonaFisica ? this.formPermisionario['strFechaNac'].value : '',
-          strCalle: this.formPermisionario['strCalleProp'].value,
-          strNumeroInterior: this.formPermisionario['strNumExt'].value,
-          strNumeroExterior: this.formPermisionario['strNumInt'].value,
+          strCalle: this.formPermisionario['strCalle'].value,
+          strNumeroInterior: this.formPermisionario['strNumeroExterior'].value,
+          strNumeroExterior: this.formPermisionario['strNumeroInterior'].value,
           intIdEstado: 1,
           intIdMunicipio: this.municipioId,
           intIdLocalidad: this.municipioId,
-          strCodigoPostal: this.formPermisionario['strCP'].value,
+          strCodigoPostal: this.formPermisionario['strCodigoPostal'].value,
           strColonia: this.formPermisionario['strColonia'].value,
           strLocalidad: this.strMunicipio,
           strMunicipio: this.strMunicipio,
@@ -1190,8 +1251,8 @@ export class AltaTransporteEspecializado {
           mediosContactoVo:
           {
             strTelefonoRepresentante: this.formPermisionario['strTelefonoRepresentante'].value,
-            strCorreo: this.formPermisionario['strEmail'].value,
-            strTelefonoConcesionario: this.formPermisionario['strTelefonoContacto'].value
+            strCorreo: this.formPermisionario['strCorreo'].value,
+            strTelefonoConcesionario: this.formPermisionario['strTelefonoConcesionario'].value
           }
         },
         documentacionVo: this.listaDocumentos
@@ -1237,7 +1298,7 @@ export class AltaTransporteEspecializado {
           this.servicios.registrarTramite(json).subscribe({
             next: (value: any) => {
               this.cargarSpinner = false;
-              const email = this.datosPermisionarioForm.get('strEmail')?.value;
+              const email = this.datosPermisionarioForm.get('strCorreo')?.value;
               let htmlTramiteEnviado: string = '';
               const strCodigo = value.data || '';
               if (email) {
@@ -1523,7 +1584,10 @@ export class AltaTransporteEspecializado {
   }
 
   mensaje() {
-    console.log(this.documentosUnidadForm.controls);
+    //console.log(this.datosFacturaForm.controls);
+    console.log(this.datosFacturaForm.get('dtFechaFact')?.hasError('maxDate') && (this.datosFacturaForm.get('dtFechaFact')?.touched || this.datosFacturaForm.get('dtFechaFact')?.dirty)
+  );
+   
   }
   /* UTILIDADES  */
 
