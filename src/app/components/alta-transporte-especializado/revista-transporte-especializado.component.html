@@ -208,7 +208,7 @@
                       class="form-control" placeholder="Escribe fecha de la factura" [ngClass]="{
             'is-invalid': datosFacturaForm.get('dtFechaFact')?.invalid && (datosFacturaForm.get('dtFechaFact')?.touched || datosFacturaForm.get('dtFechaFact')?.dirty), 
             'is-valid': datosFacturaForm.get('dtFechaFact')?.valid && (datosFacturaForm.get('dtFechaFact')?.touched || datosFacturaForm.get('dtFechaFact')?.dirty),
-             }" [matDatepicker]="picker" />
+             }" [matDatepicker]="picker" [max]="maxDate" (blur)="validarFechaManual()" />
                     <mat-datepicker-toggle matIconPrefix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
@@ -216,7 +216,13 @@
                     *ngIf="datosFacturaForm.get('dtFechaFact')?.invalid && (datosFacturaForm.get('dtFechaFact')?.touched || datosFacturaForm.get('dtFechaFact')?.dirty)">
                     <ng-container *ngIf="datosFacturaForm.get('dtFechaFact')?.hasError('required')"> Campo Obligatorio
                     </ng-container>
-                  </div>
+                    <ng-container *ngIf="datosFacturaForm.get('dtFechaFact')?.hasError('maxDate')"> No se permiten
+                      fechas futuras </ng-container>
+                    <ng-container *ngIf="datosFacturaForm.get('dtFechaFact')?.hasError('invalidDate')"> Fecha inválida
+                    </ng-container>
+                    <ng-container *ngIf="datosFacturaForm.get('dtFechaFact')?.hasError('minDate')"> La fecha no puede
+                      ser anterior a 1900 </ng-container>
+                  </div> 
                 </div>
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strNoFact" class="form-label">NO. FACTURA <b class="asteriscos">*</b></label><input
@@ -233,19 +239,23 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-3">
-                  <label for="strImporteFact" class="form-label">IMPORTE DE FACTURA <b
-                      class="asteriscos">*</b></label><input appNumericDecimal type="text" minlength="4"
-                    formControlName="strImporteFact" id="strImporteFact" name="strImporteFact" autocomplete="off"
-                    class="form-control" placeholder="Escribe importe de factura" [ngClass]="{
-                      'is-invalid': datosFacturaForm.get('strImporteFact')?.invalid && (datosFacturaForm.get('strImporteFact')?.touched || datosFacturaForm.get('strImporteFact')?.dirty),
-                      'is-valid': datosFacturaForm.get('strImporteFact')?.valid && (datosFacturaForm.get('strImporteFact')?.touched || datosFacturaForm.get('strImporteFact')?.dirty)
+                  <label for="strImporteFact" class="form-label">IMPORTE DE FACTURA <b class="asteriscos">*</b></label>
+                  <input type="text" currencyMask [options]="currencyOptions" formControlName="strImporteFact"
+                    id="strImporteFact" name="strImporteFact" autocomplete="off" class="form-control"
+                    placeholder="Escribe importe de factura" [ngClass]="{
+                      'is-invalid': datosFacturaForm.get('strImporteFact')?.invalid &&
+                        (datosFacturaForm.get('strImporteFact')?.touched || datosFacturaForm.get('strImporteFact')?.dirty),
+                      'is-valid': datosFacturaForm.get('strImporteFact')?.valid &&
+                        (datosFacturaForm.get('strImporteFact')?.touched || datosFacturaForm.get('strImporteFact')?.dirty)
                     }" />
                   <div class="invalid-feedback"
-                    *ngIf="datosFacturaForm.get('strImporteFact')?.invalid && (datosFacturaForm.get('strImporteFact')?.touched || datosFacturaForm.get('strImporteFact')?.dirty)">
+                    *ngIf="datosFacturaForm.get('strImporteFact')?.invalid &&
+                      (datosFacturaForm.get('strImporteFact')?.touched || datosFacturaForm.get('strImporteFact')?.dirty)">
                     <ng-container *ngIf="datosFacturaForm.get('strImporteFact')?.hasError('required')"> Campo
                       Obligatorio </ng-container>
                   </div>
                 </div>
+
                 <div class="col-12 col-md-12 col-lg-3">
                   <label for="strProcedencia" class="form-label">PROCEDENCIA <b class="asteriscos">*</b></label>
                   <select formControlName="strProcedencia" id="strProcedencia" name="strProcedencia"
@@ -351,6 +361,7 @@
               </p>
             </form>
           </mat-step>
+          
           <!-- Step 2 - DATOS DEL PERMISIONARIO -->
           <mat-step [stepControl]="datosPermisionarioForm">
             <ng-template matStepLabel>
@@ -885,12 +896,12 @@
                 </app-card-pdf>
                 <!---->
 
-                <app-card-pdf [pdfUrl]="pdfUrls['polizaViajero']"
-                  [title]="'EN CASO DE CONVERSIÓN A GAS, ORIGINAL Y COPIA DE '" [controlName]="'polizaViajero'"
+                <app-card-pdf [pdfUrl]="pdfUrls['conversionGas']"
+                  [title]="'EN CASO DE CONVERSIÓN A GAS, ORIGINAL Y COPIA DE DICTAMEN VIGENTE'" [controlName]="'conversionGas'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
-                  [documentChecked]="documentCheckedStatus['polizaViajero']" [esModificado]="esModificacion"
+                  [documentChecked]="documentCheckedStatus['conversionGas']" [esModificado]="esModificacion"
                   [esPersonaFisica]="esPersonaFisica"
-                  *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('polizaViajero')">
+                  *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('conversionGas')">
                 </app-card-pdf>
 
                 <!---->
