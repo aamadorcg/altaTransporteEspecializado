@@ -578,9 +578,8 @@
                     </ng-container>
                   </div>
                 </div>
-                <div class="col-12 col-md-12 col-lg-4">
+                <div class="col-12 col-md-12 col-lg-4" *ngIf="!esModificacion">
                   <label for="strColonia" class="form-label">COLONIA<b class="asteriscos">*</b> </label>
-
                   <select formControlName="strColonia" id="strColonia" name="strColonia"
                     (focus)="onSelectFocus('strColonia')" (change)="onSelectChange($event, 'strColonia')" [ngClass]="{
                          'is-invalid': datosPermisionarioForm.get('strColonia')?.invalid && datosPermisionarioForm.get('strColonia')?.touched,
@@ -591,6 +590,20 @@
                       {{ colonia.asentamiento }}
                     </option>
                   </select>
+                  <div class="invalid-feedback"
+                    *ngIf="datosPermisionarioForm.get('strColonia')?.invalid && (datosPermisionarioForm.get('strColonia')?.touched || datosPermisionarioForm.get('strColonia')?.dirty)">
+                    <ng-container *ngIf="datosPermisionarioForm.get('strColonia')?.hasError('required')"> Campo
+                      Obligatorio </ng-container>
+                  </div>
+                </div>
+                <div class="col-12 col-md-12 col-lg-4" *ngIf="esModificacion">
+                  <label for="strColonia" class="form-label">COLONIA<b class="asteriscos">*</b> </label>
+                  <input
+                    appNumeric formControlName="strColonia" type="text" maxlength="5" minlength="5" id="strColonia" name="strColonia"
+                    autocomplete="off" class="form-control"  [ngClass]="{
+                      'is-invalid': datosPermisionarioForm.get('strColonia')?.invalid && (datosPermisionarioForm.get('strColonia')?.touched || datosPermisionarioForm.get('strColonia')?.dirty), 
+                      'is-valid': datosPermisionarioForm.get('strColonia')?.valid && (datosPermisionarioForm.get('strColonia')?.touched || datosPermisionarioForm.get('strColonia')?.dirty),
+                       }" />
                   <div class="invalid-feedback"
                     *ngIf="datosPermisionarioForm.get('strColonia')?.invalid && (datosPermisionarioForm.get('strColonia')?.touched || datosPermisionarioForm.get('strColonia')?.dirty)">
                     <ng-container *ngIf="datosPermisionarioForm.get('strColonia')?.hasError('required')"> Campo
@@ -727,7 +740,7 @@
             </ng-template>
             <form [formGroup]="tramiteForm">
               <div class="row g-3 ">
-                <div class="col-12 col-md-12 col-lg-4">
+                <div class="col-12 col-md-12 col-lg-4" *ngIf="!esModificacion">
                   <label for="strTramite" class="form-label">TIPO REVISTA <b class="asteriscos">*</b></label>
                   <select formControlName="strTramite" id="strTramite" name="strTramite"
                     (focus)="onSelectFocus('strTramite')" (change)="onSelectChange($event, 'strTramite')" [ngClass]="{
@@ -738,6 +751,16 @@
                     <option value="3" selected> PERMISO DE TRANSPORTE ESPECIALIZADO DE PERSONAL</option>
                     <option value="4" selected> PERMISO DE TRANSPORTE ESPECIALIZADO ESCOLAR</option>
                   </select>
+                  <div class="invalid-feedback">Campo obligatorio</div>
+                </div>
+                <div class="col-12 col-md-12 col-lg-4" *ngIf="esModificacion">
+                  <label for="strTramite" class="form-label">TIPO REVISTA <b class="asteriscos">*</b></label>
+                  <input appNumeric formControlName="strTramite" name="strTramite" id="strTramite"  type="text"
+                    matTooltipPosition="above" autocomplete="off" class="form-control" 
+                     [ngClass]="{
+                        'is-invalid': datosPermisionarioForm.get('strTelefonoConcesionario')?.invalid && (datosPermisionarioForm.get('strTelefonoConcesionario')?.dirty || datosPermisionarioForm.get('strTelefonoConcesionario')?.touched),
+                        'is-valid': datosPermisionarioForm.get('strTelefonoConcesionario')?.valid 
+                        }" />
                   <div class="invalid-feedback">Campo obligatorio</div>
                 </div>
               </div>
@@ -804,7 +827,7 @@
                     </svg> para visualizar el documento seleccionado. </p>
                 </div>
               </div>
-              <div class="col-12 col-md-12 col-lg-4">
+              <div class="col-12 col-md-12 col-lg-4" *ngIf="!esModificacion">
                 <label for="strTipoVehiculo" class="form-label">TIPO VEHICULO <b class="asteriscos">*</b></label>
                 <select formControlName="strTipoVehiculo" id="strTipoVehiculo" name="strTipoVehiculo"
                   (focus)="onSelectFocus('strTipoVehiculo')" (change)="onSelectChange($event, 'strTipoVehiculo')"
@@ -817,6 +840,16 @@
                   <option value="2" selected> UNIDAD NUEVA PAGANDO</option>
                   <option value="3" selected> UNIDAD NUEVA PAGADA</option>
                 </select>
+                <div class="invalid-feedback">Campo obligatorio</div>
+              </div>
+              <div class="col-12 col-md-12 col-lg-4" *ngIf="esModificacion">
+                <label for="strTipoVehiculo" class="form-label">TIPO VEHICULO <b class="asteriscos">*</b></label>
+                <input appNumeric formControlName="strTipoVehiculo" name="strTipoVehiculo" id="strTipoVehiculo"  type="text"
+                    matTooltipPosition="above" autocomplete="off" class="form-control" 
+                     [ngClass]="{
+                        'is-invalid': datosPermisionarioForm.get('strTipoVehiculo')?.invalid && (datosPermisionarioForm.get('strTipoVehiculo')?.dirty || datosPermisionarioForm.get('strTipoVehiculo')?.touched),
+                        'is-valid': datosPermisionarioForm.get('strTipoVehiculo')?.valid 
+                        }" />
                 <div class="invalid-feedback">Campo obligatorio</div>
               </div>
               <div class="cards-container d-grid justify-content-center">

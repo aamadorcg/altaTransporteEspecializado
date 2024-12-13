@@ -84,21 +84,6 @@ export class AltaTransporteEspecializado {
   listaTramites: any[] = [];
 
   documentoGas: any;
-  /*Control Documentos Visibles*/
-  esSolicitudTitularVis: boolean = false;
-  facturaEndosadaVis: boolean = false;
-  esConvenioActualizadoVis: boolean = false;
-  esTarjetaCirculacionVis: boolean = false;
-  esRepuveVis: boolean = false;
-  esPolizaVis: boolean = false;
-  esUltimoPermisoVis: boolean = false;
-  esUltimoPagoRefVis: boolean = false;
-  esIneVis: boolean = false;
-  esDictamenGasVis: boolean = false;
-  esUltimoPagoTenVis: boolean = false;
-  esConstFiscalVis: boolean = false;
-  esAntNoPenalesVis: boolean = false;
-  esActaConstVis: boolean = false;
 
   arregloDocumentosVisibles: any[] = [];
 
@@ -150,6 +135,7 @@ export class AltaTransporteEspecializado {
     align: 'right',
   };
   maxDate: Date = new Date();
+  claveVehicularEdita: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -372,6 +358,7 @@ export class AltaTransporteEspecializado {
   }
 
   cargarDatosDelTramite(idTramite: any) {
+    
     this.cargarSpinner = true;
     this.servicios.obtenerTramiteEditar(idTramite).subscribe({
       next: (value: any) => {
@@ -380,7 +367,7 @@ export class AltaTransporteEspecializado {
         if (infoTramite) {
           if (infoTramite.facturaVo) {
             this.datosFacturaForm.patchValue(infoTramite.facturaVo, { emitEvent: false });
-            this.datosFacturaForm.get('strCveVeh')?.patchValue(infoTramite.facturaVo.strNumeroMotor, { emitEvent: false });
+            setTimeout(() => this.asignarClaveVehicularPorId(infoTramite.facturaVo.intIdCaCve), 300);
             this.datosFacturaForm.get('strMotor')?.patchValue(infoTramite.facturaVo.strNumeroMotor, { emitEvent: false });
             this.datosFacturaForm.get('strTipoVeh')?.patchValue(infoTramite.facturaVo.strTipo, { emitEvent: false });
             this.datosFacturaForm.get('strCombustible')?.patchValue(infoTramite.facturaVo.intIdCombustible, { emitEvent: false });
@@ -391,8 +378,8 @@ export class AltaTransporteEspecializado {
             this.datosFacturaForm.get('strTipoServ')?.patchValue(infoTramite.facturaVo.strTipoServicio, { emitEvent: false });
             this.datosFacturaForm.get('strUsoVeh')?.patchValue(infoTramite.facturaVo.strUso, { emitEvent: false });
             this.datosFacturaForm.disable();
-
-            this.tramiteForm.get('intIdTipoRevista')?.patchValue(infoTramite.facturaVo.intIdTipoRevista, { emitEvent: false });
+            
+            this.tramiteForm.get('strTramite')?.patchValue(infoTramite.facturaVo.intIdTipoRevista, { emitEvent: false });
             this.tramiteForm.disable();
 
             this.documentosUnidadForm.get('strTipoVehiculo')?.patchValue(infoTramite.facturaVo.strTipoUnidad, { emitEvent: false });
@@ -400,6 +387,7 @@ export class AltaTransporteEspecializado {
           }
           if (infoTramite.permisionarioVo) {
             this.datosPermisionarioForm.patchValue(infoTramite.permisionarioVo, { emitEvent: false });
+            this.datosPermisionarioForm.get('estado')?.patchValue('TLAXCALA', { emitEvent: false });
             this.datosPermisionarioForm.get('strFechaNac')?.patchValue(infoTramite.permisionarioVo.ldFechaNacimiento, { emitEvent: false });
             this.datosPermisionarioForm.get('strColonia')?.patchValue(infoTramite.permisionarioVo.strColonia, { emitEvent: false });
             this.datosPermisionarioForm.get('strTelefonoRepresentante')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strTelefonoRepresentante, { emitEvent: false });
@@ -417,8 +405,6 @@ export class AltaTransporteEspecializado {
         this.errorGenerico(err);
       },
     });
-
-
   }
 
   desactivaCampos() {
@@ -454,6 +440,7 @@ export class AltaTransporteEspecializado {
       next: (value: any) => {
         this.cargarSpinner = false;
         this.listaCombustibles = value.data;
+        this.asignarClaveVehicularPorId(this.claveVehicularEdita);
       },
       error: (err: HttpErrorResponse) => {
         this.errorGenerico(err);
@@ -484,6 +471,13 @@ export class AltaTransporteEspecializado {
       opcion.strEmpresa.toLowerCase().includes(valorBusqueda.toLowerCase()) ||
       opcion.strModelo.toLowerCase().includes(valorBusqueda.toLowerCase())
     );
+  }
+
+  asignarClaveVehicularPorId(id: number) {
+    const objetoSeleccionado = this.opcCveVeh.find(opcion => opcion.intIdCaCve === id);
+    if (objetoSeleccionado) {
+      this.datosFacturaForm.get('strCveVeh')?.patchValue(objetoSeleccionado);
+    }
   }
 
   displayFn(opcion: any): string {
@@ -885,7 +879,6 @@ export class AltaTransporteEspecializado {
           if (!this.arregloDocumentosVisibles.includes('curp')) {
             this.arregloDocumentosVisibles.push('curp');
           }
-          this.esSolicitudTitularVis = true;
           this.documentCheckedStatus['curp'] = status;
           doc.strArchivo != null ? this.pdfUrls['curp'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
           this.documentValidatedStatus['curp'] = !status;
@@ -1150,7 +1143,7 @@ export class AltaTransporteEspecializado {
         const control = this.datosPermisionarioForm.get(controlName);
         if (control) {
           control.reset();
-          control.clearValidators();
+          //control.clearValidators();
           control.updateValueAndValidity();
         }
       }
