@@ -1084,13 +1084,13 @@ export class AltaTransporteEspecializado {
               'ineTestigo', 'oriBajaUnidad', 'validacionTenencia', 'ultimoPagoRefrendo', 'polizaViajero', 'conversionGas', 'repuve',
               'comprobanteDom', 'curp', 'convenioEmpresa', 'constanciaFis', 'antPenales']);
             if (this.esPersonaMoral) {
-              this.aplicarValidadores(['idRepLegal', 'constanciaFisMoral', 'actaConstitutiva', 'idPersonaAut', 'idPersonaAut']);
+              this.aplicarValidadores(['idRepLegal', 'actaConstitutiva']);
             } else {
               this.aplicarValidadores(['identificacionFisica']);
             }
           } else if (selectedValue == "2" || selectedValue == "3") {
             this.esUnidadNueva = true;
-            this.aplicarValidadores(['solicitudTitular', 'comprobanteDom', 'constanciaFiscalVN']);
+            this.aplicarValidadores(['solicitudTitular', 'comprobanteDom', 'constanciaFiscalVN', 'idPersonaAut', 'domicilioPersonaAut']);
             if (selectedValue == "2") {//PAGANDO
               this.esNuevaPagando = true;
               this.esNuevaPagada = false;
@@ -1101,7 +1101,7 @@ export class AltaTransporteEspecializado {
               this.aplicarValidadores(['facturaEndosada', 'antPenales']);
             }
             if (this.esPersonaMoral) {
-              this.aplicarValidadores(['constanciaFisMoral', 'idRepLegal']);
+              this.aplicarValidadores(['actaConstitutiva', 'idRepLegal']);
             } else {
               this.aplicarValidadores(['identificacionFisica']);
             }
