@@ -1237,7 +1237,7 @@ export class AltaTransporteEspecializado {
           strNombre: this.formPermisionario['strNombre'].value,
           strApellidoPaterno: this.formPermisionario['strApellidoPaterno'].value,
           strApellidoMaterno: this.formPermisionario['strApellidoMaterno'].value,
-          strSexo: this.formPermisionario['strSexo'].value.charAt(0),
+          strSexo: this.esPersonaFisica ? this.formPermisionario['strSexo'].value.charAt(0) : '',
           ldFechaNacimiento: this.esPersonaFisica ? this.formPermisionario['strFechaNac'].value : '',
           strCalle: this.formPermisionario['strCalle'].value,
           strNumeroInterior: this.formPermisionario['strNumeroExterior'].value,
