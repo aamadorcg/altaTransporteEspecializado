@@ -466,10 +466,10 @@
                     </ng-container>
                   </div>
                 </div>
-                <div *ngIf="esPersonaFisica" class="col-12 col-md-12 col-lg-2">
-                  <label for="strFechaNac" class="form-label">FECHA NACIMIENTO <b class="asteriscos">*</b></label><input
+                <div  class="col-12 col-md-12" [ngClass]="esPersonaFisica ? 'col-lg-2' : 'col-lg-3'" >
+                  <label for="strFechaNac" class="form-label">{{esPersonaFisica ? 'FECHA NACIMIENTO' : 'FECHA DE CONSTITUCIÓN'}} <b class="asteriscos">*</b></label><input
                     formControlName="strFechaNac" type="text" minlength="4" id="strFechaNac" name="strFechaNac"
-                    autocomplete="off" class="form-control" placeholder="Fecha de nacimiento" [ngClass]="{
+                    autocomplete="off" class="form-control" [placeholder]="esPersonaFisica ? 'Fecha de nacimiento' : 'Fecha de nacimiento'" [ngClass]="{
                       'is-invalid': datosPermisionarioForm.get('strFechaNac')?.invalid && (datosPermisionarioForm.get('strFechaNac')?.touched || datosPermisionarioForm.get('strFechaNac')?.dirty), 
                       'is-valid': datosPermisionarioForm.get('strFechaNac')?.valid && (datosPermisionarioForm.get('strFechaNac')?.touched || datosPermisionarioForm.get('strFechaNac')?.dirty),
                        }" />

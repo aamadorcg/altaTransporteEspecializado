@@ -388,7 +388,11 @@ export class AltaTransporteEspecializado {
           if (infoTramite.permisionarioVo) {
             this.datosPermisionarioForm.patchValue(infoTramite.permisionarioVo, { emitEvent: false });
             this.datosPermisionarioForm.get('estado')?.patchValue('TLAXCALA', { emitEvent: false });
-            this.datosPermisionarioForm.get('strFechaNac')?.patchValue(infoTramite.permisionarioVo.ldFechaNacimiento, { emitEvent: false });
+            if(this.esPersonaFisica){
+              this.datosPermisionarioForm.get('strFechaNac')?.patchValue(infoTramite.permisionarioVo.ldFechaNacimiento, { emitEvent: false });
+            }else{
+              this.datosPermisionarioForm.get('strFechaNac')?.patchValue(infoTramite.permisionarioVo.ldFechaConstitucion, { emitEvent: false });
+            }
             this.datosPermisionarioForm.get('strColonia')?.patchValue(infoTramite.permisionarioVo.strColonia, { emitEvent: false });
             this.datosPermisionarioForm.get('strTelefonoRepresentante')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strTelefonoRepresentante, { emitEvent: false });
             this.datosPermisionarioForm.get('strCorreo')?.patchValue(infoTramite.permisionarioVo.mediosContactoVo.strCorreo, { emitEvent: false });
@@ -513,22 +517,36 @@ export class AltaTransporteEspecializado {
         }, 0);
       });
 
-      if (this.esPersonaFisica) {
+      
         this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
-          if (rfc?.length <= 10) {
-            this.datosPermisionarioForm.patchValue({ strCurp: rfc });
-            if (rfc?.length < 10) {
-              this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
+          if (this.esPersonaFisica) {
+            if (rfc?.length <= 10) {
+              this.datosPermisionarioForm.patchValue({ strCurp: rfc });
+              if (rfc?.length < 10) {
+                this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
+              }
+            }
+            if (rfc?.length >= 10) {
+              const fechaNac = rfc?.substring(4, 10);
+              this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
+              this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
+              this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
+            }
+          }else if(this.esPersonaMoral){
+            if (rfc?.length <= 9) {
+              this.datosPermisionarioForm.patchValue({ strCurp: rfc });
+              if (rfc?.length < 9) {
+                this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
+              }
+            }
+            if (rfc?.length >= 9) {
+              const fechaNac = rfc?.substring(3, 9);
+              this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
+              this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
+              this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
             }
           }
-          if (rfc?.length >= 10) {
-            const fechaNac = rfc?.substring(4, 10);
-            this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
-            this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
-            this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
-          }
         });
-      }
 
       this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
         if (curp?.length >= 11) {
@@ -1239,6 +1257,7 @@ export class AltaTransporteEspecializado {
           strApellidoMaterno: this.formPermisionario['strApellidoMaterno'].value,
           strSexo: this.esPersonaFisica ? this.formPermisionario['strSexo'].value.charAt(0) : '',
           ldFechaNacimiento: this.esPersonaFisica ? this.formPermisionario['strFechaNac'].value : '',
+          ldFechaConstitucion: this.esPersonaMoral ? this.formPermisionario['strFechaNac'].value : '',
           strCalle: this.formPermisionario['strCalle'].value,
           strNumeroInterior: this.formPermisionario['strNumeroExterior'].value,
           strNumeroExterior: this.formPermisionario['strNumeroInterior'].value,
@@ -1533,7 +1552,7 @@ export class AltaTransporteEspecializado {
   }
 
   obtenTipoVehiculo() {
-    let tipoVehiculo = this.formDocumentos['ineComprador'].value
+    let tipoVehiculo = this.formDocumentos['strTipoVehiculo'].value
     if (tipoVehiculo) {
       switch (tipoVehiculo) {
         case "1":
