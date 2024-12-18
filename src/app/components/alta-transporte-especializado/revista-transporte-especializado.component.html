@@ -740,7 +740,7 @@
             </ng-template>
             <form [formGroup]="tramiteForm">
               <div class="row g-3 ">
-                <div class="col-12 col-md-12 col-lg-4" *ngIf="!esModificacion">
+                <div class="col-12 col-md-12 col-lg-6" *ngIf="!esModificacion">
                   <label for="strTramite" class="form-label">TIPO REVISTA <b class="asteriscos">*</b></label>
                   <select formControlName="strTramite" id="strTramite" name="strTramite"
                     (focus)="onSelectFocus('strTramite')" (change)="onSelectChange($event, 'strTramite')" [ngClass]="{
@@ -753,7 +753,7 @@
                   </select>
                   <div class="invalid-feedback">Campo obligatorio</div>
                 </div>
-                <div class="col-12 col-md-12 col-lg-4" *ngIf="esModificacion">
+                <div class="col-12 col-md-12 col-lg-6" *ngIf="esModificacion">
                   <label for="strTramite" class="form-label">TIPO REVISTA <b class="asteriscos">*</b></label>
                   <input appNumeric formControlName="strTramite" name="strTramite" id="strTramite"  type="text"
                     matTooltipPosition="above" autocomplete="off" class="form-control" 

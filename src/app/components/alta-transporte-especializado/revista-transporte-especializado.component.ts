@@ -137,6 +137,9 @@ export class AltaTransporteEspecializado {
   maxDate: Date = new Date();
   claveVehicularEdita: any;
 
+  tramitePersonal: string = "PERMISO DE TRANSPORTE ESPECIALIZADO DE PERSONAL"
+  tramiteEspecializado: string = "PERMISO DE TRANSPORTE ESPECIALIZADO ESCOLAR"
+
   constructor(
     private formBuilder: FormBuilder,
     private alertaUtility: AlertaUtility,
@@ -358,7 +361,7 @@ export class AltaTransporteEspecializado {
   }
 
   cargarDatosDelTramite(idTramite: any) {
-    
+
     this.cargarSpinner = true;
     this.servicios.obtenerTramiteEditar(idTramite).subscribe({
       next: (value: any) => {
@@ -378,8 +381,8 @@ export class AltaTransporteEspecializado {
             this.datosFacturaForm.get('strTipoServ')?.patchValue(infoTramite.facturaVo.strTipoServicio, { emitEvent: false });
             this.datosFacturaForm.get('strUsoVeh')?.patchValue(infoTramite.facturaVo.strUso, { emitEvent: false });
             this.datosFacturaForm.disable();
-            
-            this.tramiteForm.get('strTramite')?.patchValue(infoTramite.facturaVo.intIdTipoRevista, { emitEvent: false });
+
+            this.obtenTipoRevista(String(infoTramite.facturaVo.intIdTipoRevista || ''));
             this.tramiteForm.disable();
 
             this.documentosUnidadForm.get('strTipoVehiculo')?.patchValue(infoTramite.facturaVo.strTipoUnidad, { emitEvent: false });
@@ -388,9 +391,9 @@ export class AltaTransporteEspecializado {
           if (infoTramite.permisionarioVo) {
             this.datosPermisionarioForm.patchValue(infoTramite.permisionarioVo, { emitEvent: false });
             this.datosPermisionarioForm.get('estado')?.patchValue('TLAXCALA', { emitEvent: false });
-            if(this.esPersonaFisica){
+            if (this.esPersonaFisica) {
               this.datosPermisionarioForm.get('strFechaNac')?.patchValue(infoTramite.permisionarioVo.ldFechaNacimiento, { emitEvent: false });
-            }else{
+            } else {
               this.datosPermisionarioForm.get('strFechaNac')?.patchValue(infoTramite.permisionarioVo.ldFechaConstitucion, { emitEvent: false });
             }
             this.datosPermisionarioForm.get('strColonia')?.patchValue(infoTramite.permisionarioVo.strColonia, { emitEvent: false });
@@ -423,6 +426,21 @@ export class AltaTransporteEspecializado {
       campoCurp?.clearValidators();
       campoApaterno?.clearValidators();
       campoAmaterno?.clearValidators();
+    }
+  }
+
+  obtenTipoRevista(tipo: string) {
+    if (tipo) {
+      switch (tipo) {
+        case "3":
+          this.tramiteForm.get('strTramite')?.patchValue(this.tramitePersonal, { emitEvent: false });
+          break;
+        case "4":
+          this.tramiteForm.get('strTramite')?.patchValue(this.tramiteEspecializado, { emitEvent: false });
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -517,36 +535,36 @@ export class AltaTransporteEspecializado {
         }, 0);
       });
 
-      
-        this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
-          if (this.esPersonaFisica) {
-            if (rfc?.length <= 10) {
-              this.datosPermisionarioForm.patchValue({ strCurp: rfc });
-              if (rfc?.length < 10) {
-                this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
-              }
-            }
-            if (rfc?.length >= 10) {
-              const fechaNac = rfc?.substring(4, 10);
-              this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
-              this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
-              this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
-            }
-          }else if(this.esPersonaMoral){
-            if (rfc?.length <= 9) {
-              this.datosPermisionarioForm.patchValue({ strCurp: rfc });
-              if (rfc?.length < 9) {
-                this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
-              }
-            }
-            if (rfc?.length >= 9) {
-              const fechaNac = rfc?.substring(3, 9);
-              this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
-              this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
-              this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
+
+      this.datosPermisionarioForm.get('strRfc')?.valueChanges.subscribe((rfc: string) => {
+        if (this.esPersonaFisica) {
+          if (rfc?.length <= 10) {
+            this.datosPermisionarioForm.patchValue({ strCurp: rfc });
+            if (rfc?.length < 10) {
+              this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
             }
           }
-        });
+          if (rfc?.length >= 10) {
+            const fechaNac = rfc?.substring(4, 10);
+            this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
+            this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
+            this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
+          }
+        } else if (this.esPersonaMoral) {
+          if (rfc?.length <= 9) {
+            this.datosPermisionarioForm.patchValue({ strCurp: rfc });
+            if (rfc?.length < 9) {
+              this.datosPermisionarioForm.patchValue({ strFechaNac: '' });
+            }
+          }
+          if (rfc?.length >= 9) {
+            const fechaNac = rfc?.substring(3, 9);
+            this.datosPermisionarioForm.patchValue({ strFechaNac: this.convertirFecha(fechaNac) });
+            this.datosPermisionarioForm.get('strFechaNac')?.markAsDirty();
+            this.datosPermisionarioForm.get('strFechaNac')?.markAsTouched();
+          }
+        }
+      });
 
       this.datosPermisionarioForm.get('strCurp')?.valueChanges.subscribe((curp: string) => {
         if (curp?.length >= 11) {
