@@ -670,12 +670,12 @@
                 </div>
 
                 <div class="col-12 col-md-12 col-lg-4">
-                  <label for="strTelefonoConcesionario" class="form-label">TELÉFONO CONCESIONARIO <b
+                  <label for="strTelefonoConcesionario" class="form-label">TELÉFONO OPCIONAL <b
                       class="asteriscos">*</b></label>
                   <div class="input-container">
                     <input appNumeric formControlName="strTelefonoConcesionario" name="strTelefonoConcesionario" type="text"
-                      minlength="10" maxlength="10" matTooltip="Tu número de teléfono debe contener 10 números"
-                      matTooltipPosition="above" id="strTelefonoConcesionario" placeholder="Escribe teléfono concesionario"
+                      minlength="10" maxlength="10" matTooltip="El número de teléfono debe contener 10 números"
+                      matTooltipPosition="above" id="strTelefonoConcesionario" placeholder="Escribe teléfono opcional"
                       autocomplete="off" class="form-control" [ngClass]="{
                         'is-invalid': datosPermisionarioForm.get('strTelefonoConcesionario')?.invalid && (datosPermisionarioForm.get('strTelefonoConcesionario')?.dirty || datosPermisionarioForm.get('strTelefonoConcesionario')?.touched),
                         'is-valid': datosPermisionarioForm.get('strTelefonoConcesionario')?.valid 
@@ -758,8 +758,8 @@
                   <input appNumeric formControlName="strTramite" name="strTramite" id="strTramite"  type="text"
                     matTooltipPosition="above" autocomplete="off" class="form-control" 
                      [ngClass]="{
-                        'is-invalid': datosPermisionarioForm.get('strTelefonoConcesionario')?.invalid && (datosPermisionarioForm.get('strTelefonoConcesionario')?.dirty || datosPermisionarioForm.get('strTelefonoConcesionario')?.touched),
-                        'is-valid': datosPermisionarioForm.get('strTelefonoConcesionario')?.valid 
+                        'is-invalid': datosPermisionarioForm.get('strTramite')?.invalid && (datosPermisionarioForm.get('strTramite')?.dirty || datosPermisionarioForm.get('strTramite')?.touched),
+                        'is-valid': datosPermisionarioForm.get('strTramite')?.valid 
                         }" />
                   <div class="invalid-feedback">Campo obligatorio</div>
                 </div>
