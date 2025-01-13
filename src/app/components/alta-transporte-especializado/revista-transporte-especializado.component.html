@@ -883,15 +883,15 @@
                   [esPersonaFisica]="esPersonaFisica"
                   *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('ineVendedor')">
                 </app-card-pdf>
-
+<!-- 
                 <app-card-pdf [pdfUrl]="pdfUrls['ineComprador']" [title]="'INE DEL COMPRADOR'"
                   [controlName]="'ineComprador'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
                   [documentChecked]="documentCheckedStatus['ineComprador']" [esModificado]="esModificacion"
                   [esPersonaFisica]="esPersonaFisica"
                   *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('ineComprador')">
-                </app-card-pdf>
+                </app-card-pdf> -->
 
-                <app-card-pdf [pdfUrl]="pdfUrls['ineTestigo']" [title]="'INE TESTIGO'" [controlName]="'ineTestigo'"
+                <app-card-pdf [pdfUrl]="pdfUrls['ineTestigo']" [title]="'INE TESTIGOS'" [controlName]="'ineTestigo'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
                   [documentChecked]="documentCheckedStatus['ineTestigo']" [esModificado]="esModificacion"
                   [esPersonaFisica]="esPersonaFisica"
@@ -913,7 +913,7 @@
                   *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('validacionTenencia')">
                 </app-card-pdf>
 
-                <app-card-pdf [pdfUrl]="pdfUrls['ultimoPagoRefrendo']" [title]="'RECIBO DEL ÚLTIMO PAGO DE REFRENDO'"
+                <app-card-pdf [pdfUrl]="pdfUrls['ultimoPagoRefrendo']" [title]="'RECIBO DEL ÚLTIMO PAGO DE REFRENDO O TENENCIA'"
                   [controlName]="'ultimoPagoRefrendo'" [formGroup]="documentosUnidadForm"
                   [defaultPdfUrl]="defaultPdfUrl" [documentChecked]="documentCheckedStatus['ultimoPagoRefrendo']"
                   [esModificado]="esModificacion" [esPersonaFisica]="esPersonaFisica"
@@ -930,7 +930,7 @@
                 <!---->
 
                 <app-card-pdf [pdfUrl]="pdfUrls['conversionGas']"
-                  [title]="'EN CASO DE CONVERSIÓN A GAS, ORIGINAL Y COPIA DE DICTAMEN VIGENTE'" [controlName]="'conversionGas'"
+                  [title]="'DICTAMEN VIGENTE'" [controlName]="'conversionGas'"
                   [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
                   [documentChecked]="documentCheckedStatus['conversionGas']" [esModificado]="esModificacion"
                   [esPersonaFisica]="esPersonaFisica"
@@ -983,6 +983,14 @@
                   [documentChecked]="documentCheckedStatus['antPenales']" [esModificado]="esModificacion"
                   [esPersonaFisica]="esPersonaFisica"
                   *ngIf="(esUnidadUsada || (esUnidadNueva && esNuevaPagada)) || arregloDocumentosVisibles.includes('antPenales')">
+                </app-card-pdf>
+
+                <app-card-pdf [pdfUrl]="pdfUrls['tarjetaCirculacion']"
+                  [title]="'TARJETA DE CIRCULACIÓN O CERTIFICADO DE NO INFRACCIÓN Y ACTA DEL MP'"
+                  [controlName]="'tarjetaCirculacion'" [formGroup]="documentosUnidadForm" [defaultPdfUrl]="defaultPdfUrl"
+                  [documentChecked]="documentCheckedStatus['tarjetaCirculacion']" [esModificado]="esModificacion"
+                  [esPersonaFisica]="esPersonaFisica"
+                  *ngIf="esUnidadUsada || arregloDocumentosVisibles.includes('tarjetaCirculacion')">
                 </app-card-pdf>
 
                 <!----------------------VEHICULOS USADOS PERSONA MORAL------------------------------------------>

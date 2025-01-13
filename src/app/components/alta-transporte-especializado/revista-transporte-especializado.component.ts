@@ -218,7 +218,7 @@ export class AltaTransporteEspecializado {
       facturaEndosada: [null, Validators.required],
       compraVenta: [null, Validators.required],
       ineVendedor: [null, Validators.required],
-      ineComprador: [null, Validators.required],
+      //ineComprador: [null, Validators.required],
       ineTestigo: [null, Validators.required],
       oriBajaUnidad: [null, Validators.required],
       validacionTenencia: [null, Validators.required],
@@ -231,6 +231,7 @@ export class AltaTransporteEspecializado {
       convenioEmpresa: [null, Validators.required],
       constanciaFis: [null, Validators.required],
       antPenales: [null, Validators.required],
+      tarjetaCirculacion: [null, Validators.required],
       /** Control Vehiculo Usado Persona Moral **/
       idRepLegal: [null, Validators.required],
       constanciaFisMoral: [null, Validators.required],
@@ -947,6 +948,15 @@ export class AltaTransporteEspecializado {
           this.documentValidatedStatus['antPenales'] = !status;
           this.documentosUnidadForm.patchValue({ antPenales: doc.strArchivo });
           break;
+        case 'TARJETA DE CIRCULACIÓN O CERTIFICADO DE NO INFRACCIÓN Y ACTA DEL MP':
+          if (!this.arregloDocumentosVisibles.includes('tarjetaCirculacion')) {
+            this.arregloDocumentosVisibles.push('tarjetaCirculacion');
+          }
+          this.documentCheckedStatus['tarjetaCirculacion'] = status;
+          doc.strArchivo != null ? this.pdfUrls['tarjetaCirculacion'] = this.sanitizer.bypassSecurityTrustResourceUrl(doc.strArchivo) : console.log('Documento no encontrado para: ', doc.strNombreDocumento);
+          this.documentValidatedStatus['tarjetaCirculacion'] = !status;
+          this.documentosUnidadForm.patchValue({ tarjetaCirculacion: doc.strArchivo });
+          break;  
         case 'IDENTIFICACIÓN OFICIAL DEL REPRESENTANTE LEGAL DE LA EMPRESA CON PODER NOTARIAL':
           if (!this.arregloDocumentosVisibles.includes('idRepLegal')) {
             this.arregloDocumentosVisibles.push('idRepLegal');
@@ -1116,9 +1126,9 @@ export class AltaTransporteEspecializado {
           this.limpiarValidadores();
           if (selectedValue == "1") {
             this.esUnidadUsada = true;
-            this.aplicarValidadores(['solicitudTitular', 'facturaEndosada', 'compraVenta', 'ineVendedor', 'ineComprador',
+            this.aplicarValidadores(['solicitudTitular', 'facturaEndosada', 'compraVenta', 'ineVendedor',
               'ineTestigo', 'oriBajaUnidad', 'validacionTenencia', 'ultimoPagoRefrendo', 'polizaViajero', 'conversionGas', 'repuve',
-              'comprobanteDom', 'curp', 'convenioEmpresa', 'constanciaFis', 'antPenales']);
+              'comprobanteDom', 'curp', 'convenioEmpresa', 'constanciaFis', 'antPenales','tarjetaCirculacion']);
             if (this.esPersonaMoral) {
               this.aplicarValidadores(['idRepLegal', 'actaConstitutiva']);
             } else {
@@ -1417,7 +1427,6 @@ export class AltaTransporteEspecializado {
           case 'EN CASO DE CONVERSIÓN A GAS, ORIGINAL Y COPIA DE DICTAMEN VIGENTE':
             documento.strArchivo = this.formDocumentos['conversionGas'].value
             break;
-
           case 'REPUVE':
             documento.strArchivo = this.formDocumentos['repuve'].value
             break;
@@ -1465,6 +1474,9 @@ export class AltaTransporteEspecializado {
             break;
           case 'IDENTIFICACIÓN OFICIAL CON FOTOGRAFIA VIGENTE':
             documento.strArchivo = this.formDocumentos['identificacionFisica'].value
+            break;
+          case 'TARJETA DE CIRCULACIÓN O CERTIFICADO DE NO INFRACCIÓN Y ACTA DEL MP':
+            documento.strArchivo = this.formDocumentos['tarjetaCirculacion'].value
             break;
           default:
             break;
@@ -1560,6 +1572,9 @@ export class AltaTransporteEspecializado {
             break;
           case 'IDENTIFICACIÓN OFICIAL CON FOTOGRAFIA VIGENTE':
             documento.strArchivo = this.formDocumentos['identificacionFisica'].value
+            break;
+          case 'TARJETA DE CIRCULACIÓN O CERTIFICADO DE NO INFRACCIÓN Y ACTA DEL MP':
+            documento.strArchivo = this.formDocumentos['tarjetaCirculacion'].value
             break;
           default:
             break;
