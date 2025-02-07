@@ -13,7 +13,7 @@ body {
      background: linear-gradient(to right,
                rgba(255, 255, 255, 0.782),
                rgba(255, 255, 255, 0.782)),
-          url("/revistaespecializado/assets/images/fondo-gris-claro.png");
+          url("/revistaesp/assets/images/fondo-gris-claro.png");
 }
 
 @import "~bootstrap-icons/font/bootstrap-icons.css";
